@@ -1,5 +1,5 @@
 import express from "express";
-import { tests, getUniqueId, getTest, removeTest, updateTest } from "../../db/mock-tests.mjs";
+import { getUniqueId, getTest, removeTest, updateTest } from "../db/handler.mjs";
 import { success } from "../helper.mjs";
 
 const testsRouter = express();
@@ -20,7 +20,7 @@ testsRouter.get("/:id", (req, res) => {
 
 //Create a test
 testsRouter.post("/", (req, res) => {
-    const id = getUniqueId(tests); //Create new id, TEMP mysql will do it later
+    const id = getUniqueId(tests); //Create new id, TEMP mariadb will do it later
     const createdTest = { ...req.body, ...{ id: id, created: new Date() } };
     tests.push(createdTest); 
     
