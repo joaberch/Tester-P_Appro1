@@ -1,0 +1,39 @@
+services:
+  mariadb:
+    image: mariadb:latest
+    secrets:
+      - root_password
+    restart: always
+    ports:
+      - 3306:3306
+    volumes:
+      - db-data:/var/lib/mysql
+    networks:
+      - db
+    environment:
+      MYSQL_ROOT_PASSWORD_FILE: /run/secrets/root_password
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - 8080:80
+    networks:
+      - db
+    links:
+    - mariadb
+    depends_on:
+      - mariadb
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mariadb
+
+secrets:
+  root_password:
+    file: mariadb-root-pwd.txt
+
+volumes:
+  db-data:
+
+networks:
+  db:
