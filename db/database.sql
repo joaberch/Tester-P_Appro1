@@ -1,6 +1,6 @@
-CREATE DATABASE IF NOT EXISTS tester CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+CREATE DATABASE IF NOT EXISTS db_tester CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
 
-USE tester;
+USE db_tester;
 
 CREATE TABLE IF NOT EXISTS t_users(
    idUsers VARCHAR(150),
@@ -34,7 +34,7 @@ CREATE TABLE IF NOT EXISTS t_tests(
    name VARCHAR(50),
    description VARCHAR(100),
    duration INT,
-   isDeleted VARCHAR(50),
+   isDeleted BOOLEAN,
    isFormative BOOLEAN,
    IdModules VARCHAR(50) NOT NULL,
    PRIMARY KEY(idTests),
