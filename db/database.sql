@@ -3,84 +3,89 @@ CREATE DATABASE IF NOT EXISTS db_tester CHARACTER SET utf8mb4 COLLATE utf8mb4_ge
 USE db_tester;
 
 CREATE TABLE IF NOT EXISTS t_users(
-   idUsers VARCHAR(150),
+   idUser INT NOT NULL AUTO_INCREMENT,
+   login CHAR(7),
+   firstname VARCHAR(100),
+   name VARCHAR(100),
    hashed_password VARCHAR(100),
    role VARCHAR(50),
    isDeleted BOOLEAN,
-   PRIMARY KEY(idUsers)
+   PRIMARY KEY(idUser),
+   UNIQUE(login)
 );
 
 CREATE TABLE IF NOT EXISTS t_modules(
-   IdModules VARCHAR(50),
+   idModule INT NOT NULL AUTO_INCREMENT,
    name VARCHAR(100),
    description VARCHAR(1000),
    isDeleted BOOLEAN,
-   PRIMARY KEY(IdModules)
+   PRIMARY KEY(idModule)
 );
 
 CREATE TABLE IF NOT EXISTS t_objectives(
-   IdObjectives VARCHAR(50),
+   idObjective INT NOT NULL AUTO_INCREMENT,
    name VARCHAR(100),
    description VARCHAR(1000),
-   bloom_level TINYINT,
+   bloomLevel TINYINT,
    isDeleted BOOLEAN,
-   IdModules VARCHAR(50) NOT NULL,
-   PRIMARY KEY(IdObjectives),
-   FOREIGN KEY(IdModules) REFERENCES t_modules(IdModules)
+   idModule INT NOT NULL,
+   PRIMARY KEY(idObjective),
+   FOREIGN KEY(idModule) REFERENCES t_modules(idModule)
 );
 
 CREATE TABLE IF NOT EXISTS t_tests(
-   idTests VARCHAR(50),
+   idTest INT NOT NULL AUTO_INCREMENT,
    name VARCHAR(50),
    description VARCHAR(100),
    duration INT,
    isDeleted BOOLEAN,
    isFormative BOOLEAN,
-   IdModules VARCHAR(50) NOT NULL,
-   PRIMARY KEY(idTests),
-   FOREIGN KEY(IdModules) REFERENCES t_modules(IdModules)
+   createdAt DATE,
+   idModule INT NOT NULL,
+   PRIMARY KEY(idTest),
+   FOREIGN KEY(idModule) REFERENCES t_modules(idModule)
 );
 
 CREATE TABLE IF NOT EXISTS t_questions(
-   IdQuestions VARCHAR(50),
+   idQuestion INT NOT NULL AUTO_INCREMENT,
    question VARCHAR(1000),
    point INT,
    type VARCHAR(100),
    isDeleted BOOLEAN,
-   idTests VARCHAR(50) NOT NULL,
-   PRIMARY KEY(IdQuestions),
-   FOREIGN KEY(idTests) REFERENCES t_tests(idTests)
+   idTest INT NOT NULL,
+   PRIMARY KEY(idQuestion),
+   FOREIGN KEY(idTest) REFERENCES t_tests(idTest)
 );
 
 CREATE TABLE IF NOT EXISTS t_attachements(
-   idAttachements VARCHAR(50),
+   idAttachement INT NOT NULL AUTO_INCREMENT,
    file TEXT,
-   idTests VARCHAR(50) NOT NULL,
-   PRIMARY KEY(idAttachements),
-   FOREIGN KEY(idTests) REFERENCES t_tests(idTests)
+   idTest INT NOT NULL,
+   PRIMARY KEY(idAttachement),
+   FOREIGN KEY(idTest) REFERENCES t_tests(idTest)
 );
 
-CREATE TABLE IF NOT EXISTS id_reponses(
-   idReponse INT,
-   reponse VARCHAR(1000),
+CREATE TABLE IF NOT EXISTS t_answers(
+   idAnswer INT NOT NULL AUTO_INCREMENT,
+   answer VARCHAR(1000),
    isCorrect BOOLEAN,
-   IdQuestions VARCHAR(50) NOT NULL,
-   PRIMARY KEY(idReponse),
-   FOREIGN KEY(IdQuestions) REFERENCES t_questions(IdQuestions)
+   idQuestion INT NOT NULL,
+   PRIMARY KEY(idAnswer),
+   FOREIGN KEY(idQuestion) REFERENCES t_questions(idQuestion)
 );
 
 CREATE TABLE IF NOT EXISTS assigned_to(
-   idUsers VARCHAR(150),
-   idTests VARCHAR(50),
-   PRIMARY KEY(idUsers, idTests),
-   FOREIGN KEY(idUsers) REFERENCES t_users(idUsers),
-   FOREIGN KEY(idTests) REFERENCES t_tests(idTests)
+   idUser INT,
+   idTest INT,
+   PRIMARY KEY(idUser, idTest),
+   FOREIGN KEY(idUser) REFERENCES t_users(idUser),
+   FOREIGN KEY(idTest) REFERENCES t_tests(idTest)
 );
 
 CREATE TABLE IF NOT EXISTS created_by(
-   idUsers VARCHAR(150),
-   idTests VARCHAR(50),
-   PRIMARY KEY(idUsers, idTests),
-   FOREIGN KEY(idUsers) REFERENCES t_users(idUsers),
-   FOREIGN KEY(idTests) REFERENCES t_tests(idTests)
+   idUser INT,
+   idTest INT,
+   PRIMARY KEY(idUser, idTest),
+   FOREIGN KEY(idUser) REFERENCES t_users(idUser),
+   FOREIGN KEY(idTest) REFERENCES t_tests(idTest)
 );

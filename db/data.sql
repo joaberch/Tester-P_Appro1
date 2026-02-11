@@ -1,88 +1,80 @@
-USE db_tester;
-
--- ======================
+-- =========================
 -- USERS
--- ======================
-INSERT INTO t_users VALUES
-('admin1', '$2y$10$hashedadmin', 'ADMIN', FALSE),
-('teacher1', '$2y$10$hashedteacher', 'TEACHER', FALSE),
-('teacher2', '$2y$10$hashedteacher2', 'TEACHER', FALSE),
-('student1', '$2y$10$hashedstudent1', 'STUDENT', FALSE),
-('student2', '$2y$10$hashedstudent2', 'STUDENT', FALSE),
-('student3', '$2y$10$hashedstudent3', 'STUDENT', TRUE); -- utilisateur supprimé
+-- =========================
+INSERT INTO t_users (login, firstname, name, hashed_password, role, isDeleted) VALUES
+('admin01', 'Alice', 'Admin', 'hash_admin', 'ADMIN', FALSE),
+('prof01', 'Bob', 'Martin', 'hash_prof1', 'TEACHER', FALSE),
+('prof02', 'Claire', 'Durand', 'hash_prof2', 'TEACHER', FALSE),
+('stud001', 'David', 'Bernard', 'hash_stud1', 'STUDENT', FALSE),
+('stud002', 'Emma', 'Petit', 'hash_stud2', 'STUDENT', FALSE),
+('stud003', 'Lucas', 'Robert', 'hash_stud3', 'STUDENT', FALSE);
 
--- ======================
+-- =========================
 -- MODULES
--- ======================
-INSERT INTO t_modules VALUES
-('MATH101', 'Mathématiques', 'Module de mathématiques générales', FALSE),
-('PROG101', 'Programmation Java', 'Introduction à la programmation orientée objet', FALSE),
-('DB101', 'Bases de données', 'Conception et manipulation de bases relationnelles', FALSE);
+-- =========================
+INSERT INTO t_modules (name, description, isDeleted) VALUES
+('Base de données', 'Introduction aux bases de données relationnelles', FALSE),
+('Programmation Java', 'Bases de la programmation orientée objet en Java', FALSE),
+('Réseaux', 'Fondamentaux des réseaux informatiques', FALSE);
 
--- ======================
+-- =========================
 -- OBJECTIVES
--- ======================
-INSERT INTO t_objectives VALUES
-('OBJ1', 'Comprendre les fonctions', 'Maîtriser les fonctions de base', 2, FALSE, 'MATH101'),
-('OBJ2', 'Résoudre des équations', 'Savoir résoudre des équations du second degré', 3, FALSE, 'MATH101'),
-('OBJ3', 'Comprendre les classes', 'Créer et utiliser des classes en Java', 2, FALSE, 'PROG101'),
-('OBJ4', 'Maîtriser les jointures', 'Comprendre les jointures SQL', 4, FALSE, 'DB101');
+-- =========================
+INSERT INTO t_objectives (name, description, bloomLevel, isDeleted, idModule) VALUES
+('Modélisation MCD', 'Comprendre et créer un modèle conceptuel de données', 3, FALSE, 1),
+('Requêtes SQL', 'Savoir écrire des requêtes SELECT complexes', 4, FALSE, 1),
+('POO', 'Comprendre les principes de la programmation orientée objet', 2, FALSE, 2),
+('Sockets', 'Comprendre la communication client-serveur', 3, FALSE, 3);
 
--- ======================
+-- =========================
 -- TESTS
--- ======================
-INSERT INTO t_tests VALUES
-('TEST1', 'Test Math 1', 'Evaluation sur les fonctions', 60, 'FALSE', TRUE, 'MATH101'),
-('TEST2', 'Test Java 1', 'QCM sur les bases Java', 45, 'FALSE', TRUE, 'PROG101'),
-('TEST3', 'Examen BD', 'Examen final bases de données', 90, 'FALSE', FALSE, 'DB101');
+-- =========================
+INSERT INTO t_tests (name, description, duration, isDeleted, isFormative, createdAt, idModule) VALUES
+('Test SQL 1', 'Évaluation sur les requêtes SQL', 60, FALSE, TRUE, '2026-01-10', 1),
+('Examen BDD', 'Examen final base de données', 120, FALSE, FALSE, '2026-01-15', 1),
+('Quiz Java', 'Quiz sur les bases Java', 45, FALSE, TRUE, '2026-01-20', 2);
 
--- ======================
+-- =========================
 -- QUESTIONS
--- ======================
-INSERT INTO t_questions VALUES
-('Q1', 'Quelle est la dérivée de x² ?', 2, 'QCM', FALSE, 'TEST1'),
-('Q2', 'Résoudre : x² - 4 = 0', 3, 'QCM', FALSE, 'TEST1'),
-('Q3', 'Quel mot-clé permet de définir une classe en Java ?', 1, 'QCM', FALSE, 'TEST2'),
-('Q4', 'Quelle jointure permet de récupérer toutes les lignes de la table A ?', 3, 'QCM', FALSE, 'TEST3');
+-- =========================
+INSERT INTO t_questions (question, point, type, isDeleted, idTest) VALUES
+('Que signifie SQL ?', 2, 'QCM', FALSE, 1),
+('Quelle clause permet de filtrer les résultats ?', 3, 'QCM', FALSE, 1),
+('Expliquez la différence entre INNER JOIN et LEFT JOIN.', 5, 'OPEN', FALSE, 2),
+('Qu est-ce qu une classe en Java ?', 2, 'QCM', FALSE, 3);
 
--- ======================
--- REPONSES
--- ======================
-INSERT INTO id_reponses VALUES
-(1, '2x', TRUE, 'Q1'),
-(2, 'x', FALSE, 'Q1'),
-(3, 'x²', FALSE, 'Q1'),
+-- =========================
+-- ANSWERS
+-- =========================
+INSERT INTO t_answers (answer, isCorrect, idQuestion) VALUES
+('Structured Query Language', TRUE, 1),
+('Simple Query Language', FALSE, 1),
+('WHERE', TRUE, 2),
+('ORDER BY', FALSE, 2),
+('Une structure définissant des objets', TRUE, 4),
+('Un type primitif', FALSE, 4);
 
-(4, 'x = 2 ou x = -2', TRUE, 'Q2'),
-(5, 'x = 4', FALSE, 'Q2'),
-
-(6, 'class', TRUE, 'Q3'),
-(7, 'define', FALSE, 'Q3'),
-
-(8, 'LEFT JOIN', TRUE, 'Q4'),
-(9, 'RIGHT JOIN', FALSE, 'Q4'),
-(10, 'INNER JOIN', FALSE, 'Q4');
-
--- ======================
+-- =========================
 -- ATTACHEMENTS
--- ======================
-INSERT INTO t_attachements VALUES
-('ATT1', 'formulaire_math.pdf', 'TEST1'),
-('ATT2', 'schema_bd.png', 'TEST3');
+-- =========================
+INSERT INTO t_attachements (file, idTest) VALUES
+('diagramme_examen_bdd.pdf', 2),
+('annexe_sql.pdf', 1);
 
--- ======================
--- ASSIGNED_TO
--- ======================
-INSERT INTO assigned_to VALUES
-('student1', 'TEST1'),
-('student1', 'TEST2'),
-('student2', 'TEST1'),
-('student2', 'TEST3');
-
--- ======================
+-- =========================
 -- CREATED_BY
--- ======================
-INSERT INTO created_by VALUES
-('teacher1', 'TEST1'),
-('teacher2', 'TEST2'),
-('teacher2', 'TEST3');
+-- =========================
+INSERT INTO created_by (idUser, idTest) VALUES
+(2, 1),
+(2, 2),
+(3, 3);
+
+-- =========================
+-- ASSIGNED_TO
+-- =========================
+INSERT INTO assigned_to (idUser, idTest) VALUES
+(4, 1),
+(5, 1),
+(6, 2),
+(4, 3),
+(5, 3);
