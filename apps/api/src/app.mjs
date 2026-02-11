@@ -19,8 +19,13 @@ app.get('/api/', (req, res) => {
     res.redirect(`http://localhost:${port}/`)
 })
 
-import { testsRouter } from "./tests/tests.mjs";
+import { testsRouter } from "./router/tests.mjs";
 app.use("/api/tests", testsRouter)
+
+app.use(({ res }) => {
+    const message = "Impossible de trouver la ressource.";
+    res.status(404).json(message)
+});
 
 app.listen(port, () => {
     console.log(`Tester app listening on port ${port}`);
