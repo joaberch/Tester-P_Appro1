@@ -60,6 +60,7 @@ CREATE TABLE IF NOT EXISTS t_questions(
 CREATE TABLE IF NOT EXISTS t_attachements(
    idAttachement INT NOT NULL AUTO_INCREMENT,
    file TEXT,
+   isDeleted BOOLEAN,
    idTest INT NOT NULL,
    PRIMARY KEY(idAttachement),
    FOREIGN KEY(idTest) REFERENCES t_tests(idTest)
