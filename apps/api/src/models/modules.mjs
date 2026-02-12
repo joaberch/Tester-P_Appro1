@@ -24,7 +24,7 @@ const ModuleModel = (sequelize, DataTypes) => {
             createdAt: true,
             updatedAt: false,
             freezeTableName: true,
-            tableName: "t_tests",
+            tableName: "t_modules",
         }
     );
 };
