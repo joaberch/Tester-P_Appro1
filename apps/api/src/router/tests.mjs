@@ -35,6 +35,21 @@ testsRouter.post("/", (req, res) => {
     })
 });
 
+//Archivate a test
+testsRouter.put("/delete/:id", async (req, res) => {
+    const testId = req.params.id;
+    let archivateTest = await Test.findByPk(testId);
+
+    if (!archivateTest) {
+        return res.status(404).json({ message: "Test non trouvé" });
+    }
+
+    await archivateTest.update({ isDeleted: true }).then((_) => {
+        const message = `Le test ${archivateTest.name} a bien été supprimé (archivé).`;
+        res.json(success(message, archivateTest));
+    });
+});
+
 //Delete a test
 testsRouter.delete("/:id", (req, res) => {
     Test.findByPk(req.params.id).then((deletedTest) => {
