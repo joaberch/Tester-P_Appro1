@@ -16,6 +16,7 @@ const AnswerModel = (sequelize, DataTypes) => {
         idQuestion: {
             type: DataTypes.INTEGER,
             allowNull: false,
+            defaultValue: false,
         }
     },
         {

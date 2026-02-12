@@ -16,6 +16,7 @@ const ModuleModel = (sequelize, DataTypes) => {
         isDeleted: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
+            defaultValue: false,
         },
     },
         {

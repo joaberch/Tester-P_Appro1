@@ -14,12 +14,13 @@ const QuestionModel = (sequelize, DataTypes) => {
             allowNull: false,
         },
         type: {
-            type: DataTypes.STRING, //TODO validate 'isIn' with enum of possibilities?
+            type: DataTypes.ENUM(['QCM', 'ouverte', 'vrai_faux']),
             allowNull: false,
         },
         isDeleted: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
+            defaultValue: false,
         },
         idTest: {
             type: DataTypes.INTEGER,

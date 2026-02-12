@@ -6,13 +6,12 @@ const UserModel = (sequelize, DataTypes) => {
             autoIncrement: true
         },
         login: {
-            type: DataTypes.STRING, //TODO fix length to 7?
+            type: DataTypes.STRING(7),
             validate: {
-                min: 7,
-                max: 7,
+                len: [7, 7],
             },
             allowNull: false,
-            //isUnique TODO
+            unique: true,
         },
         firstname: {
             type: DataTypes.STRING,
@@ -23,20 +22,21 @@ const UserModel = (sequelize, DataTypes) => {
             allowNull: false,
         },
         role: {
-            type: DataTypes.STRING, //TODO validate 'isIn' with enum of possibilities?
+            type: DataTypes.ENUM(['student', 'teacher', 'admin']),
             allowNull: false,
+            defaultValue: "student"
         },
         hashedPassword: {
-            type: DataTypes.STRING, //TODO fix length to 60?
+            type: DataTypes.STRING(60), //TODO fix length to 60?
             validate: {
-                min: 60,
-                max: 60,
+                len: [60, 60],
             },
             allowNull: false,
         },
         isDeleted: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
+            defaultValue: false,
         }
     },
         {

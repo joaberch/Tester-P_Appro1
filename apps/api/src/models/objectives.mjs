@@ -16,6 +16,7 @@ const ObjectiveModel = (sequelize, DataTypes) => {
         bloomLevel: {
             type: DataTypes.TINYINT,
             validate: {
+                min: 1,
                 max: 6,
             },
             allowNull: true,
@@ -23,6 +24,7 @@ const ObjectiveModel = (sequelize, DataTypes) => {
         isDeleted: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
+            defaultValue: false,
         },
         idModule: {
             type: DataTypes.INTEGER,

@@ -20,6 +20,7 @@ const TestModel = (sequelize, DataTypes) => {
         isDeleted: {
             type: DataTypes.BOOLEAN,
             allowNull: false,
+            defaultValue: false,
         },
         isFormative: {
             type: DataTypes.BOOLEAN,

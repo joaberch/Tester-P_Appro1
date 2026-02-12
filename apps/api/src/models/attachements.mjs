@@ -9,6 +9,11 @@ const AttachementModel = (sequelize, DataTypes) => {
             type: DataTypes.BLOB,
             allowNull: false,
         },
+        isDeleted: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+            defaultValue: false,
+        },
         idTest: {
             type: DataTypes.INTEGER,
             allowNull: false,
