@@ -69,6 +69,7 @@ CREATE TABLE IF NOT EXISTS t_answers(
    idAnswer INT NOT NULL AUTO_INCREMENT,
    answer VARCHAR(1000),
    isCorrect BOOLEAN,
+   isDeleted BOOLEAN,
    idQuestion INT NOT NULL,
    PRIMARY KEY(idAnswer),
    FOREIGN KEY(idQuestion) REFERENCES t_questions(idQuestion)

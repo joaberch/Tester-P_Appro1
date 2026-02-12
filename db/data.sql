@@ -46,13 +46,13 @@ INSERT INTO t_questions (question, point, type, isDeleted, idTest) VALUES
 -- =========================
 -- ANSWERS
 -- =========================
-INSERT INTO t_answers (answer, isCorrect, idQuestion) VALUES
-('Structured Query Language', TRUE, 1),
-('Simple Query Language', FALSE, 1),
-('WHERE', TRUE, 2),
-('ORDER BY', FALSE, 2),
-('Une structure définissant des objets', TRUE, 4),
-('Un type primitif', FALSE, 4);
+INSERT INTO t_answers (answer, isCorrect, isDeleted, idQuestion) VALUES
+('Structured Query Language', TRUE, FALSE, 1),
+('Simple Query Language', FALSE, FALSE, 1),
+('WHERE', TRUE, FALSE, 2),
+('ORDER BY', FALSE, FALSE, 2),
+('Une structure définissant des objets', TRUE, FALSE, 4),
+('Un type primitif', FALSE, FALSE, 4);
 
 -- =========================
 -- ATTACHEMENTS
