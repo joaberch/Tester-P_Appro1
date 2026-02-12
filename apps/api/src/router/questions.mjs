@@ -35,7 +35,7 @@ questionsRouter.post("/", (req, res) => {
 });
 
 //Archivate a question
-questionsRouter.put("/delete/:id", async (req, res) => {
+questionsRouter.put("/archivate/:id", async (req, res) => {
     const questionId = req.params.id;
     let archivateQuestion = await Question.findByPk(questionId);
 

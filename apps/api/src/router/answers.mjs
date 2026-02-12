@@ -35,7 +35,7 @@ answersRouter.post("/", (req, res) => {
 });
 
 //Archivate a answer
-answersRouter.put("/delete/:id", async (req, res) => {
+answersRouter.put("/archivate/:id", async (req, res) => {
     const answerId = req.params.id;
     let archivateAnswer = await Answer.findByPk(answerId);
 

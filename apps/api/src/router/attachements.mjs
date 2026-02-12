@@ -27,7 +27,7 @@ attachementsRouter.post("/", (req, res) => {
 });
 
 //Archivate an attachement
-attachementsRouter.put("/delete/:id", async (req, res) => {
+attachementsRouter.put("/archivate/:id", async (req, res) => {
     const attachementId = req.params.id;
     let archivateAttachement = await Attachement.findByPk(attachementId);
 

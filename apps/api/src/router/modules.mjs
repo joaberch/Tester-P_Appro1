@@ -35,7 +35,7 @@ modulesRouter.post("/", (req, res) => {
 });
 
 //Archivate a module
-modulesRouter.put("/delete/:id", async (req, res) => {
+modulesRouter.put("/archivate/:id", async (req, res) => {
     const moduleId = req.params.id;
     let archivateModule = await Module.findByPk(moduleId);
 

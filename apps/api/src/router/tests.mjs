@@ -36,7 +36,7 @@ testsRouter.post("/", (req, res) => {
 });
 
 //Archivate a test
-testsRouter.put("/delete/:id", async (req, res) => {
+testsRouter.put("/archivate/:id", async (req, res) => {
     const testId = req.params.id;
     let archivateTest = await Test.findByPk(testId);
 

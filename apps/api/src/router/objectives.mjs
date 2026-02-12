@@ -35,7 +35,7 @@ objectivesRouter.post("/", (req, res) => {
 });
 
 //Archivate an objective
-objectivesRouter.put("/delete/:id", async (req, res) => {
+objectivesRouter.put("/archivate/:id", async (req, res) => {
     const objectiveId = req.params.id;
     let archivateObjective = await Objective.findByPk(objectiveId);
 
