@@ -93,13 +93,13 @@ usersRouter.put("/archivate/:id", async (req, res) => {
 
 //Create student
 usersRouter.post("/", (req, res) => {
-    const userData = {
+    const studentData = {
         ...req.body,
         role: "student",
         isDeleted: false
     }
 
-    User.create(req.body).then((createdUser) => {
+    User.create(studentData).then((createdUser) => {
         const message = `L'utilisateur' ${createdUser.name} a été créé.`;
         res.json(success(message, createdUser));
     }).catch((error) => {
@@ -113,13 +113,13 @@ usersRouter.post("/", (req, res) => {
 
 //Create teacher
 usersRouter.post("/", (req, res) => {
-    const userData = {
+    const teacherData = {
         ...req.body,
         role: "teacher",
         isDeleted: false
     }
 
-    User.create(req.body).then((createdUser) => {
+    User.create(teacherData).then((createdUser) => {
         const message = `L'utilisateur' ${createdUser.name} a été créé.`;
         res.json(success(message, createdUser));
     }).catch((error) => {
