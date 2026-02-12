@@ -36,38 +36,38 @@ const Test = TestModel(sequelize, DataTypes);
 const User = UserModel(sequelize, DataTypes);
 
 Answer.belongsTo(Question, {
-    foreignKey: "fk_question",
+    foreignKey: "idQuestion",
 });
 Question.hasMany(Answer, {
-    foreignKey: "fk_question",
+    foreignKey: "idQuestion",
 })
 
 Question.belongsTo(Test, {
-    foreignKey: "fk_test",
+    foreignKey: "idTest",
 });
 Test.hasMany(Question, {
-    foreignKey: "fk_test",
+    foreignKey: "idTest",
 });
 
 Test.hasMany(Attachement, {
-    foreignKey: "fk_test",
+    foreignKey: "idTest",
 });
 Attachement.belongsTo(Test, {
-    foreignKey: "fk_test",
+    foreignKey: "idTest",
 });
 
 Test.belongsTo(Module, {
-    foreignKey: "fk_module",
+    foreignKey: "idModule",
 });
 Module.hasMany(Test, {
-    foreignKey: "fk_module",
+    foreignKey: "idModule",
 });
 
 Module.hasMany(Objective, {
-    foreignKey: "fk_module",
+    foreignKey: "idModule",
 });
 Objective.belongsTo(Module, {
-    foreignKey: "fk_module"
+    foreignKey: "idModule"
 });
 
 //assigned_to

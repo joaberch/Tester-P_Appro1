@@ -16,7 +16,7 @@ testsRouter.get("/", (req, res) => {
 //Get a specific test
 testsRouter.get("/:id", (req, res) => {
     Test.findByPk(req.params.id).then((test) => {
-        const message = `Le test avec l'id ${test.id} a été récupéré.`;
+        const message = `Le test avec l'id ${test.idTest} a été récupéré.`;
         res.json(success(message, test));
     })
 });
@@ -39,10 +39,16 @@ testsRouter.post("/", (req, res) => {
 testsRouter.delete("/:id", (req, res) => {
     Test.findByPk(req.params.id).then((deletedTest) => {
         Test.destroy({
-            where: { id: deletedTest.id },
+            where: { idTest: deletedTest.idTest },
         }).then((_) => {
             const message = `Le test ${deletedTest.name} a été supprimé.`;
             res.json(success(message, deletedTest))
+        }).catch((error) => {
+            if (error.name == "SequelizeForeignKeyConstraintError") {
+                return res.status(400).json({message: "Impossible de supprimer ce test car il est encore lié à d'autres tables.", data: error});
+            }
+            const message = "Le test n'a pas pu être supprimé. Veuillez réessayer dans un moment.";
+            res.status(500).json({ message, data: error})
         })
     })
 });
@@ -50,12 +56,12 @@ testsRouter.delete("/:id", (req, res) => {
 //Edit a test
 testsRouter.put("/:id", (req, res) => {
     const testId = req.params.id;
-    Test.update(req.body, { where: { id: testId } }).then((_) => {
+    Test.update(req.body, { where: { idTest: testId } }).then((_) => {
         Test.findByPk(testId).then((updatedTest) => {
-            const message = `Le test ${updatedTest.name} avec l'id ${updatedTest.id} a été mis à jour.`;
+            const message = `Le test ${updatedTest.name} avec l'id ${updatedTest.idTest} a été mis à jour.`;
             res.json(success(message, updatedTest));
-        })
-    })
-})
+        });
+    });
+});
 
 export { testsRouter };
