@@ -7,6 +7,8 @@ import { ObjectiveModel } from "../models/objectives.mjs";
 import { QuestionModel } from "../models/questions.mjs";
 import { TestModel } from "../models/tests.mjs";
 import { UserModel } from "../models/users.mjs";
+import { AssignedToModel } from "../models/assigned_to.mjs";
+import { CreatedByModel } from "../models/created_by.mjs";
 dotenv.config()
 
 const DB_NAME = process.env.DB_NAME;
@@ -34,6 +36,8 @@ const Objective = ObjectiveModel(sequelize, DataTypes);
 const Question = QuestionModel(sequelize, DataTypes);
 const Test = TestModel(sequelize, DataTypes);
 const User = UserModel(sequelize, DataTypes);
+const AssignedTo = AssignedToModel(sequelize, DataTypes);
+const CreatedBy = CreatedByModel(sequelize, DataTypes);
 
 Answer.belongsTo(Question, {
     foreignKey: "idQuestion",
@@ -71,11 +75,31 @@ Objective.belongsTo(Module, {
 });
 
 //assigned_to
-Test.belongsToMany(User, { through: 'assigned_to' })
-User.belongsToMany(Test, { through: 'assigned_to' })
+Test.belongsToMany(User, {
+    through: AssignedTo,
+    as: 'assigned_to',
+    foreignKey: 'idTest',
+    otherKey: 'idUser',
+});
+User.belongsToMany(Test, {
+    through: AssignedTo,
+    as: 'assigned_by',
+    foreignKey: 'idUser',
+    otherKey: 'idTest',
+});
 
 //created_by
-Test.belongsToMany(User, { through: 'created_by' })
-User.belongsToMany(Test, { through: 'created_by' })
+Test.belongsToMany(User, {
+    through: CreatedBy,
+    as: 'created_by',
+    foreignKey: 'idTest',
+    otherKey: 'idUser',
+});
+User.belongsToMany(Test, {
+    through: CreatedBy,
+    as: 'creator',
+    foreignKey: 'idUser',
+    otherKey: 'idTest'
+});
 
-export { sequelize, Answer, Attachement, Module, Objective, Question, Test, User };
+export { sequelize, Answer, Attachement, Module, Objective, Question, Test, User, AssignedTo, CreatedBy };
