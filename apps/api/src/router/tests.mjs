@@ -1,6 +1,6 @@
 import express from "express";
 import { success } from "../helper.mjs";
-import { Test, User, CreatedBy, AssignedTo, Question } from "../db/sequelize.mjs";
+import { Test, User, CreatedBy, AssignedTo, Question, Attachement } from "../db/sequelize.mjs";
 import { ValidationError } from "sequelize";
 
 const testsRouter = express();
@@ -37,6 +37,23 @@ testsRouter.get("/:id/questions", async (req, res) => {
         res.status(500).json({ message: "Les questions du test n'ont pas pu être récupéré.", data: error.message });
     }
 })
+
+//Get all attachements
+testsRouter.get("/:id/attachements", async (req, res) => {
+    try {
+        const testId = req.params.id;
+        const attachements = await Attachement.findAll({
+            where: {
+                idTest: testId,
+            }
+        })
+
+        const message = `Les pièces jointes du test ${testId} ont bien été récupéré.`;
+        res.json(success(message, attachements));
+    } catch (error) {
+        res.status(500).json({ message: "Les pièces jointes n'ont pas pu être récupéré.", data: error.message});
+    }
+});
 
 //Create a test
 testsRouter.post("/", async (req, res) => {
