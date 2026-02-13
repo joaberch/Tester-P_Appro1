@@ -13,6 +13,10 @@ const AnswerModel = (sequelize, DataTypes) => {
             type: DataTypes.BOOLEAN,
             allowNull: false,
         },
+        isDeleted: {
+            type: DataTypes.BOOLEAN,
+            allowNull: false,
+        },
         idQuestion: {
             type: DataTypes.INTEGER,
             allowNull: false,

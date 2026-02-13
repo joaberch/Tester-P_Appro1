@@ -8,29 +8,37 @@ const answersRouter = express();
 //Get all answers
 answersRouter.get("/", (req, res) => {
     Answer.findAll().then((answers) => {
-        const message = "Tous les answers ont été récupérés.";
+        const message = "Toutes les réponses ont été récupérés.";
         res.json(success(message, answers))
     })
 })
 
 //Get a specific answer
-answersRouter.get("/:id", (req, res) => {
-    Answer.findByPk(req.params.id).then((answer) => {
-        const message = `Le answer avec l'id ${answer.idAnswer} a été récupéré.`;
-        res.json(success(message, answer));
-    })
+answersRouter.get("/:id", async (req, res) => {
+    try {
+        console.log(req.params.id)
+        const answers = await Answer.findByPk(req.params.id);
+        console.log(answers)
+        if (answers == null) {
+            return res.status(404).json({ message: "Ressource introuvable." })
+        }
+        const message = `La réponse avec l'id ${answers.idAnswer} a été récupéré.`;
+        res.json(success(message, answers));
+    } catch(error) {
+        res.status(500).json({ message: error.message, data: error });
+    }
 });
 
-//Create a answer
+//Create an answer
 answersRouter.post("/", (req, res) => {
-    Answer.create(req.body).then((idAnswer) => {
-        const message = `Le answer ${createdAnswer.name} a été créé.`;
+    Answer.create(req.body).then((createdAnswer) => {
+        const message = `La réponse ${createdAnswer.answer} a été créé.`;
         res.json(success(message, createdAnswer));
     }).catch((error) => {
         if (error instanceof ValidationError) {
-            return res.status(400).json({ message: error.message, data: error });
+            
         }
-        const message = "Le answer n'a pas été ajouté. Veuillez réessayer dans un moment.";
+        const message = "La réponse n'a pas été ajouté. Veuillez réessayer dans un moment.";
         res.status(500).json({ message, data: error });
     })
 });
@@ -41,42 +49,47 @@ answersRouter.put("/archivate/:id", async (req, res) => {
     let archivateAnswer = await Answer.findByPk(answerId);
 
     if (!archivateAnswer) {
-        return res.status(404).json({ message: "Answer non trouvé" });
+        return res.status(404).json({ message: "Réponse non trouvé" });
     }
 
     await archivateAnswer.update({ isDeleted: true }).then((_) => {
-        const message = `Le answer ${archivateAnswer.name} a bien été supprimé (archivé).`;
+        const message = `La réponse ${archivateAnswer.answer} a bien été supprimé (archivé).`;
         res.json(success(message, archivateAnswer));
     });
 });
 
-//Delete a answer
-answersRouter.delete("/:id", (req, res) => {
-    Answer.findByPk(req.params.id).then((deletedAnswer) => {
-        Answer.destroy({
-            where: { idAnswer: deletedAnswer.idAnswer },
-        }).then((_) => {
-            const message = `Le answer ${deletedAnswer.name} a été supprimé.`;
-            res.json(success(message, deletedAnswer))
-        }).catch((error) => {
-            if (error.name == "SequelizeForeignKeyConstraintError") {
-                return res.status(400).json({message: "Impossible de supprimer ce answer car il est encore lié à d'autres tables.", data: error});
-            }
-            const message = "Le answer n'a pas pu être supprimé. Veuillez réessayer dans un moment.";
-            res.status(500).json({ message, data: error})
-        });
-    });
+//Delete an answer
+answersRouter.delete("/:id", async (req, res) => {
+    try {
+        const deletedAnswer = await Answer.findByPk(req.params.id);
+        if (!deletedAnswer) {
+            return res.status(404).json({ message: "Ressource introuvable."})
+        }
+        deletedAnswer.destroy();
+
+        const message = `La réponse ${deletedAnswer.answer} a bien été supprimé.`;
+        res.json(success(message, deletedAnswer));
+    } catch (error) {
+        if (error.name == "SequelizeForeignKeyConstraintError") {
+            return res.status(400).json({ message: "Impossible de supprimer cette réponse car elle est encore lié à d'autres tables.", data: error });
+        }
+        const message = "La réponse n'a pas pu être supprimé. Veuillez réessayer dans un moment.";
+        res.status(500).json({ message, data: error.message })
+    }
 });
 
-//Edit a answer
-answersRouter.put("/:id", (req, res) => {
-    const answerId = req.params.id;
-    Answer.update(req.body, { where: { idAnswer: answerId } }).then((_) => {
-        Answer.findByPk(answerId).then((updatedAnswer) => {
-            const message = `Le answer ${updatedAnswer.name} avec l'id ${updatedAnswer.idAnswer} a été mis à jour.`;
-            res.json(success(message, updatedAnswer));
-        });
-    });
+//Edit an answer
+answersRouter.put("/:id", async (req, res) => {
+    try {
+        const answerId = req.params.id;
+        const answerToUpdate = await Answer.findByPk(answerId);
+        const updatedAnswer = await answerToUpdate.update(req.body);
+
+        const message = `La réponse ${updatedAnswer.answer} avec l'id ${updatedAnswer.idAnswer} a été mis à jour.`;
+        res.json(success(message, updatedAnswer));
+    } catch (error) {
+        res.status(500).json({ message: "Erreur lors de la modification de la réponse.", data: error })
+    }
 });
 
 export { answersRouter };
