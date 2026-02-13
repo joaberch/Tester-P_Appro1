@@ -1,6 +1,6 @@
 import express from "express";
 import { success } from "../helper.mjs";
-import { Test, User, CreatedBy, AssignedTo } from "../db/sequelize.mjs";
+import { Test, User, CreatedBy, AssignedTo, Question } from "../db/sequelize.mjs";
 import { ValidationError } from "sequelize";
 
 const testsRouter = express();
@@ -20,6 +20,23 @@ testsRouter.get("/:id", (req, res) => {
         res.json(success(message, test));
     })
 });
+
+//Get all questions
+testsRouter.get("/:id/questions", async (req, res) => {
+    try {
+        const testId = req.params.id;
+        const questions = await Question.findAll({
+            where: {
+                idTest: testId,
+            }
+        });
+    
+        const message = `Les questions du test ${testId} ont bien été récupéré.`;
+        res.json(success(message, questions));
+    } catch (error) {
+        res.status(500).json({ message: "Les questions du test n'ont pas pu être récupéré.", data: error.message });
+    }
+})
 
 //Create a test
 testsRouter.post("/", async (req, res) => {
