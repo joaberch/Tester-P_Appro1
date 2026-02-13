@@ -7,9 +7,10 @@ CREATE TABLE IF NOT EXISTS t_users(
    login CHAR(7),
    firstname VARCHAR(100),
    name VARCHAR(100),
-   hashed_password VARCHAR(100),
+   hashedPassword VARCHAR(100),
    role VARCHAR(50),
    isDeleted BOOLEAN,
+   createdAt DATE,
    PRIMARY KEY(idUser),
    UNIQUE(login)
 );
