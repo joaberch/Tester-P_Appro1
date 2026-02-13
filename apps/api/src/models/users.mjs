@@ -27,7 +27,7 @@ const UserModel = (sequelize, DataTypes) => {
             defaultValue: "student"
         },
         hashedPassword: {
-            type: DataTypes.STRING(60), //TODO fix length to 60?
+            type: DataTypes.STRING(60),
             validate: {
                 len: [60, 60],
             },

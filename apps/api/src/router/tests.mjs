@@ -1,6 +1,6 @@
 import express from "express";
 import { success } from "../helper.mjs";
-import { Test } from "../db/sequelize.mjs";
+import { Test, User, CreatedBy, AssignedTo } from "../db/sequelize.mjs";
 import { ValidationError } from "sequelize";
 
 const testsRouter = express();
@@ -22,17 +22,40 @@ testsRouter.get("/:id", (req, res) => {
 });
 
 //Create a test
-testsRouter.post("/", (req, res) => {
-    Test.create(req.body).then((createdTest) => {
-        const message = `Le test ${createdTest.name} a été créé.`;
-        res.json(success(message, createdTest));
-    }).catch((error) => {
+testsRouter.post("/", async (req, res) => {
+    try {
+        const { creatorId, ...testData } = req.body;
+        if (!creatorId || !creatorId.length === 0) {
+            return res.status(400).json({ message: "Le test n'a pas de créateur." });
+        }
+
+        //Get creator information and check role
+        const teacher = await User.findAll({
+            where: {
+                idUser: creatorId,
+                role: ["teacher", "admin"],
+                isDeleted: false,
+            }
+        });
+        if (teacher.length == 0) {
+            return res.status(400).json({ message: "L'utilisateur ayant créé le test n'est pas un enseignant ou un administrateur." });
+        }
+
+        //Create test
+        const newTest = await Test.create(testData)
+        const testMessage = `Le test ${newTest.name} a été créé`;
+
+        //Create created_by
+        const created_by = { "idUser": creatorId, "idTest": newTest.idTest } //TODO - warning
+        const newCreatedBy = await CreatedBy.create(created_by)
+        const createdByMessage = `Le lien de création entre l'utilisateur ${newCreatedBy.idUser} et le test ${newCreatedBy.idTest} a bien été créé.`;
+        res.json(success(testMessage + "\n" + createdByMessage, newTest + newCreatedBy));
+    } catch (error) {
         if (error instanceof ValidationError) {
             return res.status(400).json({ message: error.message, data: error });
         }
-        const message = "Le test n'a pas été ajouté. Veuillez réessayer dans un moment.";
-        res.status(500).json({ message, data: error });
-    })
+        res.status(500).json({ message: "Le test n'a pas pu être créé.", data: error.message });
+    }
 });
 
 //Archivate a test
@@ -60,23 +83,103 @@ testsRouter.delete("/:id", (req, res) => {
             res.json(success(message, deletedTest))
         }).catch((error) => {
             if (error.name == "SequelizeForeignKeyConstraintError") {
-                return res.status(400).json({message: "Impossible de supprimer ce test car il est encore lié à d'autres tables.", data: error});
+                return res.status(400).json({ message: "Impossible de supprimer ce test car il est encore lié à d'autres tables.", data: error });
             }
             const message = "Le test n'a pas pu être supprimé. Veuillez réessayer dans un moment.";
-            res.status(500).json({ message, data: error})
+            res.status(500).json({ message, data: error })
         })
     })
 });
 
 //Edit a test
-testsRouter.put("/:id", (req, res) => {
-    const testId = req.params.id;
-    Test.update(req.body, { where: { idTest: testId } }).then((_) => {
-        Test.findByPk(testId).then((updatedTest) => {
-            const message = `Le test ${updatedTest.name} avec l'id ${updatedTest.idTest} a été mis à jour.`;
-            res.json(success(message, updatedTest));
+testsRouter.put("/:id", async (req, res) => {
+    try {
+        const { creatorId, ...testData } = req.body;
+        const testId = req.params.id;
+
+        //get test
+        const test = await Test.findByPk(testId);
+        if (!test) {
+            return res.status(404).json({ message: "Test non trouvé." });
+        }
+
+        const alreadyExist = await CreatedBy.findOne({ where: { idTest: testId, idUser: creatorId } });
+        if (alreadyExist) {
+            return res.status(400).json({ message: "Ce test est déjà assigné à cet utilisateur." })
+        }
+
+        //update test
+        const updatedTest = await test.update(testData);
+        const testMessage = `Le test ${updatedTest.name} avec l'id ${updatedTest.idTest} a été mis à jour.`;
+
+        //get creator data
+        const teacher = await User.findAll({
+            where: {
+                idUser: creatorId,
+                role: ["teacher", "admin"],
+                isDeleted: false,
+            }
         });
-    });
+        if (teacher.length == 0) {
+            return res.status(400).json({ message: "L'utilisateur ayant créé le test n'est pas un enseignant ou un administrateur." });
+        }
+
+        const created_by = { "idUser": creatorId, "idTest": test.idTest } //TODO - check if teacher duplicate make a panic or still works
+        const newCreatedBy = await CreatedBy.create(created_by);
+        const createdByMessage = `Le lien de création entre l'utilisateur ${newCreatedBy.idUser} et le test ${newCreatedBy.idTest} a bien été créé.`;
+        res.json(success(testMessage + "\n" + createdByMessage, test + newCreatedBy));
+    } catch (error) {
+        if (error instanceof ValidationError) {
+            return res.status(400).json({ message: error.message, data: error });
+        }
+        res.status(500).json({ message: "Le test n'a pas pu être créé.", data: error.message });
+    }
 });
+
+//Assign a test
+testsRouter.post("/:testId/user/:userId", async (req, res) => { //TODO - check if can assign to admin/teacher - I assume so
+    try {
+        const testId = req.params.testId;
+        const userId = req.params.userId;
+        const alreadyExist = await AssignedTo.findOne({ where: { idTest: testId, idUser: userId } });
+        if (alreadyExist) {
+            return res.status(400).json({ message: "Ce test est déjà assigné à cet utilisateur." })
+        }
+        const createAssignedTo = {
+            "idUser": userId,
+            "idTest": testId,
+        }
+        const createdAssignedTo = AssignedTo.create(createAssignedTo);
+        const message = `L'assignation du test ${testId} à l'utilisateur ${userId} a réussi`;
+        res.json(success(message, createdAssignedTo));
+    } catch (error) {
+        if (error instanceof ValidationError) {
+            return res.status(400).json({ message: error.message, data: error });
+        }
+        if (error instanceof SequelizeUniqueConstraintError) {
+            return res.status(400).json({ message: "L'utilisateur a déjà été assigné à ce test" })
+        }
+        res.status(500).json({ message: "L'assignation n'a pas pu être créé.", data: error.message });
+    }
+});
+
+//De-Assign a test
+testsRouter.delete("/:testId/user/:userId", async (req, res) => {
+    try {
+        const testId = req.params.testId;
+        const userId = req.params.userId;
+        const assignation = await AssignedTo.findOne({ where: { idTest: testId, idUser: userId } });
+        if (!assignation) {
+            return res.status(400).json({ message: "L'assignation n'existe pas et ne peut donc pas être supprimé." })
+        }
+
+        const removedAssignedTo = await assignation.destroy();
+        const message = `Le test ${testId} n'est plus assigné à l'utilisateur ${userId}.`;
+        res.json(success(message, removedAssignedTo));
+    } catch (error) {
+        const message = "L'assignation n'a pas pu être supprimé. Veuillez réessayer dans un moment.";
+        res.status(500).json({ message, data: error })
+    }
+})
 
 export { testsRouter };
