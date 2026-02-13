@@ -1,6 +1,7 @@
 import express from "express";
 import { success } from "../helper.mjs";
 import { Module } from "../db/sequelize.mjs";
+import { ValidationError } from "sequelize";
 
 const modulesRouter = express();
 

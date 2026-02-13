@@ -1,6 +1,7 @@
 import express from "express";
 import { success } from "../helper.mjs";
 import { Attachement } from "../db/sequelize.mjs";
+import { ValidationError } from "sequelize";
 
 const attachementsRouter = express();
 

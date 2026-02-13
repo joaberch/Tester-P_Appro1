@@ -1,6 +1,7 @@
 import express from "express";
 import { success } from "../helper.mjs";
 import { User } from "../db/sequelize.mjs";
+import { ValidationError } from "sequelize";
 
 const usersRouter = express();
 //TODO check enum in DB for role
@@ -22,7 +23,7 @@ usersRouter.get("/students", (req, res) => {
 usersRouter.get("/teachers", (req, res) => {
     User.findAll({
         where: {
-            role: "teachers",
+            role: "teacher",
             isDeleted: false,
         }
     }).then((teachers) => {
@@ -92,7 +93,7 @@ usersRouter.put("/archivate/:id", async (req, res) => {
 });
 
 //Create student
-usersRouter.post("/", (req, res) => {
+usersRouter.post("/student", (req, res) => {
     const studentData = {
         ...req.body,
         role: "student",
@@ -112,7 +113,7 @@ usersRouter.post("/", (req, res) => {
 });
 
 //Create teacher
-usersRouter.post("/", (req, res) => {
+usersRouter.post("/teacher", (req, res) => {
     const teacherData = {
         ...req.body,
         role: "teacher",
@@ -130,3 +131,5 @@ usersRouter.post("/", (req, res) => {
         res.status(500).json({ message, data: error });
     })
 });
+
+export { usersRouter };

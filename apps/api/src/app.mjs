@@ -20,7 +20,10 @@ app.get('/api/', (req, res) => {
 })
 
 import { testsRouter } from "./router/tests.mjs";
-app.use("/api/tests", testsRouter)
+app.use("/api/tests", testsRouter);
+
+import { usersRouter } from "./router/users.mjs";
+app.use("/api/users", usersRouter)
 
 app.use(({ res }) => {
     const message = "Impossible de trouver la ressource.";
