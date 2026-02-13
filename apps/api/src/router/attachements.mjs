@@ -65,7 +65,7 @@ attachementsRouter.put("/:id", (req, res) => {
     const attachementId = req.params.id;
     Attachement.update(req.body, { where: { idAttachement: attachementId } }).then((_) => {
         Attachement.findByPk(attachementId).then((updatedAttachement) => {
-            const message = `La pièce jointe ${updatedAttachement.name} avec l'id ${updatedAttachement.idAttachement} a été mis à jour.`;
+            const message = `La pièce jointe ${updatedAttachement.idAttachement} avec l'id ${updatedAttachement.idAttachement} a été mis à jour.`;
             res.json(success(message, updatedAttachement));
         });
     });

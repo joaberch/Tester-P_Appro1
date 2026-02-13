@@ -35,7 +35,7 @@ import { modulesRouter } from "./router/modules.mjs";
 app.use("/api/modules", modulesRouter);
 
 import { attachementsRouter } from "./router/attachements.mjs";
-app.use("/api/attachements", attachementsRouter)
+app.use("/api/attachements", attachementsRouter);
 
 app.use(({ res }) => {
     const message = "Impossible de trouver la ressource.";
