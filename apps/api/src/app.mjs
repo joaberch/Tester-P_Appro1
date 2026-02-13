@@ -31,6 +31,12 @@ app.use("/api/questions", questionsRouter);
 import { objectivesRouter } from "./router/objectives.mjs";
 app.use("/api/objectives", objectivesRouter);
 
+import { modulesRouter } from "./router/modules.mjs";
+app.use("/api/modules", modulesRouter);
+
+import { attachementsRouter } from "./router/attachements.mjs";
+app.use("/api/attachements", attachementsRouter)
+
 app.use(({ res }) => {
     const message = "Impossible de trouver la ressource.";
     res.status(404).json(message);

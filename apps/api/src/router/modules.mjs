@@ -1,6 +1,6 @@
 import express from "express";
 import { success } from "../helper.mjs";
-import { Module } from "../db/sequelize.mjs";
+import { Module, Test } from "../db/sequelize.mjs";
 import { ValidationError } from "sequelize";
 
 const modulesRouter = express();
@@ -20,6 +20,23 @@ modulesRouter.get("/:id", (req, res) => {
         res.json(success(message, module));
     })
 });
+
+//Get all tests
+modulesRouter.get("/:id/tests", async (req, res) => {
+    try {
+        const moduleId = req.params.id;
+        const tests = await Test.findAll({
+            where: {
+                idModule: moduleId,
+            }
+        });
+    
+        const message = `Les tests du module ${moduleId} ont bien été récupéré.`;
+        res.json(success(message, tests));
+    } catch (error) {
+        res.status(500).json({ message: "Erreur lors de la récupération des tests"})
+    }
+})
 
 //Create a module
 modulesRouter.post("/", (req, res) => {
