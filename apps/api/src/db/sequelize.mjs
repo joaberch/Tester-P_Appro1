@@ -77,7 +77,7 @@ Objective.belongsTo(Module, {
 //assigned_to
 Test.belongsToMany(User, {
     through: AssignedTo,
-    as: 'assigned_to',
+    as: 'assignedUser',
     foreignKey: 'idTest',
     otherKey: 'idUser',
 });
@@ -91,7 +91,7 @@ User.belongsToMany(Test, {
 //created_by
 Test.belongsToMany(User, {
     through: CreatedBy,
-    as: 'created_by',
+    as: 'createdTest',
     foreignKey: 'idTest',
     otherKey: 'idUser',
 });
