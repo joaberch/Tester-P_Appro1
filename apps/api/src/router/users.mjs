@@ -4,7 +4,6 @@ import { User } from "../db/sequelize.mjs";
 import { ValidationError } from "sequelize";
 
 const usersRouter = express();
-//TODO check enum in DB for role
 
 //Get all students
 usersRouter.get("/students", (req, res) => {

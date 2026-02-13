@@ -8,29 +8,37 @@ const objectivesRouter = express();
 //Get all objectives
 objectivesRouter.get("/", (req, res) => {
     Objective.findAll().then((objectives) => {
-        const message = "Tous les objectives ont été récupérés.";
+        const message = "Tous les objectifs ont été récupérés.";
         res.json(success(message, objectives))
     })
 })
 
 //Get a specific objective
-objectivesRouter.get("/:id", (req, res) => {
-    Objective.findByPk(req.params.id).then((objective) => {
-        const message = `Le objective avec l'id ${objective.idObjective} a été récupéré.`;
+objectivesRouter.get("/:id", async (req, res) => {
+    try {
+        const objectiveId = req.params.id;
+        const objective = await Objective.findByPk(objectiveId);
+        if (!objective) {
+            return res.status(404).json({ message: "Ressource introuvable." })
+        }
+
+        const message = `L'objectif avec l'id ${objective.idObjective} a été récupéré.`;
         res.json(success(message, objective));
-    })
+    } catch (error) {
+        return res.status(500).json({ message: "L'objectif n'a pas pu être récupéré."})
+    }
 });
 
 //Create an objective
 objectivesRouter.post("/", (req, res) => {
     Objective.create(req.body).then((createdObjective) => {
-        const message = `Le objective ${createdObjective.name} a été créé.`;
+        const message = `L'objectif ${createdObjective.name} a été créé.`;
         res.json(success(message, createdObjective));
     }).catch((error) => {
         if (error instanceof ValidationError) {
             return res.status(400).json({ message: error.message, data: error });
         }
-        const message = "Le objective n'a pas été ajouté. Veuillez réessayer dans un moment.";
+        const message = "L'objectif n'a pas été ajouté. Veuillez réessayer dans un moment.";
         res.status(500).json({ message, data: error });
     })
 });
@@ -41,46 +49,52 @@ objectivesRouter.put("/archivate/:id", async (req, res) => {
     let archivateObjective = await Objective.findByPk(objectiveId);
 
     if (!archivateObjective) {
-        return res.status(404).json({ message: "Objective non trouvé" });
+        return res.status(404).json({ message: "Objectif non trouvé" });
     }
 
     await archivateObjective.update({ isDeleted: true }).then((_) => {
-        const message = `Le objective ${archivateObjective.name} a bien été supprimé (archivé).`;
+        const message = `L'objectif ${archivateObjective.name} a bien été supprimé (archivé).`;
         res.json(success(message, archivateObjective));
     });
 });
 
 //Delete an objective
-objectivesRouter.delete("/:id", (req, res) => {
+objectivesRouter.delete("/:id", async (req, res) => {
     try {
-        Objective.findByPk(req.params.id).then((deletedObjective) => {
-            Objective.destroy({
-                where: { idObjective: deletedObjective.idObjective },
-            }).then((_) => {
-                const message = `Le objective ${deletedObjective.name} a été supprimé.`;
-                res.json(success(message, deletedObjective))
-            }).catch((error) => {
-                if (error.name == "SequelizeForeignKeyConstraintError") {
-                    return res.status(400).json({message: "Impossible de supprimer ce objective car il est encore lié à d'autres tables.", data: error});
-                }
-                const message = "Le objective n'a pas pu être supprimé. Veuillez réessayer dans un moment.";
-                res.status(500).json({ message, data: error});
-            });
-        });
+        const objectiveId = req.params.id;
+        const objective = await Objective.findByPk(objectiveId);
+        if (!objective) {
+            return res.status(404).json({ message: "Ressource introuvable." })
+        }
+        const deletedObjective = await objective.destroy();
+
+        const message = `L'objectif ${deletedObjective.name} a été supprimé.`;
+        res.json(success(message, deletedObjective))
     } catch (error) {
-        res.status(500).json({ message: "Les objectifs n'ont pas pu être supprimé.", data: error.message});
+        if (error.name == "SequelizeForeignKeyConstraintError") {
+            return res.status(400).json({ message: "Impossible de supprimer cet objectif car il est encore lié à d'autres tables.", data: error });
+        }
+        const message = "L'objectif n'a pas pu être supprimé. Veuillez réessayer dans un moment.";
+        res.status(500).json({ message, data: error })
     }
 });
 
 //Edit an objective
-objectivesRouter.put("/:id", (req, res) => {
-    const objectiveId = req.params.id;
-    Objective.update(req.body, { where: { idObjective: objectiveId } }).then((_) => {
-        Objective.findByPk(objectiveId).then((updatedObjective) => {
-            const message = `Le objective ${updatedObjective.name} avec l'id ${updatedObjective.idObjective} a été mis à jour.`;
-            res.json(success(message, updatedObjective));
-        });
-    });
+objectivesRouter.put("/:id", async (req, res) => {
+    try {
+        const objectiveId = req.params.id;
+        const objective = await Objective.findByPk(objectiveId);
+        if (!objective) {
+            return res.status(404).json({ message: "Ressource introuvable." })
+        }
+        const updatedObjective = await objective.update(req.body);
+
+        const message = `Le module ${updatedObjective.name} a été modifié.`;
+        res.json(success(message, updatedObjective))
+    } catch (error) {
+        const message = "L'objectif n'a pas pu être modifié.";
+        res.status(500).json({ message, data: error.message })
+    }
 });
 
 export { objectivesRouter };

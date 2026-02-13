@@ -14,11 +14,19 @@ testsRouter.get("/", (req, res) => {
 });
 
 //Get a specific test
-testsRouter.get("/:id", (req, res) => {
-    Test.findByPk(req.params.id).then((test) => {
+testsRouter.get("/:id", async (req, res) => {
+    try {
+        const testId = req.params.id;
+        const test = await Test.findByPk(testId);
+        if (!test) {
+            return res.status(404).json({ message: "Ressource introuvable." })
+        }
+
         const message = `Le test avec l'id ${test.idTest} a été récupéré.`;
         res.json(success(message, test));
-    })
+    } catch (error) {
+        return res.status(500).json({ message: "Le test n'a pas pu être récupéré."});
+    }
 });
 
 //Get all questions
@@ -138,30 +146,30 @@ testsRouter.put("/:id", async (req, res) => {
         }
 
         const alreadyExist = await CreatedBy.findOne({ where: { idTest: testId, idUser: creatorId } });
-        if (alreadyExist) {
-            return res.status(400).json({ message: "Ce test est déjà assigné à cet utilisateur." })
-        }
 
         //update test
         const updatedTest = await test.update(testData);
         const testMessage = `Le test ${updatedTest.name} avec l'id ${updatedTest.idTest} a été mis à jour.`;
 
         //get creator data
-        const teacher = await User.findAll({
-            where: {
-                idUser: creatorId,
-                role: ["teacher", "admin"],
-                isDeleted: false,
+        if (!alreadyExist) {
+            const teacher = await User.findAll({
+                where: {
+                    idUser: creatorId,
+                    role: ["teacher", "admin"],
+                    isDeleted: false,
+                }
+            });
+            if (teacher.length == 0) {
+                return res.status(400).json({ message: "L'utilisateur ayant créé le test n'est pas un enseignant ou un administrateur." });
             }
-        });
-        if (teacher.length == 0) {
-            return res.status(400).json({ message: "L'utilisateur ayant créé le test n'est pas un enseignant ou un administrateur." });
+            
+            const created_by = { "idUser": creatorId, "idTest": test.idTest } //TODO - check if teacher duplicate make a panic or still works
+            const newCreatedBy = await CreatedBy.create(created_by);
+            const createdByMessage = `Le lien de création entre l'utilisateur ${newCreatedBy.idUser} et le test ${newCreatedBy.idTest} a bien été créé.`;
+            return res.json(success(testMessage + "\n" + createdByMessage, test + newCreatedBy));
         }
-
-        const created_by = { "idUser": creatorId, "idTest": test.idTest } //TODO - check if teacher duplicate make a panic or still works
-        const newCreatedBy = await CreatedBy.create(created_by);
-        const createdByMessage = `Le lien de création entre l'utilisateur ${newCreatedBy.idUser} et le test ${newCreatedBy.idTest} a bien été créé.`;
-        res.json(success(testMessage + "\n" + createdByMessage, test + newCreatedBy));
+        return res.json(success(testMessage, test))
     } catch (error) {
         if (error instanceof ValidationError) {
             return res.status(400).json({ message: error.message, data: error });
@@ -171,13 +179,21 @@ testsRouter.put("/:id", async (req, res) => {
 });
 
 //Assign a test
-testsRouter.post("/:testId/user/:userId", async (req, res) => { //TODO - check if can assign to admin/teacher - I assume so
+testsRouter.post("/:testId/user/:userId", async (req, res) => {
     try {
         const testId = req.params.testId;
         const userId = req.params.userId;
         const alreadyExist = await AssignedTo.findOne({ where: { idTest: testId, idUser: userId } });
         if (alreadyExist) {
             return res.status(400).json({ message: "Ce test est déjà assigné à cet utilisateur." })
+        }
+        const user = await User.findByPk(userId);
+        if (!user) {
+            return res.status(404).json({ message: `L'utilisateur avec l'id ${userId} n'a pas été trouvé.` })
+        }
+        const test = await Test.findByPk(testId);
+        if (!test) {
+            return res.status(404).json({ message: `Le test avec l'id ${testId} n'a pas été trouvé.` })
         }
         const createAssignedTo = {
             "idUser": userId,
