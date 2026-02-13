@@ -28,6 +28,9 @@ app.use("/api/users", usersRouter);
 import { questionsRouter } from "./router/questions.mjs";
 app.use("/api/questions", questionsRouter);
 
+import { objectivesRouter } from "./router/objectives.mjs";
+app.use("/api/objectives", objectivesRouter);
+
 app.use(({ res }) => {
     const message = "Impossible de trouver la ressource.";
     res.status(404).json(message);

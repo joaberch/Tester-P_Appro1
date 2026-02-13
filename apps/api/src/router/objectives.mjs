@@ -52,20 +52,24 @@ objectivesRouter.put("/archivate/:id", async (req, res) => {
 
 //Delete an objective
 objectivesRouter.delete("/:id", (req, res) => {
-    Objective.findByPk(req.params.id).then((deletedObjective) => {
-        Objective.destroy({
-            where: { idObjective: deletedObjective.idObjective },
-        }).then((_) => {
-            const message = `Le objective ${deletedObjective.name} a été supprimé.`;
-            res.json(success(message, deletedObjective))
-        }).catch((error) => {
-            if (error.name == "SequelizeForeignKeyConstraintError") {
-                return res.status(400).json({message: "Impossible de supprimer ce objective car il est encore lié à d'autres tables.", data: error});
-            }
-            const message = "Le objective n'a pas pu être supprimé. Veuillez réessayer dans un moment.";
-            res.status(500).json({ message, data: error})
+    try {
+        Objective.findByPk(req.params.id).then((deletedObjective) => {
+            Objective.destroy({
+                where: { idObjective: deletedObjective.idObjective },
+            }).then((_) => {
+                const message = `Le objective ${deletedObjective.name} a été supprimé.`;
+                res.json(success(message, deletedObjective))
+            }).catch((error) => {
+                if (error.name == "SequelizeForeignKeyConstraintError") {
+                    return res.status(400).json({message: "Impossible de supprimer ce objective car il est encore lié à d'autres tables.", data: error});
+                }
+                const message = "Le objective n'a pas pu être supprimé. Veuillez réessayer dans un moment.";
+                res.status(500).json({ message, data: error});
+            });
         });
-    });
+    } catch (error) {
+        res.status(500).json({ message: "Les objectifs n'ont pas pu être supprimé.", data: error.message});
+    }
 });
 
 //Edit an objective
