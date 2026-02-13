@@ -23,11 +23,14 @@ import { testsRouter } from "./router/tests.mjs";
 app.use("/api/tests", testsRouter);
 
 import { usersRouter } from "./router/users.mjs";
-app.use("/api/users", usersRouter)
+app.use("/api/users", usersRouter);
+
+import { questionsRouter } from "./router/questions.mjs";
+app.use("/api/questions", questionsRouter);
 
 app.use(({ res }) => {
     const message = "Impossible de trouver la ressource.";
-    res.status(404).json(message)
+    res.status(404).json(message);
 });
 
 app.listen(port, () => {

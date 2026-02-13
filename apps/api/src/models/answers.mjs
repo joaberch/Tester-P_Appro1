@@ -21,7 +21,7 @@ const AnswerModel = (sequelize, DataTypes) => {
     },
         {
             timestamps: true,
-            createdAt: true,
+            createdAt: false,
             updatedAt: false,
             freezeTableName: true,
             tableName: "t_answers",

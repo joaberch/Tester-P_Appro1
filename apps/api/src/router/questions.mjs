@@ -1,6 +1,6 @@
 import express from "express";
 import { success } from "../helper.mjs";
-import { Question } from "../db/sequelize.mjs";
+import { Answer, Question } from "../db/sequelize.mjs";
 import { ValidationError } from "sequelize";
 
 const questionsRouter = express();
@@ -21,10 +21,27 @@ questionsRouter.get("/:id", (req, res) => {
     })
 });
 
+//Get all answers
+questionsRouter.get("/:id/answers", async (req, res) => {
+    try {
+        const questionId = req.params.id;
+        const answers = await Answer.findAll({
+            where: {
+                idQuestion: questionId,
+            }
+        });
+    
+        const message = `Les réponses de la question ${questionId} ont bien été récupéré.`;
+        res.json(success(message, answers));
+    } catch (error) {
+        res.status(500).json({ message: "Les réponses n'ont pas pu être récupéré.", data: error.message});
+    }
+})
+
 //Create a question
 questionsRouter.post("/", (req, res) => {
     Question.create(req.body).then((createdQuestion) => {
-        const message = `Le question ${createdQuestion.name} a été créé.`;
+        const message = `Le question ${createdQuestion.question} a été créé.`;
         res.json(success(message, createdQuestion));
     }).catch((error) => {
         if (error instanceof ValidationError) {
@@ -45,7 +62,7 @@ questionsRouter.put("/archivate/:id", async (req, res) => {
     }
 
     await archivateQuestion.update({ isDeleted: true }).then((_) => {
-        const message = `Le question ${archivateQuestion.name} a bien été supprimé (archivé).`;
+        const message = `Le question ${archivateQuestion.question} a bien été supprimé (archivé).`;
         res.json(success(message, archivateQuestion));
     });
 });
@@ -56,7 +73,7 @@ questionsRouter.delete("/:id", (req, res) => {
         Question.destroy({
             where: { idQuestion: deletedQuestion.idQuestion },
         }).then((_) => {
-            const message = `Le question ${deletedQuestion.name} a été supprimé.`;
+            const message = `Le question ${deletedQuestion.question} a été supprimé.`;
             res.json(success(message, deletedQuestion))
         }).catch((error) => {
             if (error.name == "SequelizeForeignKeyConstraintError") {
@@ -73,7 +90,7 @@ questionsRouter.put("/:id", (req, res) => {
     const questionId = req.params.id;
     Question.update(req.body, { where: { idQuestion: questionId } }).then((_) => {
         Question.findByPk(questionId).then((updatedQuestion) => {
-            const message = `Le question ${updatedQuestion.name} avec l'id ${updatedQuestion.idQuestion} a été mis à jour.`;
+            const message = `Le question ${updatedQuestion.question} avec l'id ${updatedQuestion.idQuestion} a été mis à jour.`;
             res.json(success(message, updatedQuestion));
         });
     });
