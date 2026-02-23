@@ -2,11 +2,12 @@ import express from "express";
 import { success } from "../helper.mjs";
 import { Answer } from "../db/sequelize.mjs";
 import { ValidationError } from "sequelize";
+import { auth } from "../auth/auth.mjs";
 
 const answersRouter = express();
 
 //Get all answers
-answersRouter.get("/", (req, res) => {
+answersRouter.get("/", auth, (req, res) => {
     Answer.findAll().then((answers) => {
         const message = "Toutes les réponses ont été récupérés.";
         res.json(success(message, answers))
@@ -14,7 +15,7 @@ answersRouter.get("/", (req, res) => {
 })
 
 //Get a specific answer
-answersRouter.get("/:id", async (req, res) => {
+answersRouter.get("/:id", auth, async (req, res) => {
     try {
         console.log(req.params.id)
         const answers = await Answer.findByPk(req.params.id);
@@ -30,7 +31,7 @@ answersRouter.get("/:id", async (req, res) => {
 });
 
 //Create an answer
-answersRouter.post("/", (req, res) => {
+answersRouter.post("/", auth, (req, res) => {
     Answer.create(req.body).then((createdAnswer) => {
         const message = `La réponse ${createdAnswer.answer} a été créé.`;
         res.json(success(message, createdAnswer));
@@ -44,7 +45,7 @@ answersRouter.post("/", (req, res) => {
 });
 
 //Archivate a answer
-answersRouter.put("/archivate/:id", async (req, res) => {
+answersRouter.put("/archivate/:id", auth, async (req, res) => {
     const answerId = req.params.id;
     let archivateAnswer = await Answer.findByPk(answerId);
 
@@ -59,7 +60,7 @@ answersRouter.put("/archivate/:id", async (req, res) => {
 });
 
 //Delete an answer
-answersRouter.delete("/:id", async (req, res) => {
+answersRouter.delete("/:id", auth, async (req, res) => {
     try {
         const deletedAnswer = await Answer.findByPk(req.params.id);
         if (!deletedAnswer) {
@@ -79,7 +80,7 @@ answersRouter.delete("/:id", async (req, res) => {
 });
 
 //Edit an answer
-answersRouter.put("/:id", async (req, res) => {
+answersRouter.put("/:id", auth, async (req, res) => {
     try {
         const answerId = req.params.id;
         const answerToUpdate = await Answer.findByPk(answerId);

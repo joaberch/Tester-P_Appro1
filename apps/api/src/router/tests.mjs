@@ -2,11 +2,12 @@ import express from "express";
 import { success } from "../helper.mjs";
 import { Test, User, CreatedBy, AssignedTo, Question, Attachement } from "../db/sequelize.mjs";
 import { ValidationError } from "sequelize";
+import { auth } from "../auth/auth.mjs";
 
 const testsRouter = express();
 
 //Get all tests
-testsRouter.get("/", (req, res) => {
+testsRouter.get("/", auth, (req, res) => {
     Test.findAll().then((tests) => {
         const message = "Tous les tests ont été récupérés.";
         res.json(success(message, tests))
@@ -14,7 +15,7 @@ testsRouter.get("/", (req, res) => {
 });
 
 //Get a specific test
-testsRouter.get("/:id", async (req, res) => {
+testsRouter.get("/:id", auth, async (req, res) => {
     try {
         const testId = req.params.id;
         const test = await Test.findByPk(testId);
@@ -30,7 +31,7 @@ testsRouter.get("/:id", async (req, res) => {
 });
 
 //Get all questions
-testsRouter.get("/:id/questions", async (req, res) => {
+testsRouter.get("/:id/questions", auth, async (req, res) => {
     try {
         const testId = req.params.id;
         const questions = await Question.findAll({
@@ -47,7 +48,7 @@ testsRouter.get("/:id/questions", async (req, res) => {
 })
 
 //Get all attachements
-testsRouter.get("/:id/attachements", async (req, res) => {
+testsRouter.get("/:id/attachements", auth, async (req, res) => {
     try {
         const testId = req.params.id;
         const attachements = await Attachement.findAll({
@@ -64,7 +65,7 @@ testsRouter.get("/:id/attachements", async (req, res) => {
 });
 
 //Create a test
-testsRouter.post("/", async (req, res) => {
+testsRouter.post("/", auth, async (req, res) => {
     try {
         const { creatorId, ...testData } = req.body;
         if (!creatorId || !creatorId.length === 0) {
@@ -101,7 +102,7 @@ testsRouter.post("/", async (req, res) => {
 });
 
 //Archivate a test
-testsRouter.put("/archivate/:id", async (req, res) => {
+testsRouter.put("/archivate/:id", auth, async (req, res) => {
     const testId = req.params.id;
     let archivateTest = await Test.findByPk(testId);
 
@@ -116,7 +117,7 @@ testsRouter.put("/archivate/:id", async (req, res) => {
 });
 
 //Delete a test
-testsRouter.delete("/:id", (req, res) => {
+testsRouter.delete("/:id", auth, (req, res) => {
     Test.findByPk(req.params.id).then((deletedTest) => {
         Test.destroy({
             where: { idTest: deletedTest.idTest },
@@ -134,7 +135,7 @@ testsRouter.delete("/:id", (req, res) => {
 });
 
 //Edit a test
-testsRouter.put("/:id", async (req, res) => {
+testsRouter.put("/:id", auth, async (req, res) => {
     try {
         const { creatorId, ...testData } = req.body;
         const testId = req.params.id;
@@ -179,7 +180,7 @@ testsRouter.put("/:id", async (req, res) => {
 });
 
 //Assign a test
-testsRouter.post("/:testId/user/:userId", async (req, res) => {
+testsRouter.post("/:testId/user/:userId", auth, async (req, res) => {
     try {
         const testId = req.params.testId;
         const userId = req.params.userId;
@@ -214,7 +215,7 @@ testsRouter.post("/:testId/user/:userId", async (req, res) => {
 });
 
 //De-Assign a test
-testsRouter.delete("/:testId/user/:userId", async (req, res) => {
+testsRouter.delete("/:testId/user/:userId", auth, async (req, res) => {
     try {
         const testId = req.params.testId;
         const userId = req.params.userId;
@@ -230,6 +231,6 @@ testsRouter.delete("/:testId/user/:userId", async (req, res) => {
         const message = "L'assignation n'a pas pu être supprimé. Veuillez réessayer dans un moment.";
         res.status(500).json({ message, data: error })
     }
-})
+});
 
 export { testsRouter };

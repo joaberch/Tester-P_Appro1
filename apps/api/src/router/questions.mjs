@@ -2,11 +2,12 @@ import express from "express";
 import { success } from "../helper.mjs";
 import { Answer, Question } from "../db/sequelize.mjs";
 import { ValidationError } from "sequelize";
+import { auth } from "../auth/auth.mjs";
 
 const questionsRouter = express();
 
 //Get all questions
-questionsRouter.get("/", (req, res) => {
+questionsRouter.get("/", auth, (req, res) => {
     Question.findAll().then((questions) => {
         const message = "Toutes les questions ont été récupérés.";
         res.json(success(message, questions))
@@ -14,7 +15,7 @@ questionsRouter.get("/", (req, res) => {
 })
 
 //Get a specific question
-questionsRouter.get("/:id", async (req, res) => {
+questionsRouter.get("/:id", auth, async (req, res) => {
     try {
         const questionId = req.params.id;
         const question = await Question.findByPk(questionId);
@@ -30,7 +31,7 @@ questionsRouter.get("/:id", async (req, res) => {
 });
 
 //Get all answers
-questionsRouter.get("/:id/answers", async (req, res) => {
+questionsRouter.get("/:id/answers", auth, async (req, res) => {
     try {
         const questionId = req.params.id;
         const answers = await Answer.findAll({
@@ -47,7 +48,7 @@ questionsRouter.get("/:id/answers", async (req, res) => {
 })
 
 //Create a question
-questionsRouter.post("/", (req, res) => {
+questionsRouter.post("/", auth, (req, res) => {
     Question.create(req.body).then((createdQuestion) => {
         const message = `La question ${createdQuestion.question} a été créé.`;
         res.json(success(message, createdQuestion));
@@ -61,7 +62,7 @@ questionsRouter.post("/", (req, res) => {
 });
 
 //Archivate a question
-questionsRouter.put("/archivate/:id", async (req, res) => {
+questionsRouter.put("/archivate/:id", auth, async (req, res) => {
     const questionId = req.params.id;
     let archivateQuestion = await Question.findByPk(questionId);
 
@@ -76,7 +77,7 @@ questionsRouter.put("/archivate/:id", async (req, res) => {
 });
 
 //Delete a question
-questionsRouter.delete("/:id", async (req, res) => {
+questionsRouter.delete("/:id", auth, async (req, res) => {
     try {
         const questionId = req.params.id;
         const question = await Question.findByPk(questionId);
@@ -97,7 +98,7 @@ questionsRouter.delete("/:id", async (req, res) => {
 });
 
 //Edit a question
-questionsRouter.put("/:id", async (req, res) => {
+questionsRouter.put("/:id", auth, async (req, res) => {
     try {
         const questionId = req.params.id;
         const question = await Question.findByPk(questionId);

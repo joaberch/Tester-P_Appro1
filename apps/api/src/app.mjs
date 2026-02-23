@@ -16,8 +16,11 @@ app.get('/', (req, res) => {
 })
 
 app.get('/api/', (req, res) => {
-    res.redirect(`http://localhost:${port}/`)
+    res.redirect(`http://localhost:${port}/`);
 })
+
+import { loginRouter } from "./router/login.mjs";
+app.use("/api/login", loginRouter);
 
 import { testsRouter } from "./router/tests.mjs";
 app.use("/api/tests", testsRouter);

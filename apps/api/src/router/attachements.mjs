@@ -2,11 +2,12 @@ import express from "express";
 import { success } from "../helper.mjs";
 import { Attachement } from "../db/sequelize.mjs";
 import { ValidationError } from "sequelize";
+import { auth } from "../auth/auth.mjs";
 
 const attachementsRouter = express();
 
 //Get a specific attachement
-attachementsRouter.get("/:id", async (req, res) => {
+attachementsRouter.get("/:id", auth, async (req, res) => {
     try {
         const attachementId = req.params.id;
         let attachement = await Attachement.findByPk(attachementId);
@@ -24,7 +25,7 @@ attachementsRouter.get("/:id", async (req, res) => {
 });
 
 //Create an attachement
-attachementsRouter.post("/", (req, res) => {
+attachementsRouter.post("/", auth, (req, res) => {
     Attachement.create(req.body).then((createdAttachement) => {
         const message = `La pièce jointe ${createdAttachement.idAttachement} a été créé.`;
         res.json(success(message, createdAttachement));
@@ -38,7 +39,7 @@ attachementsRouter.post("/", (req, res) => {
 });
 
 //Archivate an attachement
-attachementsRouter.put("/archivate/:id", async (req, res) => {
+attachementsRouter.put("/archivate/:id", auth, async (req, res) => {
     const attachementId = req.params.id;
     let archivateAttachement = await Attachement.findByPk(attachementId);
 
@@ -53,7 +54,7 @@ attachementsRouter.put("/archivate/:id", async (req, res) => {
 });
 
 //Delete an attachement
-attachementsRouter.delete("/:id", async (req, res) => {
+attachementsRouter.delete("/:id", auth, async (req, res) => {
     try {
         const attachementId = req.params.id;
         const attachementToDelete = await Attachement.findByPk(attachementId);
@@ -74,7 +75,7 @@ attachementsRouter.delete("/:id", async (req, res) => {
 });
 
 //Edit an attachement
-attachementsRouter.put("/:id", async (req, res) => {
+attachementsRouter.put("/:id", auth, async (req, res) => {
     try {
         const attachementId = req.params.id;
         const attachementToUpdate = await Attachement.findByPk(attachementId);

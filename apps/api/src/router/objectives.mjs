@@ -2,11 +2,12 @@ import express from "express";
 import { success } from "../helper.mjs";
 import { Objective } from "../db/sequelize.mjs";
 import { ValidationError } from "sequelize";
+import { auth } from "../auth/auth.mjs";
 
 const objectivesRouter = express();
 
 //Get all objectives
-objectivesRouter.get("/", (req, res) => {
+objectivesRouter.get("/", auth, (req, res) => {
     Objective.findAll().then((objectives) => {
         const message = "Tous les objectifs ont été récupérés.";
         res.json(success(message, objectives))
@@ -14,7 +15,7 @@ objectivesRouter.get("/", (req, res) => {
 })
 
 //Get a specific objective
-objectivesRouter.get("/:id", async (req, res) => {
+objectivesRouter.get("/:id", auth, async (req, res) => {
     try {
         const objectiveId = req.params.id;
         const objective = await Objective.findByPk(objectiveId);
@@ -30,7 +31,7 @@ objectivesRouter.get("/:id", async (req, res) => {
 });
 
 //Create an objective
-objectivesRouter.post("/", (req, res) => {
+objectivesRouter.post("/", auth, (req, res) => {
     Objective.create(req.body).then((createdObjective) => {
         const message = `L'objectif ${createdObjective.name} a été créé.`;
         res.json(success(message, createdObjective));
@@ -44,7 +45,7 @@ objectivesRouter.post("/", (req, res) => {
 });
 
 //Archivate an objective
-objectivesRouter.put("/archivate/:id", async (req, res) => {
+objectivesRouter.put("/archivate/:id", auth, async (req, res) => {
     const objectiveId = req.params.id;
     let archivateObjective = await Objective.findByPk(objectiveId);
 
@@ -59,7 +60,7 @@ objectivesRouter.put("/archivate/:id", async (req, res) => {
 });
 
 //Delete an objective
-objectivesRouter.delete("/:id", async (req, res) => {
+objectivesRouter.delete("/:id", auth, async (req, res) => {
     try {
         const objectiveId = req.params.id;
         const objective = await Objective.findByPk(objectiveId);
@@ -80,7 +81,7 @@ objectivesRouter.delete("/:id", async (req, res) => {
 });
 
 //Edit an objective
-objectivesRouter.put("/:id", async (req, res) => {
+objectivesRouter.put("/:id", auth, async (req, res) => {
     try {
         const objectiveId = req.params.id;
         const objective = await Objective.findByPk(objectiveId);

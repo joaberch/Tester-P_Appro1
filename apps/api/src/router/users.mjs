@@ -2,11 +2,12 @@ import express from "express";
 import { success } from "../helper.mjs";
 import { User } from "../db/sequelize.mjs";
 import { ValidationError } from "sequelize";
+import { auth } from "../auth/auth.mjs";
 
 const usersRouter = express();
 
 //Get all students
-usersRouter.get("/students", (req, res) => {
+usersRouter.get("/students", auth, (req, res) => {
     User.findAll({
         where: {
             role: "student",
@@ -19,7 +20,7 @@ usersRouter.get("/students", (req, res) => {
 });
 
 //Get all teachers
-usersRouter.get("/teachers", (req, res) => {
+usersRouter.get("/teachers", auth, (req, res) => {
     User.findAll({
         where: {
             role: "teacher",
@@ -32,7 +33,7 @@ usersRouter.get("/teachers", (req, res) => {
 });
 
 //Update user to students
-usersRouter.put("/student/:id", async (req, res) => {
+usersRouter.put("/student/:id", auth, async (req, res) => {
     const userId = req.params.id;
     let updatedUser = await User.findByPk(userId);
 
@@ -47,7 +48,7 @@ usersRouter.put("/student/:id", async (req, res) => {
 });
 
 //Update user to teachers
-usersRouter.put("/teacher/:id", async (req, res) => {
+usersRouter.put("/teacher/:id", auth, async (req, res) => {
     const userId = req.params.id;
     let updatedUser = await User.findByPk(userId);
 
@@ -62,7 +63,7 @@ usersRouter.put("/teacher/:id", async (req, res) => {
 });
 
 //Update user to admin
-usersRouter.put("/admin/:id", async (req, res) => {
+usersRouter.put("/admin/:id", auth, async (req, res) => {
     const userId = req.params.id;
     let updatedUser = await User.findByPk(userId);
 
@@ -77,7 +78,7 @@ usersRouter.put("/admin/:id", async (req, res) => {
 });
 
 //Archivate an user
-usersRouter.put("/archivate/:id", async (req, res) => {
+usersRouter.put("/archivate/:id", auth, async (req, res) => {
     const userId = req.params.id;
     let updatedUser = await User.findByPk(userId);
 
@@ -92,7 +93,7 @@ usersRouter.put("/archivate/:id", async (req, res) => {
 });
 
 //Create student
-usersRouter.post("/student", (req, res) => {
+usersRouter.post("/student", auth, (req, res) => {
     const studentData = {
         ...req.body,
         role: "student",
@@ -112,7 +113,7 @@ usersRouter.post("/student", (req, res) => {
 });
 
 //Create teacher
-usersRouter.post("/teacher", (req, res) => {
+usersRouter.post("/teacher", auth, (req, res) => {
     const teacherData = {
         ...req.body,
         role: "teacher",
