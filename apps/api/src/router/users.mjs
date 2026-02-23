@@ -3,6 +3,7 @@ import { success } from "../helper.mjs";
 import { User } from "../db/sequelize.mjs";
 import { ValidationError } from "sequelize";
 import { auth } from "../auth/auth.mjs";
+import bcrypt from "bcrypt";
 
 const usersRouter = express();
 
@@ -93,36 +94,48 @@ usersRouter.put("/archivate/:id", auth, async (req, res) => {
 });
 
 //Create student
-usersRouter.post("/student", auth, (req, res) => {
-    const studentData = {
-        ...req.body,
-        role: "student",
-        isDeleted: false
-    }
+usersRouter.post("/student", auth, async (req, res) => {
+    try {
+        const studentData = {
+            ...req.body,
+            role: "student",
+            isDeleted: false
+        }
+        if (!req.body.password) {
+            return res.status(400).json({ message: "Mot de passe requis." });
+        }
+        studentData.hashedPassword = await bcrypt.hash(req.body.password, 12);
 
-    User.create(studentData).then((createdUser) => {
-        const message = `L'utilisateur' ${createdUser.name} a été créé.`;
-        res.json(success(message, createdUser));
-    }).catch((error) => {
+        const createdUser = await User.create(studentData);
+
+        const { hashedPassword, ...safeUser } = createdUser.toJSON();
+        const message = `L'utilisateur' ${safeUser.name} a été créé.`;
+        res.json(success(message, safeUser));
+    } catch (error) {
         if (error instanceof ValidationError) {
             return res.status(400).json({ message: error.message, data: error });
         }
         const message = "L'utilisateur n'a pas été créé. Veuillez réessayer dans un moment.";
-        res.status(500).json({ message, data: error });
-    })
+        res.status(500).json({ message, data: error.message });
+    }
 });
 
 //Create teacher
-usersRouter.post("/teacher", auth, (req, res) => {
+usersRouter.post("/teacher", auth, async (req, res) => {
     const teacherData = {
         ...req.body,
         role: "teacher",
         isDeleted: false
     }
+    if (!req.body.password) {
+        return res.status(400).json({ message: "Mot de passe requis." });
+    }
+    teacherData.hashedPassword = await bcrypt.hash(req.body.password, 12); //TODO (no err just for better readability)
 
     User.create(teacherData).then((createdUser) => {
-        const message = `L'utilisateur' ${createdUser.name} a été créé.`;
-        res.json(success(message, createdUser));
+        const { hashedPassword, ...safeUser } = createdUser.toJSON(); //Don't return the hashedPassword to the frontend
+        const message = `L'utilisateur' ${safeUser.name} a été créé.`;
+        res.json(success(message, safeUser));
     }).catch((error) => {
         if (error instanceof ValidationError) {
             return res.status(400).json({ message: error.message, data: error });

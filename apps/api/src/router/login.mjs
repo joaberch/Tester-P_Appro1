@@ -6,7 +6,7 @@ import { privateKey } from "../auth/private_key.mjs";
 
 const loginRouter = express();
 
-loginRouter.post("/", (req, res) => {
+loginRouter.post("/", async (req, res) => {
     try {
         const authorizationHeader = req.headers.authorization;
 
@@ -14,24 +14,24 @@ loginRouter.post("/", (req, res) => {
             const message = "Vous êtes déjà connecté.";
             return res.status(200).json({ message });
         }
-        //TODO err if already connected
-        const user = User.findOne({ where: { login: req.body.login } })
+        //TODO err if already connected and work with wrong pwd
+        const user = await User.findOne({ where: { login: req.body.login } })
         if (!user) {
             const message = "L'utilisateur n'existe pas";
             return res.status(404).json({ message });
         }
 
-        let isValid = bcrypt.compare(req.body.hashedPassword, user.hashedPassword);
+        let isValid = await bcrypt.compare(req.body.password, user.hashedPassword);
         if (!isValid) {
             const message = "Le mot de passe est incorrect";
             return res.status(401).json({ message });
         }
 
         const token = jwt.sign({ userId: user.idUser }, privateKey, {
-            expiresIn: "3m",
+            expiresIn: "24h",
         });
         const message = "L'utilisateur est connecté."
-        return res.json({ message, data: user, token })
+        return res.json({ message, data: user.login, token })
     } catch (error) {
         const message = "L'utilisateur n'a pas pu être connecté."
         return res.json({ message, data: error.message });
