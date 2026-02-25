@@ -10,15 +10,15 @@ const auth = (req, res, next) => {
     }
 
     const token = authorizationHeader.split(" ")[1];
-    const decodedToken = jwt.verify(
+    jwt.verify(
         token, privateKey,
         (error, decodedToken) => {
             if (error) {
                 const message = "Access denied";
                 return res.status(401).json({ message });
             }
-            const userId = decodedToken.idUser;
-            if (req.body.idUser && req.body.idUser !== userId) {
+
+            if (req.body && req.body.userId && req.body.userId !== userId) {
                 const message = "Identifiant invalide.";
                 return res.status(401).json({ message });
             }
