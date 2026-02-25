@@ -14,9 +14,9 @@ export default {
   methods: {
     redirect() {
       if (this.isTest) { //test
-        return { path: "/test", query: { id: this.element.id } };
+        return { path: `/test/${this.element.idTest}` };
       } else { //module
-        return { path: "/module", query: { id: this.element.id } };
+        return { path: `/module/${this.element.idModule}` };
       }
     }
   }
@@ -29,7 +29,7 @@ export default {
       <strong>{{ element.name }}</strong>
       <div class="element-meta">
         <span v-if="element.isFormative" class="badge">Formatif</span>
-        <span>{{ element.duration }}m</span>
+        <span v-if="isTest">{{ element.duration }}m</span>
       </div>
     </div>
 

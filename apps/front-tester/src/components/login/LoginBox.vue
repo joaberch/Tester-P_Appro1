@@ -22,10 +22,11 @@ export default {
                 })
                 .then((res) => {
                     localStorage.token = res.data.token
-                    location.href = '/'
+                    this.$router.push('/');
                 })
                 .catch((err) => {
-                    if (err.response.status == 404 || err.response.status == 401) {
+                    console.log(err)
+                    if (err.response || err.response.status == 404 || err.response.status == 401) {
                         this.errorMessage = 'Username or password incorrect'
                     }
                 });
