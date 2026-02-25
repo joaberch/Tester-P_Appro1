@@ -2,12 +2,12 @@ import express from "express";
 import { success } from "../helper.mjs";
 import { Module, Test } from "../db/sequelize.mjs";
 import { ValidationError } from "sequelize";
-import { auth } from "../auth/auth.mjs";
+import { auth } from "../auth/authMiddleware.mjs";
 
 const modulesRouter = express();
 
 //Get all modules
-modulesRouter.get("/", auth, (req, res) => {
+modulesRouter.get("/", auth, authorizeRoles("admin", "teacher", "student"), (req, res) => {
     Module.findAll().then((modules) => {
         const message = "Tous les modules ont été récupérés.";
         res.json(success(message, modules))
@@ -15,7 +15,7 @@ modulesRouter.get("/", auth, (req, res) => {
 })
 
 //Get a specific module
-modulesRouter.get("/:id", auth, async (req, res) => {
+modulesRouter.get("/:id", auth, authorizeRoles("admin", "teacher", "student"), async (req, res) => {
     try {
         const moduleId = req.params.id;
         const module = await Module.findByPk(moduleId);
@@ -30,8 +30,8 @@ modulesRouter.get("/:id", auth, async (req, res) => {
     }
 });
 
-//Get all tests
-modulesRouter.get("/:id/tests", auth, async (req, res) => {
+//Get all tests of module
+modulesRouter.get("/:id/tests", auth, authorizeRoles("admin", "teacher"), async (req, res) => {
     try {
         const moduleId = req.params.id;
         const tests = await Test.findAll({
@@ -48,7 +48,7 @@ modulesRouter.get("/:id/tests", auth, async (req, res) => {
 })
 
 //Create a module
-modulesRouter.post("/", auth, (req, res) => {
+modulesRouter.post("/", auth, authorizeRoles("admin", "teacher"), (req, res) => {
     Module.create(req.body).then((createdModule) => {
         const message = `Le module ${createdModule.name} a été créé.`;
         res.json(success(message, createdModule));
@@ -62,7 +62,7 @@ modulesRouter.post("/", auth, (req, res) => {
 });
 
 //Archivate a module
-modulesRouter.put("/archivate/:id", auth, async (req, res) => {
+modulesRouter.put("/archivate/:id", auth, authorizeRoles("admin", "teacher"), async (req, res) => {
     const moduleId = req.params.id;
     let archivateModule = await Module.findByPk(moduleId);
 
@@ -77,7 +77,7 @@ modulesRouter.put("/archivate/:id", auth, async (req, res) => {
 });
 
 //Delete a module
-modulesRouter.delete("/:id", auth, async (req, res) => {
+modulesRouter.delete("/:id", auth, authorizeRoles("admin"), async (req, res) => {
     try {
         const moduleId = req.params.id;
         const module = await Module.findByPk(moduleId);
@@ -98,7 +98,7 @@ modulesRouter.delete("/:id", auth, async (req, res) => {
 });
 
 //Edit a module
-modulesRouter.put("/:id", auth, async (req, res) => {
+modulesRouter.put("/:id", auth, authorizeRoles("admin", "teacher"), async (req, res) => {
     try {
         const moduleId = req.params.id;
         const module = await Module.findByPk(moduleId);

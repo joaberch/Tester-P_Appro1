@@ -2,13 +2,13 @@ import express from "express";
 import { success } from "../helper.mjs";
 import { User } from "../db/sequelize.mjs";
 import { ValidationError } from "sequelize";
-import { auth } from "../auth/auth.mjs";
+import { auth } from "../auth/authMiddleware.mjs";
 import bcrypt from "bcrypt";
 
 const usersRouter = express();
 
 //Get all students
-usersRouter.get("/students", auth, (req, res) => {
+usersRouter.get("/students", auth, authorizeRoles("admin", "teacher"), (req, res) => {
     User.findAll({
         where: {
             role: "student",
@@ -21,7 +21,7 @@ usersRouter.get("/students", auth, (req, res) => {
 });
 
 //Get all teachers
-usersRouter.get("/teachers", auth, (req, res) => {
+usersRouter.get("/teachers", auth, authorizeRoles("admin"), (req, res) => { //TODO - useful for teacher to get this info? In rapport
     User.findAll({
         where: {
             role: "teacher",
@@ -34,7 +34,7 @@ usersRouter.get("/teachers", auth, (req, res) => {
 });
 
 //Update user to students
-usersRouter.put("/student/:id", auth, async (req, res) => {
+usersRouter.put("/student/:id", auth, authorizeRoles("admin"), async (req, res) => {
     const userId = req.params.id;
     let updatedUser = await User.findByPk(userId);
 
@@ -49,7 +49,7 @@ usersRouter.put("/student/:id", auth, async (req, res) => {
 });
 
 //Update user to teachers
-usersRouter.put("/teacher/:id", auth, async (req, res) => {
+usersRouter.put("/teacher/:id", auth, authorizeRoles("admin"), async (req, res) => {
     const userId = req.params.id;
     let updatedUser = await User.findByPk(userId);
 
@@ -64,7 +64,7 @@ usersRouter.put("/teacher/:id", auth, async (req, res) => {
 });
 
 //Update user to admin
-usersRouter.put("/admin/:id", auth, async (req, res) => {
+usersRouter.put("/admin/:id", auth, authorizeRoles("admin"), async (req, res) => {
     const userId = req.params.id;
     let updatedUser = await User.findByPk(userId);
 
@@ -79,7 +79,7 @@ usersRouter.put("/admin/:id", auth, async (req, res) => {
 });
 
 //Archivate an user
-usersRouter.put("/archivate/:id", auth, async (req, res) => {
+usersRouter.put("/archivate/:id", auth, authorizeRoles("admin"), async (req, res) => { //TODO - can teacher do this? Only to student? - TODO in rapport
     const userId = req.params.id;
     let updatedUser = await User.findByPk(userId);
 
@@ -94,7 +94,7 @@ usersRouter.put("/archivate/:id", auth, async (req, res) => {
 });
 
 //Create student
-usersRouter.post("/student", auth, async (req, res) => {
+usersRouter.post("/student", auth, authorizeRoles("admin"), async (req, res) => { //TODO - can teacher do?
     try {
         const studentData = {
             ...req.body,
@@ -121,7 +121,7 @@ usersRouter.post("/student", auth, async (req, res) => {
 });
 
 //Create teacher
-usersRouter.post("/teacher", auth, async (req, res) => {
+usersRouter.post("/teacher", auth, authorizeRoles("admin"), async (req, res) => {
     const teacherData = {
         ...req.body,
         role: "teacher",

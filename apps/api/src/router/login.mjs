@@ -27,7 +27,11 @@ loginRouter.post("/", async (req, res) => {
             return res.status(401).json({ message });
         }
 
-        const token = jwt.sign({ userId: user.idUser }, privateKey, {
+        const payload = {
+            userId: user.idUser,
+            role: user.role,
+        }
+        const token = jwt.sign(payload, privateKey, {
             expiresIn: "24h",
         });
         const message = "L'utilisateur est connecté."

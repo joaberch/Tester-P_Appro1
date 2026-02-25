@@ -22,6 +22,7 @@ const auth = (req, res, next) => {
                 const message = "Identifiant invalide.";
                 return res.status(401).json({ message });
             }
+            req.user = decodedToken;
             next();
         }
     );

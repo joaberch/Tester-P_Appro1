@@ -2,12 +2,12 @@ import express from "express";
 import { success } from "../helper.mjs";
 import { Answer, Question } from "../db/sequelize.mjs";
 import { ValidationError } from "sequelize";
-import { auth } from "../auth/auth.mjs";
+import { auth } from "../auth/authMiddleware.mjs";
 
 const questionsRouter = express();
 
 //Get all questions
-questionsRouter.get("/", auth, (req, res) => {
+questionsRouter.get("/", auth, authorizeRoles("admin", "teacher"), (req, res) => { //TODO if useful
     Question.findAll().then((questions) => {
         const message = "Toutes les questions ont été récupérés.";
         res.json(success(message, questions))
@@ -15,7 +15,7 @@ questionsRouter.get("/", auth, (req, res) => {
 })
 
 //Get a specific question
-questionsRouter.get("/:id", auth, async (req, res) => {
+questionsRouter.get("/:id", auth, authorizeRoles("admin", "teacher", "student"), async (req, res) => { //TODO if useful (already have all questions of a test)
     try {
         const questionId = req.params.id;
         const question = await Question.findByPk(questionId);
@@ -30,8 +30,8 @@ questionsRouter.get("/:id", auth, async (req, res) => {
     }
 });
 
-//Get all answers
-questionsRouter.get("/:id/answers", auth, async (req, res) => {
+//Get all answers of a question
+questionsRouter.get("/:id/answers", auth, authorizeRoles("admin", "teacher", "student"), async (req, res) => { //TODO - if user has test assigned and question type is QCM
     try {
         const questionId = req.params.id;
         const answers = await Answer.findAll({
@@ -48,7 +48,7 @@ questionsRouter.get("/:id/answers", auth, async (req, res) => {
 })
 
 //Create a question
-questionsRouter.post("/", auth, (req, res) => {
+questionsRouter.post("/", auth, authorizeRoles("admin", "teacher"), (req, res) => {
     Question.create(req.body).then((createdQuestion) => {
         const message = `La question ${createdQuestion.question} a été créé.`;
         res.json(success(message, createdQuestion));
@@ -62,7 +62,7 @@ questionsRouter.post("/", auth, (req, res) => {
 });
 
 //Archivate a question
-questionsRouter.put("/archivate/:id", auth, async (req, res) => {
+questionsRouter.put("/archivate/:id", auth, authorizeRoles("admin", "teacher"), async (req, res) => {
     const questionId = req.params.id;
     let archivateQuestion = await Question.findByPk(questionId);
 
@@ -77,7 +77,7 @@ questionsRouter.put("/archivate/:id", auth, async (req, res) => {
 });
 
 //Delete a question
-questionsRouter.delete("/:id", auth, async (req, res) => {
+questionsRouter.delete("/:id", auth, authorizeRoles("admin"), async (req, res) => {
     try {
         const questionId = req.params.id;
         const question = await Question.findByPk(questionId);
@@ -98,7 +98,7 @@ questionsRouter.delete("/:id", auth, async (req, res) => {
 });
 
 //Edit a question
-questionsRouter.put("/:id", auth, async (req, res) => {
+questionsRouter.put("/:id", auth, authorizeRoles("admin", "teacher"), async (req, res) => {
     try {
         const questionId = req.params.id;
         const question = await Question.findByPk(questionId);

@@ -2,12 +2,12 @@ import express from "express";
 import { success } from "../helper.mjs";
 import { Objective } from "../db/sequelize.mjs";
 import { ValidationError } from "sequelize";
-import { auth } from "../auth/auth.mjs";
+import { auth } from "../auth/authMiddleware.mjs";
 
 const objectivesRouter = express();
 
 //Get all objectives
-objectivesRouter.get("/", auth, (req, res) => {
+objectivesRouter.get("/", auth, authorizeRoles("admin", "teacher", "student"), (req, res) => {
     Objective.findAll().then((objectives) => {
         const message = "Tous les objectifs ont été récupérés.";
         res.json(success(message, objectives))
@@ -15,7 +15,7 @@ objectivesRouter.get("/", auth, (req, res) => {
 })
 
 //Get a specific objective
-objectivesRouter.get("/:id", auth, async (req, res) => {
+objectivesRouter.get("/:id", auth, authorizeRoles("admin", "teacher", "student"), async (req, res) => { //TODO - check if useful
     try {
         const objectiveId = req.params.id;
         const objective = await Objective.findByPk(objectiveId);
@@ -31,7 +31,7 @@ objectivesRouter.get("/:id", auth, async (req, res) => {
 });
 
 //Create an objective
-objectivesRouter.post("/", auth, (req, res) => {
+objectivesRouter.post("/", auth, authorizeRoles("admin", "teacher"), (req, res) => {
     Objective.create(req.body).then((createdObjective) => {
         const message = `L'objectif ${createdObjective.name} a été créé.`;
         res.json(success(message, createdObjective));
@@ -45,7 +45,7 @@ objectivesRouter.post("/", auth, (req, res) => {
 });
 
 //Archivate an objective
-objectivesRouter.put("/archivate/:id", auth, async (req, res) => {
+objectivesRouter.put("/archivate/:id", auth, authorizeRoles("admin", "teacher"), async (req, res) => {
     const objectiveId = req.params.id;
     let archivateObjective = await Objective.findByPk(objectiveId);
 
@@ -60,7 +60,7 @@ objectivesRouter.put("/archivate/:id", auth, async (req, res) => {
 });
 
 //Delete an objective
-objectivesRouter.delete("/:id", auth, async (req, res) => {
+objectivesRouter.delete("/:id", auth, authorizeRoles("admin"), async (req, res) => {
     try {
         const objectiveId = req.params.id;
         const objective = await Objective.findByPk(objectiveId);
@@ -81,7 +81,7 @@ objectivesRouter.delete("/:id", auth, async (req, res) => {
 });
 
 //Edit an objective
-objectivesRouter.put("/:id", auth, async (req, res) => {
+objectivesRouter.put("/:id", auth, authorizeRoles("admin", "teacher"), async (req, res) => {
     try {
         const objectiveId = req.params.id;
         const objective = await Objective.findByPk(objectiveId);
