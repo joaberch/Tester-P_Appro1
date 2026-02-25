@@ -3,6 +3,7 @@ import { success } from "../helper.mjs";
 import { Answer, Question } from "../db/sequelize.mjs";
 import { ValidationError } from "sequelize";
 import { auth } from "../auth/authMiddleware.mjs";
+import authorizeRoles from "../auth/roleMiddleware.mjs";
 
 const questionsRouter = express();
 

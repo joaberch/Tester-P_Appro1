@@ -1,6 +1,7 @@
 import express from "express";
 import { success } from "../helper.mjs";
 import { Attachement } from "../db/sequelize.mjs";
+import authorizeRoles from "../auth/roleMiddleware.mjs";
 import { ValidationError } from "sequelize";
 import { auth } from "../auth/authMiddleware.mjs";
 

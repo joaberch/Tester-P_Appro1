@@ -2,6 +2,7 @@ import express from "express";
 import { success } from "../helper.mjs";
 import { Answer } from "../db/sequelize.mjs";
 import { ValidationError } from "sequelize";
+import authorizeRoles from "../auth/roleMiddleware.mjs";
 import { auth } from "../auth/authMiddleware.mjs";
 
 const answersRouter = express();
