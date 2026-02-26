@@ -2,83 +2,108 @@
 import axios from "axios";
 
 export default {
-    props: {
-        questions: {
-            type: Array,
-            required: true
-        },
+  props: {
+    questions: {
+      type: Array,
+      required: true
     },
-    data() {
-        return {
-            answers: {},
-            selectedAnswers: {},
-        }
-    },
-    methods: {
-        async fetchAnswers(questionId) {
-            let APIGetQuestionAnswersCall = `http://localhost:3000/api/questions/${questionId}/answers`;
-            try {
-                const fetchedAnswers = await axios.get(APIGetQuestionAnswersCall, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.token}`
-                    }
-                });
-                this.answers[questionId] = fetchedAnswers.data.data
-            } catch (error) {
-                console.error("Erreur: ", error)
-            }
-        },
-        async fetchAllAnswers() {
-            for (const question of this.questions) {
-                if (question.type == "QCM") {
-                    await this.fetchAnswers(question.idQuestion);
-                }
-            }
-        },
-        send() {
-            console.log(this.selectedAnswers)
-        }
-    },
-    async mounted() {
-        await this.fetchAllAnswers();
+    test: {
+      type: Object,
+      required: true,
     }
+  },
+  data() {
+    return {
+      answers: {},
+      selectedAnswers: {},
+    }
+  },
+  methods: {
+    async fetchAnswers(questionId) {
+      let APIGetQuestionAnswersCall = `http://localhost:3000/api/questions/${questionId}/answers`;
+      try {
+        const fetchedAnswers = await axios.get(APIGetQuestionAnswersCall, {
+          headers: {
+            Authorization: `Bearer ${localStorage.token}`
+          }
+        });
+        this.answers[questionId] = fetchedAnswers.data.data
+      } catch (error) {
+        console.error("Erreur: ", error);
+      }
+    },
+    async fetchAllAnswers() {
+      for (const question of this.questions) {
+        if (question.type == "QCM") {
+          await this.fetchAnswers(question.idQuestion);
+        }
+      }
+    },
+    async send() {
+      try {
+        let APICreateDoneTestCall = `http://localhost:3000/api/testsDone/`
+
+        const payload = {
+          score: null,
+          idTest: this.test.idTest,
+        }
+
+        const addedTestDone = await axios
+          .post(APICreateDoneTestCall,
+            payload,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.token}`
+              }
+            });
+      } catch (error) {
+        console.log("Erreur: ", error);
+      }
+    }
+  },
+  async mounted() {
+    await this.fetchAllAnswers();
+  }
 }
 </script>
 <template>
-    <div id="questions">
-        <div class="question" v-for="question in this.questions" :key="question.idQuestion" :class="question.type">
-            <div class="question-header">
-                <p class="question-title">{{ question.question }}</p>
-                <span class="question-points">{{ question.point }}pts</span>
-            </div>
-            <ul class="question-QCM" v-if="question.type=='QCM'">
-                <li v-for="answer in answers[question.idQuestion]" :key="answer.id">
-                    <label>
-                        <input type="radio" :name="'question-'+question.idQuestion" :value="answer.idAnswer" v-model="selectedAnswers[question.idQuestion]" />
-                        {{ answer.answer }}
-                    </label>
-                </li>
-            </ul>
-            <div class="question-OPEN" v-else-if="question.type=='OPEN'">
-                <input type="text" v-model="selectedAnswers[question.idQuestion]" placeholder="Votre réponse">
-            </div>
-            <ul v-else-if="question.type=='VRAI_FAUX'">
-                <li>
-                    <label>
-                        <input type="radio" v-model="selectedAnswers[question.idQuestion]" :name="'question-'+question.idQuestion" value="true"/>
-                        Vrai
-                    </label>
-                </li>
-                <li>
-                    <label>
-                        <input type="radio" v-model="selectedAnswers[question.idQuestion]" :name="'question-'+question.idQuestion" value="false"/>
-                        Faux
-                    </label>
-                </li>
-            </ul>
-        </div>
+  <div id="questions">
+    <div class="question" v-for="question in this.questions" :key="question.idQuestion" :class="question.type">
+      <div class="question-header">
+        <p class="question-title">{{ question.question }}</p>
+        <span class="question-points">{{ question.point }}pts</span>
+      </div>
+      <ul class="question-QCM" v-if="question.type == 'QCM'">
+        <li v-for="answer in answers[question.idQuestion]" :key="answer.id">
+          <label>
+            <input type="radio" :name="'question-' + question.idQuestion" :value="answer.idAnswer"
+              v-model="selectedAnswers[question.idQuestion]" />
+            {{ answer.answer }}
+          </label>
+        </li>
+      </ul>
+      <div class="question-OPEN" v-else-if="question.type == 'OPEN'">
+        <input type="text" v-model="selectedAnswers[question.idQuestion]" placeholder="Votre réponse">
+      </div>
+      <ul v-else-if="question.type == 'VRAI_FAUX'">
+        <li>
+          <label>
+            <input type="radio" v-model="selectedAnswers[question.idQuestion]" :name="'question-' + question.idQuestion"
+              value="true" />
+            Vrai
+          </label>
+        </li>
+        <li>
+          <label>
+            <input type="radio" v-model="selectedAnswers[question.idQuestion]" :name="'question-' + question.idQuestion"
+              value="false" />
+            Faux
+          </label>
+        </li>
+      </ul>
     </div>
-    <button @click="send">Envoyer</button>
+  </div>
+  <button @click="send">Envoyer</button>
 </template>
 <style scoped>
 #questions {
@@ -162,7 +187,8 @@ ul:hover {
 input[type="radio"],
 input[type="checkbox"] {
   margin-right: 10px;
-  accent-color: #3498db; /* modern color for radio/checkbox */
+  accent-color: #3498db;
+  /* modern color for radio/checkbox */
   cursor: pointer;
 }
 
@@ -206,6 +232,7 @@ button:hover {
     align-items: flex-start;
     gap: 5px;
   }
+
   button {
     width: 100%;
   }

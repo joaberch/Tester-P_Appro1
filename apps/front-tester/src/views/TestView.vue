@@ -59,7 +59,7 @@ export default {
         <TestDescription @start-test="startTest" :test="test"/>
       </div>
       <div v-if="this.isStarted">
-        <Question :questions="this.questions"/>
+        <Question :questions="this.questions" :test="test"/>
       </div>
     </div>
   </div>
