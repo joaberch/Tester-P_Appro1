@@ -44,7 +44,7 @@ INSERT INTO t_questions (question, point, type, isDeleted, idTest) VALUES
 ('Qu est-ce qu une classe en Java ?', 2, 'QCM', FALSE, 3);
 
 -- =========================
--- ANSWERS
+-- ANSWERS (QCM)
 -- =========================
 INSERT INTO t_answers (answer, isCorrect, isDeleted, idQuestion) VALUES
 ('Structured Query Language', TRUE, FALSE, 1),
@@ -55,7 +55,7 @@ INSERT INTO t_answers (answer, isCorrect, isDeleted, idQuestion) VALUES
 ('Un type primitif', FALSE, FALSE, 4);
 
 -- =========================
--- ATTACHEMENTS
+-- ATTACHMENTS
 -- =========================
 INSERT INTO t_attachements (file, isDeleted, idTest) VALUES
 ('diagramme_examen_bdd.pdf', FALSE, 2),
@@ -78,3 +78,55 @@ INSERT INTO assigned_to (idUser, idTest) VALUES
 (6, 2),
 (4, 3),
 (5, 3);
+
+-- =====================================================
+-- NOUVELLES DONNÉES : TESTS PASSÉS
+-- =====================================================
+
+-- David (idUser = 4) passe Test SQL 1 (idTest = 1)
+INSERT INTO t_testDone (score, completedAt, idTest, idUser) VALUES
+(5, '2026-02-01', 1, 4);
+
+-- Emma (idUser = 5) passe Test SQL 1
+INSERT INTO t_testDone (score, completedAt, idTest, idUser) VALUES
+(3, '2026-02-01', 1, 5);
+
+-- Lucas (idUser = 6) passe Examen BDD
+INSERT INTO t_testDone (score, completedAt, idTest, idUser) VALUES
+(4, '2026-02-02', 2, 6);
+
+-- =====================================================
+-- RÉPONSES DONNÉES PAR DAVID (idTestDone = 1)
+-- =====================================================
+
+INSERT INTO t_answerDone (openText, pointGotten, idQuestion, idTestDone) VALUES
+(NULL, 2, 1, 1),  -- Q1
+(NULL, 3, 2, 1);  -- Q2
+
+-- Choix pour Q1
+INSERT INTO answers_chosen (idAnswer, idAnswerDone) VALUES
+(1, 1);
+
+-- Choix pour Q2
+INSERT INTO answers_chosen (idAnswer, idAnswerDone) VALUES
+(3, 2);
+
+-- =====================================================
+-- RÉPONSES DONNÉES PAR EMMA (idTestDone = 2)
+-- =====================================================
+
+INSERT INTO t_answerDone (openText, pointGotten, idQuestion, idTestDone) VALUES
+(NULL, 0, 1, 2),
+(NULL, 3, 2, 2);
+
+INSERT INTO answers_chosen (idAnswer, idAnswerDone) VALUES
+(2, 3),
+(3, 4);
+
+-- =====================================================
+-- RÉPONSE OUVERTE LUCAS (idTestDone = 3)
+-- =====================================================
+
+INSERT INTO t_answerDone (openText, pointGotten, idQuestion, idTestDone) VALUES
+('INNER JOIN retourne uniquement les correspondances, LEFT JOIN retourne tout à gauche.', 
+ 4, 3, 3);

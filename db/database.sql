@@ -77,6 +77,31 @@ CREATE TABLE IF NOT EXISTS t_answers(
    FOREIGN KEY(idQuestion) REFERENCES t_questions(idQuestion)
 );
 
+CREATE TABLE IF NOT EXISTS t_testDone(
+   idTestDone INT NOT NULL AUTO_INCREMENT,
+   score INT,
+   completedAt DATE,
+   idTest INT NOT NULL,
+   idUser INT NOT NULL,
+   PRIMARY KEY(idTestDone),
+   FOREIGN KEY(idTest) REFERENCES t_tests(idTest),
+   FOREIGN KEY(idUser) REFERENCES t_users(idUser)
+);
+
+-- openText is optionnal if question was open
+CREATE TABLE IF NOT EXISTS t_answerDone(
+   idAnswerDone INT NOT NULL AUTO_INCREMENT,
+   openText VARCHAR(1000),
+   pointGotten INT,
+   idQuestion INT NOT NULL,
+   idTestDone INT NOT NULL,
+   PRIMARY KEY(idAnswerDone),
+   FOREIGN KEY(idQuestion) REFERENCES t_questions(idQuestion),
+   FOREIGN KEY(idTestDone) REFERENCES t_testDone(idTestDone)
+);
+
+-- many-to-many table
+
 CREATE TABLE IF NOT EXISTS assigned_to(
    idUser INT,
    idTest INT,
@@ -91,4 +116,14 @@ CREATE TABLE IF NOT EXISTS created_by(
    PRIMARY KEY(idUser, idTest),
    FOREIGN KEY(idUser) REFERENCES t_users(idUser),
    FOREIGN KEY(idTest) REFERENCES t_tests(idTest)
+);
+
+-- for QCM checkbox answers, multiple answers
+
+CREATE TABLE IF NOT EXISTS answers_chosen(
+   idAnswer INT,
+   idAnswerDone INT,
+   PRIMARY KEY(idAnswer, idAnswerDone),
+   FOREIGN KEY(idAnswer) REFERENCES t_answers(idAnswer),
+   FOREIGN KEY(idAnswerDone) REFERENCES t_answerDone(idAnswerDone)
 );
