@@ -24,6 +24,9 @@ app.get('/api/', (req, res) => {
 import { loginRouter } from "./router/login.mjs";
 app.use("/api/login", loginRouter);
 
+import { testDoneRouter } from "./router/testDone.mjs";
+app.use("/api/testsDone", testDoneRouter)
+
 import { testsRouter } from "./router/tests.mjs";
 app.use("/api/tests", testsRouter);
 
