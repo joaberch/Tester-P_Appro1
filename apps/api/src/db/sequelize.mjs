@@ -9,6 +9,9 @@ import { TestModel } from "../models/tests.mjs";
 import { UserModel } from "../models/users.mjs";
 import { AssignedToModel } from "../models/assigned_to.mjs";
 import { CreatedByModel } from "../models/created_by.mjs";
+import { TestDoneModel } from '../models/testDone.mjs';
+import { AnswerDoneModel } from "../models/answerDone.mjs";
+import { AnswerChosenModel } from '../models/answers_chosen.mjs';
 dotenv.config()
 
 const DB_NAME = process.env.DB_NAME;
@@ -38,6 +41,9 @@ const Test = TestModel(sequelize, DataTypes);
 const User = UserModel(sequelize, DataTypes);
 const AssignedTo = AssignedToModel(sequelize, DataTypes);
 const CreatedBy = CreatedByModel(sequelize, DataTypes);
+const TestDone = TestDoneModel(sequelize, DataTypes);
+const AnswerDone = AnswerDoneModel(sequelize, DataTypes);
+const AnswerChosen = AnswerChosenModel(sequelize, DataTypes);
 
 Answer.belongsTo(Question, {
     foreignKey: "idQuestion",
@@ -74,6 +80,52 @@ Objective.belongsTo(Module, {
     foreignKey: "idModule"
 });
 
+//t_testDone -> t_users
+TestDone.belongsTo(User, {
+    foreignKey: "idTest"
+});
+User.hasMany(TestDone, {
+    foreignKey: "idTest"
+})
+
+//t_testDone -> t_tests
+TestDone.belongsTo(Test, {
+    foreignKey: "idTest"
+});
+Test.hasMany(TestDone, {
+    foreignKey: "idTest"
+})
+
+//t_answerDone -> t_testDone
+AnswerDone.belongsTo(TestDone, {
+    foreignKey: "idTestDone"
+})
+TestDone.hasMany(AnswerDone, {
+    foreignKey: "idTestDone"
+})
+
+//t_answerDone -> t_questions
+AnswerDone.belongsTo(Question, {
+    foreignKey: "idQuestion"
+})
+Question.hasMany(AnswerDone, {
+    foreignKey: "idQuestion"
+})
+
+//answers_chosen
+Answer.belongsToMany(AnswerDone, {
+    through: AnswerChosen,
+    as: 'done_by',
+    foreignKey: 'idAnswer',
+    otherKey: 'idAnswerDone',
+});
+AnswerDone.belongsToMany(Answer, {
+    through: AnswerChosen,
+    as: 'made_for',
+    foreignKey: 'idAnswerDone',
+    otherKey: 'idAnswer',
+})
+
 //assigned_to
 Test.belongsToMany(User, {
     through: AssignedTo,
@@ -102,4 +154,4 @@ User.belongsToMany(Test, {
     otherKey: 'idTest'
 });
 
-export { sequelize, Answer, Attachement, Module, Objective, Question, Test, User, AssignedTo, CreatedBy };
+export { sequelize, Answer, Attachement, Module, Objective, Question, Test, User, AssignedTo, CreatedBy, TestDone, AnswerDone, AnswerChosen };

@@ -1,4 +1,4 @@
-const AnswersChosenModel = (sequelize, DataTypes) => {
+const AnswerChosenModel = (sequelize, DataTypes) => {
     return sequelize.define("answers_chosen", {
         idAnswer: {
             type: DataTypes.INTEGER,
@@ -21,4 +21,4 @@ const AnswersChosenModel = (sequelize, DataTypes) => {
     );
 };
 
-export { AnswersChosenModel };
+export { AnswerChosenModel };
