@@ -80,7 +80,7 @@ CREATE TABLE IF NOT EXISTS t_answers(
 CREATE TABLE IF NOT EXISTS t_testDone(
    idTestDone INT NOT NULL AUTO_INCREMENT,
    score INT,
-   completedAt DATE,
+   createdAt DATE,
    idTest INT NOT NULL,
    idUser INT NOT NULL,
    PRIMARY KEY(idTestDone),

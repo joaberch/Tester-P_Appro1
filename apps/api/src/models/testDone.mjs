@@ -9,7 +9,7 @@ const TestDoneModel = (sequelize, DataTypes) => {
             type: DataTypes.INTEGER,
             allowNull: true,
         },
-        idTest: {
+        idTest: { //TODO - prevent duplicate of idTest && idUser?
             type: DataTypes.INTEGER,
             allowNull: false,
         },
@@ -20,7 +20,7 @@ const TestDoneModel = (sequelize, DataTypes) => {
     },
         {
             timestamps: true,
-            createdAt: completedAt,
+            createdAt: true,
             updatedAt: false,
             freezeTableName: true,
             tableName: "t_testDone",

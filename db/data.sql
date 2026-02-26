@@ -84,15 +84,15 @@ INSERT INTO assigned_to (idUser, idTest) VALUES
 -- =====================================================
 
 -- David (idUser = 4) passe Test SQL 1 (idTest = 1)
-INSERT INTO t_testDone (score, completedAt, idTest, idUser) VALUES
+INSERT INTO t_testDone (score, createdAt, idTest, idUser) VALUES
 (5, '2026-02-01', 1, 4);
 
 -- Emma (idUser = 5) passe Test SQL 1
-INSERT INTO t_testDone (score, completedAt, idTest, idUser) VALUES
+INSERT INTO t_testDone (score, createdAt, idTest, idUser) VALUES
 (3, '2026-02-01', 1, 5);
 
 -- Lucas (idUser = 6) passe Examen BDD
-INSERT INTO t_testDone (score, completedAt, idTest, idUser) VALUES
+INSERT INTO t_testDone (score, createdAt, idTest, idUser) VALUES
 (4, '2026-02-02', 2, 6);
 
 -- =====================================================
