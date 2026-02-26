@@ -10,7 +10,17 @@ const testDoneRouter = express();
 //Create a test result
 testDoneRouter.post("/", auth, authorizeRoles("admin", "teacher", "student"), async (req, res) => {
     try {
-        const createdTestDone = await TestDone.create(req.body);
+        //let userId = req.user.id;
+        if (!req || !req.user || !req.user.userId) {
+            console.log(req.user.userId)
+            return res.status(500).json({ message: "Erreur lors de la récupération de l'utilisateur."})
+        }
+
+        const createdTestDone = await TestDone.create({
+            score: req.body.score,
+            idTest: req.body.idTest,
+            idUser: req.user.userId //managed from backend
+        });
         const message = `Le test ${createdTestDone.idTestDone} a été fait et créé.`;
         res.json(success(message, createdTestDone));
     } catch (error) {

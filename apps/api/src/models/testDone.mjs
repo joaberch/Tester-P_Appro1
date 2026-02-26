@@ -15,7 +15,7 @@ const TestDoneModel = (sequelize, DataTypes) => {
         },
         idUser: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            allowNull: true, //Because is managed in the backend
         }
     },
         {
