@@ -28,6 +28,27 @@ export default {
             } catch (error) {
                 console.error("Erreur :", error)
             }
+        },
+        async saveQuestion(question) { //TODO - automatically update on exit of input or type changed, check the ressources used
+            const APIUpdateQuestion = `http://localhost:3000/api/questions/${question.idQuestion}`;
+
+            const payload = {
+                question: question.question,
+                point: question.point,
+                type: question.type,
+            }
+
+            try {
+                await axios
+                    .put(APIUpdateQuestion, payload, {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.token}`
+                        }
+                    }
+                );
+            } catch (error) {
+                console.error("Erreur:", error)
+            }
         }
     }
 }
@@ -35,22 +56,21 @@ export default {
 <template>
     <div class="question" v-if="!question.isDeleted">
         <div class="question-header">
-            Question : <input type="text" v-model="question.question" placeholder="Texte de la question" />
-            Points : <input type="number" v-model.number="question.point" min="0" class="points" placeholder="Points" />
+            Question : <input type="text" v-model="question.question" placeholder="Texte de la question" @change="saveQuestion(this.question)" />
+            Points : <input type="number" v-model.number="question.point" min="0" class="points" placeholder="Points" @change="saveQuestion(this.question)" />
             <button @click="archivateQuestion(question.idQuestion)" class="delete-btn">Supprimer</button>
         </div>
 
         <label>
             Type :
-            <select v-model="question.type">
+            <select v-model="question.type" @change="saveQuestion(this.question)">
                 <option value="checkbox">checkbox</option>
                 <option value="open">Ouverte</option>
                 <option value="radiobox">radiobox</option>
             </select>
         </label>
 
-        <QuestionAnswer :question="question" />
-        
+        <QuestionAnswer :question="question" /> 
     </div>
 </template>
 <style scoped>

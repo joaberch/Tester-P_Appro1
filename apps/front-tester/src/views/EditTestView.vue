@@ -83,7 +83,6 @@ export default {
       <h2>Questions</h2>
       
       <TestQuestion :question="question" v-for="(question, index) in questions" class="question" :key="question.idQuestion || index"/>
-
       <button @click="createQuestion()" id="add-question-btn">Ajouter une question</button>
     </div>
   </div>
