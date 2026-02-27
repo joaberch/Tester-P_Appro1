@@ -11,6 +11,7 @@ export default {
     data() {
         return {
             answers: [],
+            selectedAnswers: [],
         }
     },
     mounted() {
@@ -29,7 +30,6 @@ export default {
             );
 
             this.answers = fetchedAnswers.data.data;
-            console.log(this.answers)
         }
     }
 }
@@ -37,11 +37,14 @@ export default {
 <template>
     <div class="answers">
         <div v-if="this.question.type == 'checkbox'">
-            TODO
+            <div v-for="answer in answers">
+                <input type="checkbox" :value="answer.idAnswer" v-model="selectedAnswers">{{ answer.answer }}</input>
+            </div>
         </div>
         <div v-else-if="this.question.type == 'radiobox'">
-            <input type="radio" :name="'question-' + question.idQuestion" value="true">Vrai</input>
-            <input type="radio" :name="'question-' + question.idQuestion" value="false">Faux</input>
+            <div v-for="answer in answers">
+                <input type="radio" :value="answer.idAnswer" v-model="selectedAnswers" :name="'question-' + question.idQuestion">{{ answer.answer }}</input>
+            </div>
         </div>
     </div>
 </template>

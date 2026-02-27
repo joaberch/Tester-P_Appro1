@@ -1,5 +1,6 @@
 <script>
 import QuestionAnswer from './questionAnswer.vue';
+import axios from "axios";
 
 export default {
     props: {
@@ -10,15 +11,33 @@ export default {
     },
     components: {
         QuestionAnswer,
+    },
+    methods: {
+        async archivateQuestion(idQuestion) {
+            try {
+                const APIArchivateQuestionCall = `http://localhost:3000/api/questions/archivate/${idQuestion}`
+                
+                await axios
+                    .put(APIArchivateQuestionCall, {}, {
+                        headers: {
+                            Authorization: `Bearer ${localStorage.token}`
+                        }
+                    }
+                );
+                this.question.isDeleted = true; //Change locally to not reload page
+            } catch (error) {
+                console.error("Erreur :", error)
+            }
+        }
     }
 }
 </script>
 <template>
-    <div class="question">
+    <div class="question" v-if="!question.isDeleted">
         <div class="question-header">
             Question : <input type="text" v-model="question.question" placeholder="Texte de la question" />
             Points : <input type="number" v-model.number="question.point" min="0" class="points" placeholder="Points" />
-            <button class="delete-btn">Supprimer</button>
+            <button @click="archivateQuestion(question.idQuestion)" class="delete-btn">Supprimer</button>
         </div>
 
         <label>
