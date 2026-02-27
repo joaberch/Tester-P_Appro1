@@ -41,6 +41,31 @@ export default {
           })
 
           this.questions = fetchedQuestions.data.data;
+      },
+      async createQuestion() {
+        try {
+          const APICreateQuestion = `http://localhost:3000/api/questions`
+  
+          const payload = {
+            question: '', //base value
+            point: 1, //base value
+            type: 'open', //base value
+            isDeleted: false,
+            idTest: this.test.idTest,
+          }
+
+          const createdQuestion = await axios
+            .post(APICreateQuestion, payload, {
+              headers: {
+                Authorization: `Bearer ${localStorage.token}`
+              }
+            }
+          );
+
+          this.questions.push(createdQuestion.data.data);
+        } catch(error) {
+          console.error(error)
+        }
       }
     }
 }
@@ -59,10 +84,8 @@ export default {
       
       <TestQuestion :question="question" v-for="(question, index) in questions" class="question" :key="question.idQuestion || index"/>
 
-      <button id="add-question-btn">Ajouter une question</button>
+      <button @click="createQuestion()" id="add-question-btn">Ajouter une question</button>
     </div>
-
-    <button id="save-btn">Enregistrer</button>
   </div>
 </template>
 <style scoped>

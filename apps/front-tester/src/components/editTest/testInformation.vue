@@ -1,10 +1,39 @@
 <script>
+import axios from "axios";
+
 export default {
     props: {
         test: {
             type: Object,
             required: true,
         }
+    },
+    methods: {
+      async save() {
+        const APIUpdateTestCall = `http://localhost:3000/api/tests/${this.test.idTest}`;
+
+        const payload = {
+          name: this.test.name,
+          description: this.test.description,
+          duration: this.test.duration,
+          isDeleted: this.test.isDeleted,
+          isFormative: this.test.isFormative,
+        }
+
+        try {
+          const updatedTest = await axios
+            .put(APIUpdateTestCall, payload, {
+              headers: {
+                Authorization: `Bearer ${localStorage.token}`
+              }
+            }
+          );
+
+          console.log(updatedTest)
+        } catch(error) {
+          console.error("Erreur:", error)
+        }
+      }
     }
 }
 </script>
@@ -31,8 +60,22 @@ export default {
         <input type="checkbox" :checked="this.test.isFormative" v-model="test.isFormative" />
       </label>
     </div>
+    <button id="save-btn" @click="save()">Enregistrer</button>
 </template>
 <style scoped>
+#save-btn {
+  margin-top: 1rem;
+  padding: 0.6rem 1rem;
+  background-color: #1890ff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#save-btn:hover {
+  background-color: #40a9ff;
+}
 #test-info {
   margin-bottom: 2rem;
 }
