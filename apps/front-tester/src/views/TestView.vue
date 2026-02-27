@@ -53,7 +53,10 @@ export default {
     <div v-else>
       <div id="header">
         <RouterLink :to="{ name: 'home' }">Accueil</RouterLink>
-        <RouterLink class="button" :to="{ name: 'edit-test'}">Modifier le test</RouterLink>
+        <div class="right-part">
+          <RouterLink class="button" :to="{ name: 'edit-test'}">Modifier le test</RouterLink>
+          <RouterLink class="button" :to="{ name: 'correct-test'}">Corriger les tests</RouterLink>
+        </div>
       </div>
       <div id="description">
         <TestDescription @start-test="startTest" :test="test"/>
