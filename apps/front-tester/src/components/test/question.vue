@@ -39,7 +39,7 @@ export default {
         }
       }
     },
-    async send() {
+    async createTestDone() {
       try {
         let APICreateDoneTestCall = `http://localhost:3000/api/testsDone/`
 
@@ -48,7 +48,7 @@ export default {
           idTest: this.test.idTest,
         }
 
-        const addedTestDone = await axios
+        await axios
           .post(APICreateDoneTestCall,
             payload,
             {
@@ -59,6 +59,11 @@ export default {
       } catch (error) {
         console.log("Erreur: ", error);
       }
+    },
+    async send() {
+      await this.createTestDone()
+
+      this.$router.push('/');
     }
   },
   async mounted() {

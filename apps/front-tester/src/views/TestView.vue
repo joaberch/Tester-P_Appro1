@@ -53,7 +53,7 @@ export default {
     <div v-else>
       <div id="header">
         <RouterLink :to="{ name: 'home' }">Accueil</RouterLink>
-        <button>Modifier le test</button>
+        <RouterLink class="button" :to="{ name: 'edit-test'}">Modifier le test</RouterLink>
       </div>
       <div id="description">
         <TestDescription @start-test="startTest" :test="test"/>
@@ -90,7 +90,7 @@ export default {
   text-decoration: underline;
 }
 
-#header button {
+#header .button {
   padding: 8px 16px;
   border: none;
   background-color: #f39c12;
@@ -100,7 +100,7 @@ export default {
   transition: 0.3s ease;
 }
 
-#header button:hover {
+#header .button:hover {
   background-color: #e67e22;
 }
 

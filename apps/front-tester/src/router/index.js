@@ -22,6 +22,11 @@ const router = createRouter({
             path: "/module/:id",
             name: "module",
             component: () => import('../views/ModuleView.vue'),
+        },
+        {
+            path: "/test/edit/:id",
+            name: "edit-test",
+            component: () => import('../views/EditTestView.vue'),
         }
     ],
 });
