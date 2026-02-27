@@ -24,9 +24,9 @@ export default {
         <label>
             Type :
             <select v-model="question.type">
-                <option value="QCM">QCM</option>
+                <option value="checkbox">checkbox</option>
                 <option value="OPEN">Ouverte</option>
-                <option value="VRAI_FAUX">Vrai/Faux</option>
+                <option value="radiobox">radiobox</option>
             </select>
         </label>
 

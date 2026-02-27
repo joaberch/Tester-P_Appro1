@@ -14,7 +14,7 @@ const QuestionModel = (sequelize, DataTypes) => {
             allowNull: false,
         },
         type: {
-            type: DataTypes.ENUM(['QCM', 'ouverte', 'vrai_faux']),
+            type: DataTypes.ENUM(['checkbox', 'ouverte', 'radiobox']),
             allowNull: false,
         },
         isDeleted: {

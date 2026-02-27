@@ -118,7 +118,7 @@ CREATE TABLE IF NOT EXISTS created_by(
    FOREIGN KEY(idTest) REFERENCES t_tests(idTest)
 );
 
--- for QCM checkbox answers, multiple answers
+-- for checkbox answers, multiple answers
 
 CREATE TABLE IF NOT EXISTS answers_chosen(
    idAnswer INT,

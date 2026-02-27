@@ -32,7 +32,7 @@ questionsRouter.get("/:id", auth, authorizeRoles("admin", "teacher", "student"),
 });
 
 //Get all answers of a question
-questionsRouter.get("/:id/answers", auth, authorizeRoles("admin", "teacher", "student"), async (req, res) => { //TODO - if user has test assigned and question type is QCM
+questionsRouter.get("/:id/answers", auth, authorizeRoles("admin", "teacher", "student"), async (req, res) => { //TODO - if user has test assigned and question type is checkbox
     try {
         const questionId = req.params.id;
         const answers = await Answer.findAll({

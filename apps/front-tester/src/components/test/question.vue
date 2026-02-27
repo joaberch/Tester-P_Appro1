@@ -34,8 +34,9 @@ export default {
     },
     async fetchAllAnswers() {
       for (const question of this.questions) {
-        if (question.type == "QCM") {
+        if (question.type == "checkbox") {
           await this.fetchAnswers(question.idQuestion);
+          this.selectedAnswers[question.idQuestion] = []; //Checkbox can have multiple correct answer
         }
       }
     },
@@ -78,11 +79,10 @@ export default {
         <p class="question-title">{{ question.question }}</p>
         <span class="question-points">{{ question.point }}pts</span>
       </div>
-      <ul class="question-QCM" v-if="question.type == 'QCM'">
-        <li v-for="answer in answers[question.idQuestion]" :key="answer.id">
+      <ul class="question-checkbox" v-if="question.type == 'checkbox'">
+        <li v-for="answer in answers[question.idQuestion]" :key="answer.idAnswer">
           <label>
-            <input type="radio" :name="'question-' + question.idQuestion" :value="answer.idAnswer"
-              v-model="selectedAnswers[question.idQuestion]" />
+            <input type="checkbox" :value="answer.idAnswer" v-model="selectedAnswers[question.idQuestion]" />
             {{ answer.answer }}
           </label>
         </li>
@@ -90,7 +90,7 @@ export default {
       <div class="question-OPEN" v-else-if="question.type == 'OPEN'">
         <input type="text" v-model="selectedAnswers[question.idQuestion]" placeholder="Votre réponse">
       </div>
-      <ul v-else-if="question.type == 'VRAI_FAUX'">
+      <ul v-else-if="question.type == 'radiobox'">
         <li>
           <label>
             <input type="radio" v-model="selectedAnswers[question.idQuestion]" :name="'question-' + question.idQuestion"
@@ -137,7 +137,7 @@ export default {
 }
 
 /* Type spécifique */
-.question.QCM {
+.question.checkbox {
   border-left-color: #3498db;
 }
 
@@ -145,7 +145,7 @@ export default {
   border-left-color: #9b59b6;
 }
 
-.question.VRAI_FAUX {
+.question.radiobox {
   border-left-color: #e67e22;
 }
 

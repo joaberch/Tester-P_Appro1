@@ -38,13 +38,13 @@ INSERT INTO t_tests (name, description, duration, isDeleted, isFormative, create
 -- QUESTIONS
 -- =========================
 INSERT INTO t_questions (question, point, type, isDeleted, idTest) VALUES
-('Que signifie SQL ?', 2, 'QCM', FALSE, 1),
-('Quelle clause permet de filtrer les résultats ?', 3, 'QCM', FALSE, 1),
+('Que signifie SQL ?', 2, 'checkbox', FALSE, 1),
+('Quelle clause permet de filtrer les résultats ?', 3, 'checkbox', FALSE, 1),
 ('Expliquez la différence entre INNER JOIN et LEFT JOIN.', 5, 'OPEN', FALSE, 2),
-('Qu est-ce qu une classe en Java ?', 2, 'QCM', FALSE, 3);
+('Qu est-ce qu une classe en Java ?', 2, 'checkbox', FALSE, 3);
 
 -- =========================
--- ANSWERS (QCM)
+-- ANSWERS (checkbox)
 -- =========================
 INSERT INTO t_answers (answer, isCorrect, isDeleted, idQuestion) VALUES
 ('Structured Query Language', TRUE, FALSE, 1),

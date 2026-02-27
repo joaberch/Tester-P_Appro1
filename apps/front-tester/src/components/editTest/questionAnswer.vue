@@ -36,10 +36,10 @@ export default {
 </script>
 <template>
     <div class="answers">
-        <div v-if="this.question.type == 'QCM'">
+        <div v-if="this.question.type == 'checkbox'">
             TODO
         </div>
-        <div v-else-if="this.question.type == 'VRAI_FAUX'">
+        <div v-else-if="this.question.type == 'radiobox'">
             <input type="radio" :name="'question-' + question.idQuestion" value="true">Vrai</input>
             <input type="radio" :name="'question-' + question.idQuestion" value="false">Faux</input>
         </div>
