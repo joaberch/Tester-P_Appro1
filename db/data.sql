@@ -40,7 +40,7 @@ INSERT INTO t_tests (name, description, duration, isDeleted, isFormative, create
 INSERT INTO t_questions (question, point, type, isDeleted, idTest) VALUES
 ('Que signifie SQL ?', 2, 'checkbox', FALSE, 1),
 ('Quelle clause permet de filtrer les résultats ?', 3, 'checkbox', FALSE, 1),
-('Expliquez la différence entre INNER JOIN et LEFT JOIN.', 5, 'OPEN', FALSE, 2),
+('Expliquez la différence entre INNER JOIN et LEFT JOIN.', 5, 'open', FALSE, 2),
 ('Qu est-ce qu une classe en Java ?', 2, 'checkbox', FALSE, 3);
 
 -- =========================

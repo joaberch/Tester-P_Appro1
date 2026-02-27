@@ -44,7 +44,7 @@ export default {
             Type :
             <select v-model="question.type">
                 <option value="checkbox">checkbox</option>
-                <option value="OPEN">Ouverte</option>
+                <option value="open">Ouverte</option>
                 <option value="radiobox">radiobox</option>
             </select>
         </label>

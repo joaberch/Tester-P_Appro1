@@ -87,7 +87,7 @@ export default {
           </label>
         </li>
       </ul>
-      <div class="question-OPEN" v-else-if="question.type == 'OPEN'">
+      <div class="question-open" v-else-if="question.type == 'open'">
         <input type="text" v-model="selectedAnswers[question.idQuestion]" placeholder="Votre réponse">
       </div>
       <ul v-else-if="question.type == 'radiobox'">
@@ -141,7 +141,7 @@ export default {
   border-left-color: #3498db;
 }
 
-.question.OPEN {
+.question.open {
   border-left-color: #9b59b6;
 }
 
