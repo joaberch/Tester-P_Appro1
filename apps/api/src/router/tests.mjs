@@ -147,11 +147,13 @@ testsRouter.put("/:id", auth, authorizeRoles("admin", "teacher"), async (req, re
             return res.status(404).json({ message: "Test non trouvé." });
         }
 
-        const alreadyExist = await CreatedBy.findOne({ where: { idTest: testId, idUser: creatorId } });
-
+        
         //update test
         const updatedTest = await test.update(testData);
         const testMessage = `Le test ${updatedTest.name} avec l'id ${updatedTest.idTest} a été mis à jour.`;
+        console.log(updatedTest)
+        
+        const alreadyExist = await CreatedBy.findOne({ where: { idTest: testId, idUser: creatorId } });
 
         //get creator data
         if (!alreadyExist) {
