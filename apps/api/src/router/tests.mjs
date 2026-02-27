@@ -68,9 +68,9 @@ testsRouter.get("/:id/attachements", auth, authorizeRoles("admin", "teacher", "s
 //Create a test
 testsRouter.post("/", auth, authorizeRoles("admin", "teacher"), async (req, res) => {
     try {
-        const { creatorId, ...testData } = req.body;
+        const creatorId = req.user.userId;
         if (!creatorId || !creatorId.length === 0) {
-            return res.status(400).json({ message: "Le test n'a pas de créateur." });
+            return res.status(400).json({ message: "Le créateur n'a pas pu être trouvé." });
         }
 
         //Get creator information and check role
@@ -83,6 +83,11 @@ testsRouter.post("/", auth, authorizeRoles("admin", "teacher"), async (req, res)
         });
         if (teacher.length == 0) {
             return res.status(400).json({ message: "L'utilisateur ayant créé le test n'est pas un enseignant ou un administrateur." });
+        }
+
+        const testData = {
+            creatorId: creatorId,
+            ...req.body
         }
 
         //Create test

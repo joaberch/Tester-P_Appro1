@@ -12,7 +12,6 @@ testDoneRouter.post("/", auth, authorizeRoles("admin", "teacher", "student"), as
     try {
         //let userId = req.user.id;
         if (!req || !req.user || !req.user.userId) {
-            console.log(req.user.userId)
             return res.status(500).json({ message: "Erreur lors de la récupération de l'utilisateur."})
         }
 
