@@ -7,13 +7,24 @@ import authorizeRoles from "../auth/roleMiddleware.mjs";
 
 const objectivesRouter = express();
 
-//Get all objectives
-objectivesRouter.get("/", auth, authorizeRoles("admin", "teacher", "student"), (req, res) => {
-    Objective.findAll().then((objectives) => {
+//Get all objectives of module
+objectivesRouter.get("/", auth, authorizeRoles("admin", "teacher", "student"), async (req, res) => {
+    try {
+        const id = req.query.idModule;
+        if (!id) {
+            return res.status(400).json({ message: "Query not found. Specify a module id." })
+        }
+        console.log(id)
+
+        const objectives = await Objective.findAll({
+            where: { idModule: id }
+        })
         const message = "Tous les objectifs ont été récupérés.";
-        res.json(success(message, objectives))
-    })
-})
+        res.json(success(message, objectives));
+    } catch (error) {
+        console.error("Erreur:", error)
+    }
+});
 
 //Get a specific objective
 objectivesRouter.get("/:id", auth, authorizeRoles("admin", "teacher", "student"), async (req, res) => { //TODO - check if useful
