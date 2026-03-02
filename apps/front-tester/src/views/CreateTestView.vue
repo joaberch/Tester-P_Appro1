@@ -70,6 +70,7 @@ export default {
 </script>
 <template>
     <div id="create-test-container">
+        <RouterLink class="back-btn" :to="{ name: 'home'}">Accueil</RouterLink>
         <h2>Créer un nouveau test</h2>
 
         <div class="form-group">
@@ -114,6 +115,22 @@ export default {
     </div>
 </template>
 <style scoped>
+.back-btn {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 8px;
+    background-color: #e5e7eb;
+    color: #2c3e50;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.back-btn:hover {
+    background-color: #d1d5db;
+}
+
 #create-test-container {
     max-width: 600px;
     margin: 30px auto;

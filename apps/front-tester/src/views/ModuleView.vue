@@ -42,10 +42,13 @@ export default {
               }
             );
 
-            this.objectives = fetchedObjectives.data.data;
+            this.objectives = fetchedObjectives.data.data.filter(o => o.isDeleted == false);
           } catch (error) {
             console.error("Erreur:", error)
           }
+        },
+        goToEdit() {
+          this.$router.push(`/module/edit/${this.$route.params.id}`);
         }
     }
 }
@@ -53,8 +56,9 @@ export default {
 <template>
   <div class="module-container">
     <div class="header">
+      <RouterLink :to="{ name: 'home' }" class="back-btn">Accueil</RouterLink>
       <h2>{{ module.name }}</h2>
-      <button class="edit-btn" @click="goToEdit">
+      <button class="edit-btn" @click="goToEdit()">
         Modifier le module
       </button>
     </div>
@@ -74,19 +78,21 @@ export default {
 
       <div class="objectives" v-if="this.objectives.length > 0">
         <div v-for="objective in objectives" :key="objective.idObjective">
-          <p>{{ objective.name }}</p>
-          <p class="data">
-            <span>{{ objective.description }}</span>
-            <span>
-              {{ objective.bloomLevel }} - 
-              <span v-if="objective.bloomLevel==1">Connaître</span>
-              <span v-else-if="objective.bloomLevel==2">Comprendre</span>
-              <span v-else-if="objective.bloomLevel==3">Appliquer</span>
-              <span v-else-if="objective.bloomLevel==4">Analyser</span>
-              <span v-else-if="objective.bloomLevel==5">Évaluer</span>
-              <span v-else-if="objective.bloomLevel==6">Créer</span>
-            </span>
-          </p>
+          <div>
+            <p>{{ objective.name }}</p>
+            <p class="data">
+              <span>{{ objective.description }}</span>
+              <span>
+                {{ objective.bloomLevel }} - 
+                <span v-if="objective.bloomLevel==1">Connaître</span>
+                <span v-else-if="objective.bloomLevel==2">Comprendre</span>
+                <span v-else-if="objective.bloomLevel==3">Appliquer</span>
+                <span v-else-if="objective.bloomLevel==4">Analyser</span>
+                <span v-else-if="objective.bloomLevel==5">Évaluer</span>
+                <span v-else-if="objective.bloomLevel==6">Créer</span>
+              </span>
+            </p>
+          </div>
         </div>
       </div>
 
@@ -97,6 +103,22 @@ export default {
   </div>
 </template>
 <style scoped>
+.back-btn {
+    display: inline-block;
+    padding: 8px 14px;
+    border-radius: 8px;
+    background-color: #e5e7eb;
+    color: #2c3e50;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+    transition: all 0.2s ease;
+}
+
+.back-btn:hover {
+    background-color: #d1d5db;
+}
+
 .data {
   display: flex;
   justify-content: space-between;
