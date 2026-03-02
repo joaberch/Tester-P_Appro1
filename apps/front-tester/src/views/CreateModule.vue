@@ -24,7 +24,9 @@ export default {
                         headers: {
                             Authorization: `Bearer ${localStorage.token}`
                         }
-                    })
+                    }
+                );
+                
             } catch (error) {
                 console.error("Erreur:", error)
             }
