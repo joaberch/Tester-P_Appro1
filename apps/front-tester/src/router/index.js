@@ -43,6 +43,10 @@ const router = createRouter({
             name: "create-module",
             component: () => import('../views/CreateModule.vue')
         },
+        {
+            path: "/module/edit/:id",
+            name: "edit-module",
+            component: () => import('../views/EditModuleView.vue'),
         }
     ],
 });
