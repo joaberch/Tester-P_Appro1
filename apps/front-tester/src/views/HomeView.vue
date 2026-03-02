@@ -25,7 +25,8 @@ export default {
 </script>
 <template>
     <div id="header">
-        <RouterLink v-if="this.token.role == 'teacher' || this.token.role == 'admin'" :to="{ name: 'create-test' }">Créer un test</RouterLink>
+        <RouterLink class="button" v-if="this.token.role == 'teacher' || this.token.role == 'admin'" :to="{ name: 'create-test' }">Créer un test</RouterLink>
+        <RouterLink class="button" v-if="this.token.role == 'teacher' || this.token.role == 'admin'" :to="{ name: 'create-module'}">Créer un module</RouterLink>
         <button v-if="this.token.role == 'admin'">Console admin</button>
         <button @click="disconnect()">Se déconnecter</button>
     </div>
@@ -34,7 +35,7 @@ export default {
 <style scoped>
 #header {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-evenly;
     align-items: center;
     padding: 10px 20px;
     background-color: #2c3e50; /* gris foncé */
@@ -42,7 +43,7 @@ export default {
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
-#header button {
+#header button, .button {
     background-color: #e74c3c; /* rouge */
     color: white;
     border: none;
@@ -51,9 +52,10 @@ export default {
     cursor: pointer;
     font-weight: bold;
     transition: background-color 0.2s ease;
+    text-decoration: none;
 }
 
-#header button:hover {
+#header button:hover, .button:hover {
     background-color: #c0392b; /* rouge plus foncé au survol */
 }
 </style>
