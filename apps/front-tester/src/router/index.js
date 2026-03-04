@@ -1,3 +1,4 @@
+import axios from "axios";
 import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
@@ -60,5 +61,23 @@ const router = createRouter({
         }
     ],
 });
+
+router.beforeEach(async (to, from) => {
+    if (to.name == 'login') {
+        return true;
+    }
+
+    const APIGetMeCall = `${import.meta.env.VITE_API_URL}/me`;
+
+    try {
+        const me = await axios.get(APIGetMeCall, {withCredentials: true});
+    
+        if (!me.data && to.name != 'login') {
+            return { name: 'login' };
+        }
+    } catch(error) {
+        return { name: 'login' };
+    }
+})
 
 export default router;
