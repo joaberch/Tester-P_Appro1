@@ -29,7 +29,7 @@ export default {
       this.isStarted = true;
     },
     async fetchQuestions() {
-      let APIGetQuestionsCall = `http://localhost:3000/api/tests/${this.$route.params.id}/questions`;
+      let APIGetQuestionsCall = `${import.meta.env.VITE_API_URL}/tests/${this.$route.params.id}/questions`;
 
       const fetchedQuestions = await axios.get(APIGetQuestionsCall, {
         withCredentials: true
@@ -37,7 +37,7 @@ export default {
       this.questions = fetchedQuestions.data.data;
     },
     async fetchTest() {
-      let APIGetTestCall = `http://localhost:3000/api/tests/${this.$route.params.id}`;
+      let APIGetTestCall = `${import.meta.env.VITE_API_URL}/tests/${this.$route.params.id}`;
 
       const fetchedTest = await axios.get(APIGetTestCall, {
         withCredentials: true
@@ -45,7 +45,7 @@ export default {
       this.test = fetchedTest.data.data;
     },
     async getQuestionAnswer(id) {
-      const APIGetQuestionAnswers = `http://localhost:3000/api/questions/${id}/answers`;
+      const APIGetQuestionAnswers = `${import.meta.env.VITE_API_URL}/questions/${id}/answers`;
 
       try {
         const fetchedAnswers = await axios

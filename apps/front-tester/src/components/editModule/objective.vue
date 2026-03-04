@@ -10,7 +10,7 @@ export default {
     },
     methods: {
         async updateObjective(objective) {
-            const APIUpdateObjectiveCall = `http://localhost:3000/api/objectives/${this.objective.idObjective}`;
+            const APIUpdateObjectiveCall = `${import.meta.env.VITE_API_URL}/objectives/${this.objective.idObjective}`;
 
             const payload = {
                 name: objective.name,
@@ -29,7 +29,7 @@ export default {
             }
         },
         async archivateObjective() {
-            const APIArchivateObjectiveCall = `http://localhost:3000/api/objectives/archivate/${this.objective.idObjective}`;
+            const APIArchivateObjectiveCall = `${import.meta.env.VITE_API_URL}/objectives/archivate/${this.objective.idObjective}`;
 
             try {
                 await axios

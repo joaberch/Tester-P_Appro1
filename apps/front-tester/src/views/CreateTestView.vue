@@ -20,7 +20,7 @@ export default {
     },
     methods: {
         async fetchAllModules() {
-            const APIGetAllModulesCall = `http://localhost:3000/api/modules`;
+            const APIGetAllModulesCall = `${import.meta.env.VITE_API_URL}/modules`;
 
             try {
                 const fetchedModules = await axios
@@ -35,7 +35,7 @@ export default {
             }
         },
         async createTest() {
-            const APICreateTest = `http://localhost:3000/api/tests`;
+            const APICreateTest = `${import.meta.env.VITE_API_URL}/tests`;
 
             const payload = {
                 name: this.test.name,

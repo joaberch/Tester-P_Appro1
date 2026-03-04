@@ -14,7 +14,7 @@ export default {
     },
     methods: {
         async fetchModule() {
-            const APIGetModuleCall = `http://localhost:3000/api/modules/${this.$route.params.id}`;
+            const APIGetModuleCall = `${import.meta.env.VITE_API_URL}/modules/${this.$route.params.id}`;
 
             try {
                 const fetchedModule = await axios
@@ -29,7 +29,7 @@ export default {
             }
         },
         async fetchObjectives() {
-          const APIGetModuleObjectivesCall = `http://localhost:3000/api/objectives/?idModule=${this.$route.params.id}`
+          const APIGetModuleObjectivesCall = `${import.meta.env.VITE_API_URL}/objectives/?idModule=${this.$route.params.id}`
 
           try {
             const fetchedObjectives = await axios

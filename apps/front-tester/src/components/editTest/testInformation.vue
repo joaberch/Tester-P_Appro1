@@ -10,7 +10,7 @@ export default {
     },
     methods: {
       async save() {
-        const APIUpdateTestCall = `http://localhost:3000/api/tests/${this.test.idTest}`;
+        const APIUpdateTestCall = `${import.meta.env.VITE_API_URL}/tests/${this.test.idTest}`;
 
         const payload = {
           name: this.test.name,

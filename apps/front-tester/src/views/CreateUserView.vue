@@ -9,7 +9,7 @@ export default {
     },
     methods: {
         async createUser() {
-            const APICreateUserCall = `http://localhost:3000/api/users`;
+            const APICreateUserCall = `${import.meta.env.VITE_API_URL}/users`;
 
             const payload = {
                 firstname: this.user.firstname,

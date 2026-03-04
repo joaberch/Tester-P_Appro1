@@ -22,7 +22,7 @@ export default {
     },
     methods: {
         async fetchUsers() {
-            const APIGetStudentsCall = `http://localhost:3000/api/users/`;
+            const APIGetStudentsCall = `${import.meta.env.VITE_API_URL}/users/`;
 
             try {
                 const fetchedStudents = await axios
@@ -35,9 +35,6 @@ export default {
             } catch(error) {
                 console.error("Erreur:", error)
             }
-        },
-        async addUser() {
-            const APICreateUserCall = `http://localhost:3000/api/users`
         }
     }
 }

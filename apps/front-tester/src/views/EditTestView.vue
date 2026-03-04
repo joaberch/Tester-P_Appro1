@@ -20,7 +20,7 @@ export default {
     },
     methods: {
       async fetchTestData() {
-        const APIGetTestDataCall = `http://localhost:3000/api/tests/${this.$route.params.id}`
+        const APIGetTestDataCall = `${import.meta.env.VITE_API_URL}/tests/${this.$route.params.id}`
 
         const fetchedTest = await axios
           .get(APIGetTestDataCall, {
@@ -29,7 +29,7 @@ export default {
           this.test = fetchedTest.data.data;
       },
       async fetchTestQuestions() {
-        const APIGetTestQuestionsCall = `http://localhost:3000/api/tests/${this.$route.params.id}/questions`
+        const APIGetTestQuestionsCall = `${import.meta.env.VITE_API_URL}/tests/${this.$route.params.id}/questions`
 
         const fetchedQuestions = await axios
           .get(APIGetTestQuestionsCall, {
@@ -40,7 +40,7 @@ export default {
       },
       async createQuestion() {
         try {
-          const APICreateQuestion = `http://localhost:3000/api/questions`
+          const APICreateQuestion = `${import.meta.env.VITE_API_URL}/questions`
   
           const payload = {
             question: '', //base value

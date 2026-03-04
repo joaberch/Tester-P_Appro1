@@ -1,6 +1,8 @@
 <script>
 import axios from 'axios';
 
+const VITE_API_URL = import.meta.env.VITE_API_URL
+
 export default {
     props: {
         user: {
@@ -10,7 +12,7 @@ export default {
     },
     methods: {
         async updateUser() {
-            const APIUpdateUserCall = `http://localhost:3000/api/users/${this.user.idUser}`
+            const APIUpdateUserCall = `${VITE_API_URL}/users/${this.user.idUser}`
 
             const payload = {
                 login: this.user.login,
@@ -30,7 +32,7 @@ export default {
             }
         },
         async archivateUser() {
-            const APIArchivateUserCall = `http://localhost:3000/api/users/archivate/${this.user.idUser}`;
+            const APIArchivateUserCall = `${VITE_API_URL}/users/archivate/${this.user.idUser}`;
 
             try {
                 await axios

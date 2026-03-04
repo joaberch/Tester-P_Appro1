@@ -18,7 +18,7 @@ export default {
     },
     methods: {
         async fetchAllAnswers(questionId) {
-            const APIGetAnswersOfQuestionCall = `http://localhost:3000/api/questions/${questionId}/answers`;
+            const APIGetAnswersOfQuestionCall = `${import.meta.env.VITE_API_URL}/questions/${questionId}/answers`;
 
             const fetchedAnswers = await axios
                 .get(APIGetAnswersOfQuestionCall, {
@@ -36,7 +36,7 @@ export default {
                 idQuestion: this.question.idQuestion,
             }
 
-            const APICreateAnswerCall = `http://localhost:3000/api/answers`;
+            const APICreateAnswerCall = `${import.meta.env.VITE_API_URL}/answers`;
 
             try {
                 const createdAnswer = await axios
@@ -51,7 +51,7 @@ export default {
             }
         },
         async updateAnswer(answer) {
-            const APIUpdateAnswerCall = `http://localhost:3000/api/answers/${answer.idAnswer}`
+            const APIUpdateAnswerCall = `${import.meta.env.VITE_API_URL}/answers/${answer.idAnswer}`
 
             const payload = {
                 answer: answer.answer,
@@ -70,7 +70,7 @@ export default {
             }
         },
         async archivateAnswer(answer) {
-            const APIArchivateAnswerCall = `http://localhost:3000/api/answers/archivate/${answer.idAnswer}`
+            const APIArchivateAnswerCall = `${import.meta.env.VITE_API_URL}/answers/archivate/${answer.idAnswer}`
 
             try {
                 await axios

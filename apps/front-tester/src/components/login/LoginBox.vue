@@ -13,7 +13,7 @@ export default {
             let username = document.getElementsByClassName('username')[0].value
             let password = document.getElementsByClassName('password')[0].value
 
-            let APICall = 'http://localhost:3000/api/login'
+            let APICall = `${import.meta.env.VITE_API_URL}/login`
 
             await axios
                 .post(APICall, {

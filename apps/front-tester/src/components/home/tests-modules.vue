@@ -15,8 +15,8 @@ export default {
     },
     async mounted() {
         try {
-            let APIGetAllTestsCall = 'http://localhost:3000/api/tests';
-            let APIGetAllModulesCall = 'http://localhost:3000/api/modules';
+            let APIGetAllTestsCall = `${import.meta.env.VITE_API_URL}/tests`;
+            let APIGetAllModulesCall = `${import.meta.env.VITE_API_URL}/modules`;
     
             let fetchedTests = await axios.get(APIGetAllTestsCall, {
                 withCredentials: true

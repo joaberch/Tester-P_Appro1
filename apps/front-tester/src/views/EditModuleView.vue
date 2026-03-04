@@ -14,7 +14,7 @@ export default {
     },
     methods: {
         async fetchModule() {
-            const APIFetchModuleCall = `http://localhost:3000/api/modules/${this.$route.params.id}`;
+            const APIFetchModuleCall = `${import.meta.env.VITE_API_URL}/modules/${this.$route.params.id}`;
 
             try {
                 const fetchedModule = await axios
@@ -29,7 +29,7 @@ export default {
             }
         },
         async fetchObjectives() {
-            const APIGetModuleObjectivesCall = `http://localhost:3000/api/objectives/?idModule=${this.$route.params.id}`
+            const APIGetModuleObjectivesCall = `${import.meta.env.VITE_API_URL}/objectives/?idModule=${this.$route.params.id}`
 
             try {
                 const fetchedObjectives = await axios
@@ -44,7 +44,7 @@ export default {
             }
         },
         async save() {
-            const APIUpdateModuleCall = `http://localhost:3000/api/modules/${this.$route.params.id}`
+            const APIUpdateModuleCall = `${import.meta.env.VITE_API_URL}/modules/${this.$route.params.id}`
 
             const payload = {
                 name: this.module.name,
@@ -63,7 +63,7 @@ export default {
             }
         },
         async createObjective() {
-            const APICreateObjectiveCall = `http://localhost:3000/api/objectives/`
+            const APICreateObjectiveCall = `${import.meta.env.VITE_API_URL}/objectives/`
 
             const payload = {
                 name: '', //base value

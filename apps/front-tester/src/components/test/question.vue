@@ -20,7 +20,7 @@ export default {
   },
   methods: {
     async fetchAnswers(questionId) {
-      let APIGetQuestionAnswersCall = `http://localhost:3000/api/questions/${questionId}/answers`;
+      let APIGetQuestionAnswersCall = `${import.meta.env.VITE_API_URL}/questions/${questionId}/answers`;
       try {
         const fetchedAnswers = await axios.get(APIGetQuestionAnswersCall, {
           withCredentials: true
@@ -40,7 +40,7 @@ export default {
     },
     async createTestDone() {
       try {
-        let APICreateDoneTestCall = `http://localhost:3000/api/testsDone/`
+        let APICreateDoneTestCall = `${import.meta.env.VITE_API_URL}/testsDone/`
 
         const payload = {
           score: null,

@@ -9,7 +9,7 @@ export default {
     },
     methods: {
         async create() {
-            const APICreateModuleCall = `http://localhost:3000/api/modules/`;
+            const APICreateModuleCall = `${import.meta.env.VITE_API_URL}/modules/`;
 
             const payload = {
                 name: this.module.name,

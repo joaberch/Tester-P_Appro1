@@ -15,7 +15,7 @@ export default {
     methods: {
         async archivateQuestion(idQuestion) {
             try {
-                const APIArchivateQuestionCall = `http://localhost:3000/api/questions/archivate/${idQuestion}`
+                const APIArchivateQuestionCall = `${import.meta.env.VITE_API_URL}/questions/archivate/${idQuestion}`
                 
                 await axios
                     .put(APIArchivateQuestionCall, {}, {
@@ -28,7 +28,7 @@ export default {
             }
         },
         async saveQuestion(question) { //TODO - automatically update on exit of input or type changed, check the ressources used
-            const APIUpdateQuestion = `http://localhost:3000/api/questions/${question.idQuestion}`;
+            const APIUpdateQuestion = `${import.meta.env.VITE_API_URL}/questions/${question.idQuestion}`;
 
             const payload = {
                 question: question.question,
