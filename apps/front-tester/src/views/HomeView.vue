@@ -7,12 +7,19 @@ export default {
         TestsModules
     },
     methods: {
-        disconnect() {
-            //TODO route that remove cookie in backend
-            this.$router.push('/login');
+        async disconnect() {
+            const APIDisconnectCall = `${import.meta.env.VITE_API_URL}/me/disconnect`;
+
+            try {
+                await axios.post(APIDisconnectCall, {}, { withCredentials: true });
+
+                this.$router.push('/login');
+            } catch(error) {
+                console.error("Erreur:", error)
+            }
         },
         async getMe() {
-            const APIGetMeCall = 'http://localhost:3000/me';
+            const APIGetMeCall = `${import.meta.env.VITE_API_URL}/me`;
 
             try {
                 const res = await axios
