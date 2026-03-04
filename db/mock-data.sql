@@ -2,12 +2,12 @@
 -- USERS
 -- =========================
 INSERT INTO t_users (login, firstname, name, hashedPassword, role, isDeleted, createdAt) VALUES
-('admin01', 'Alice', 'Admin', 'hash_admin', 'ADMIN', FALSE, '2026-01-10'),
-('prof01', 'Bob', 'Martin', 'hash_prof1', 'TEACHER', FALSE, '2026-01-10'),
-('prof02', 'Claire', 'Durand', 'hash_prof2', 'TEACHER', FALSE, '2026-01-10'),
-('stud001', 'David', 'Bernard', 'hash_stud1', 'STUDENT', FALSE, '2026-01-10'),
-('stud002', 'Emma', 'Petit', 'hash_stud2', 'STUDENT', FALSE, '2026-01-10'),
-('stud003', 'Lucas', 'Robert', 'hash_stud3', 'STUDENT', FALSE, '2026-01-10');
+('admin01', 'Alice', 'Admin', 'hash_admin', 'admin', FALSE, '2026-01-10'),
+('prof01', 'Bob', 'Martin', 'hash_prof1', 'teacher', FALSE, '2026-01-10'),
+('prof02', 'Claire', 'Durand', 'hash_prof2', 'teacher', FALSE, '2026-01-10'),
+('stud001', 'David', 'Bernard', 'hash_stud1', 'student', FALSE, '2026-01-10'),
+('stud002', 'Emma', 'Petit', 'hash_stud2', 'student', FALSE, '2026-01-10'),
+('stud003', 'Lucas', 'Robert', 'hash_stud3', 'student', FALSE, '2026-01-10');
 
 -- =========================
 -- MODULES
