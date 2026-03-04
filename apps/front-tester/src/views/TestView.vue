@@ -3,48 +3,109 @@ import axios from "axios";
 import { RouterLink } from "vue-router";
 import TestDescription from "../components/test/testDescription.vue";
 import Question from "../components/test/question.vue";
+import { jsPDF } from "jspdf";
 
 export default {
-    components: {
-        TestDescription,
-        Question
-    },
-    data() {
-        return {
-            test: [],
-            questions: [],
-            loaded: false,
-            isStarted: false,
-        }
-    },
-    async mounted() {
-        let APIGetTestCall = `http://localhost:3000/api/tests/${this.$route.params.id}`;
-
-        const fetchedTest = await axios.get(APIGetTestCall, {
-            headers: {
-                Authorization: `Bearer ${localStorage.token}`
-            }
-        });
-        this.test = fetchedTest.data.data;
-
-        this.loaded = true;
-    },
-    methods: {
-        async startTest() {
-            await this.fetchQuestions()
-            this.isStarted = true;
-        },
-        async fetchQuestions() {
-            let APIGetQuestionsCall = `http://localhost:3000/api/tests/${this.$route.params.id}/questions`;
-
-            const fetchedQuestions = await axios.get(APIGetQuestionsCall, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.token}`
-                }
-            });
-            this.questions = fetchedQuestions.data.data;
-        }
+  components: {
+    TestDescription,
+    Question
+  },
+  data() {
+    return {
+      test: [],
+      questions: [],
+      loaded: false,
+      isStarted: false,
     }
+  },
+  async mounted() {
+    this.fetchTest();
+    this.fetchQuestions();
+    this.loaded = true;
+  },
+  methods: {
+    async startTest() {
+      await this.fetchQuestions()
+      this.isStarted = true;
+    },
+    async fetchQuestions() {
+      let APIGetQuestionsCall = `http://localhost:3000/api/tests/${this.$route.params.id}/questions`;
+
+      const fetchedQuestions = await axios.get(APIGetQuestionsCall, {
+        headers: {
+          Authorization: `Bearer ${localStorage.token}`
+        }
+      });
+      this.questions = fetchedQuestions.data.data;
+    },
+    async fetchTest() {
+      let APIGetTestCall = `http://localhost:3000/api/tests/${this.$route.params.id}`;
+
+      const fetchedTest = await axios.get(APIGetTestCall, {
+        headers: {
+          Authorization: `Bearer ${localStorage.token}`
+        }
+      });
+      this.test = fetchedTest.data.data;
+    },
+    async getQuestionAnswer(id) {
+      const APIGetQuestionAnswers = `http://localhost:3000/api/questions/${id}/answers`;
+
+      try {
+        const fetchedAnswers = await axios
+          .get(APIGetQuestionAnswers, {
+            headers: {
+              Authorization: `Bearer ${localStorage.token}`
+            }
+          }
+          );
+        return fetchedAnswers.data.data;
+      } catch (error) {
+        console.error("Erreur:", error)
+      }
+    },
+    async exportToPDF() {
+      const doc = new jsPDF();
+
+      doc.setFontSize(20); //title
+      doc.text(this.test.name, 20, 20);
+
+      doc.setFontSize(12); //other
+      doc.text(this.test.description, 20, 35);
+
+      let startY = 50;
+
+      for (let i = 0; i < this.questions.length; ++i) { //questions
+        if (startY > 270) {
+          doc.addPage();
+          startY = 20;
+        }
+        doc.setFontSize(14);
+        doc.text(`${i + 1}. ${this.questions[i].question}`, 20, startY);
+        startY += 10;
+        if (this.questions[i].type != "open") {
+          const answers = await this.getQuestionAnswer(this.questions[i].idQuestion);
+          if (this.questions[i].type == "radiobox") {
+            for (let j = 0; j < answers.length; ++j) {
+              doc.text("(  )  " + answers[j].answer, 20, startY)
+              startY += 10;
+            }
+          } else if (this.questions[i].type == "checkbox") {
+            for (let j = 0; j < answers.length; ++j) {
+              doc.text("[  ]  " + answers[j].answer, 20, startY)
+              startY += 10;
+            }
+          }
+          startY += 10
+        } else {
+          startY += 20
+        }
+
+      };
+
+      doc.save(`${this.test.name}.pdf`);
+    }
+  }
 }
 </script>
 <template>
@@ -54,20 +115,44 @@ export default {
       <div id="header">
         <RouterLink :to="{ name: 'home' }">Accueil</RouterLink>
         <div class="right-part">
-          <RouterLink class="button" :to="{ name: 'edit-test'}">Modifier le test</RouterLink>
-          <RouterLink class="button" :to="{ name: 'correct-test'}">Corriger les tests</RouterLink>
+          <RouterLink class="button" :to="{ name: 'edit-test' }">Modifier le test</RouterLink>
+          <!--<RouterLink class="button" :to="{ name: 'correct-test' }">Corriger les tests</RouterLink>-->
         </div>
       </div>
       <div id="description">
-        <TestDescription @start-test="startTest" :test="test"/>
+        <TestDescription @start-test="startTest" :test="test" />
       </div>
       <div v-if="this.isStarted">
-        <Question :questions="this.questions" :test="test"/>
+        <Question :questions="this.questions" :test="test" />
       </div>
+      <button @click="exportToPDF()">Exporter en PDF</button>
     </div>
   </div>
 </template>
 <style scoped>
+button {
+  margin-top: 20px;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #4f46e5, #6366f1);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(79, 70, 229, 0.3);
+}
+
+button:active {
+  transform: translateY(0px);
+  box-shadow: none;
+}
+
 .test-page {
   min-height: 100vh;
   background-color: #f5f7fa;
