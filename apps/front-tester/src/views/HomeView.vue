@@ -27,7 +27,7 @@ export default {
     <div id="header">
         <RouterLink class="button" v-if="this.token.role == 'teacher' || this.token.role == 'admin'" :to="{ name: 'create-test' }">Créer un test</RouterLink>
         <RouterLink class="button" v-if="this.token.role == 'teacher' || this.token.role == 'admin'" :to="{ name: 'create-module'}">Créer un module</RouterLink>
-        <button v-if="this.token.role == 'admin'">Console admin</button>
+        <RouterLink class="button" v-if="this.token.role == 'admin'" :to="{ name: 'admin' }">Console admin</RouterLink>
         <button @click="disconnect()">Se déconnecter</button>
     </div>
     <TestsModules />
