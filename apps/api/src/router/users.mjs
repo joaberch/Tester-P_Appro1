@@ -5,6 +5,8 @@ import { ValidationError } from "sequelize";
 import { auth } from "../auth/authMiddleware.mjs";
 import authorizeRoles from "../auth/roleMiddleware.mjs";
 import bcrypt from "bcrypt";
+import dotenv from "dotenv";
+dotenv.config();
 
 const usersRouter = express();
 
@@ -75,7 +77,7 @@ usersRouter.post("/", auth, authorizeRoles("admin"), async (req, res) => { //TOD
         if (!req.body.password) {
             return res.status(400).json({ message: "Mot de passe requis." });
         }
-        userData.hashedPassword = await bcrypt.hash(req.body.password, 12);
+        userData.hashedPassword = await bcrypt.hash(req.body.password + process.env.PEPPER, parseInt(process.env.SALT_NBR));
 
         const createdUser = await User.create(userData);
 

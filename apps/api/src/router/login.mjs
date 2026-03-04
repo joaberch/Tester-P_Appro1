@@ -3,6 +3,8 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { User } from "../db/sequelize.mjs";
 import { privateKey } from "../auth/private_key.mjs";
+import dotenv from "dotenv";
+dotenv.config();
 
 const loginRouter = express();
 
@@ -21,7 +23,7 @@ loginRouter.post("/", async (req, res) => {
             return res.status(404).json({ message });
         }
 
-        let isValid = await bcrypt.compare(req.body.password, user.hashedPassword);
+        let isValid = await bcrypt.compare(req.body.password + process.env.PEPPER, user.hashedPassword);
         if (!isValid) {
             const message = "Le mot de passe est incorrect";
             return res.status(401).json({ message });
@@ -37,9 +39,9 @@ loginRouter.post("/", async (req, res) => {
 
         res.cookie("token", token, {
             httpOnly: true,
-            secure: false, //TODO in prod
-            sameSite: 'lax' //TODO in prod
-        })
+            secure: process.env.COOKIE_SECURE, //TODO in prod
+            sameSite: process.env.COOKIE_SAMESITE //TODO in prod
+        });
 
         const message = "L'utilisateur est connecté."
         return res.json({ message, data: user.login })
