@@ -27,9 +27,7 @@ export default {
             try {
                 const fetchedStudents = await axios
                     .get(APIGetStudentsCall, {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.token}`
-                        }
+                        withCredentials: true
                     }
                 );
 

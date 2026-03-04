@@ -22,9 +22,7 @@ export default {
 
             const fetchedAnswers = await axios
                 .get(APIGetAnswersOfQuestionCall, {
-                    headers: {
-                        Authorization: `Bearer ${localStorage.token}`
-                    }
+                    withCredentials: true
                 }
                 );
 
@@ -43,9 +41,7 @@ export default {
             try {
                 const createdAnswer = await axios
                     .post(APICreateAnswerCall, newAnswer, {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.token}`
-                        }
+                        withCredentials: true
                     }
                     );
 
@@ -66,9 +62,7 @@ export default {
             try {
                 await axios
                     .put(APIUpdateAnswerCall, payload, {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.token}`
-                        }
+                        withCredentials: true
                     }
                 );
             } catch (error) {
@@ -81,9 +75,7 @@ export default {
             try {
                 await axios
                     .put(APIArchivateAnswerCall, {}, {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.token}`
-                        }
+                        withCredentials: true
                     }
                 );
 

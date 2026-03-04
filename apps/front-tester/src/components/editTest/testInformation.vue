@@ -23,9 +23,7 @@ export default {
         try {
           const updatedTest = await axios
             .put(APIUpdateTestCall, payload, {
-              headers: {
-                Authorization: `Bearer ${localStorage.token}`
-              }
+              withCredentials: true
             }
           );
 

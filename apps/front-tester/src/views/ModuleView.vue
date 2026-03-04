@@ -19,9 +19,7 @@ export default {
             try {
                 const fetchedModule = await axios
                     .get(APIGetModuleCall, {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.token}`
-                        }
+                        withCredentials: true
                     }
                 );
 
@@ -36,9 +34,7 @@ export default {
           try {
             const fetchedObjectives = await axios
               .get(APIGetModuleObjectivesCall, {
-                headers: {
-                  Authorization: `Bearer ${localStorage.token}`
-                }
+                withCredentials: true
               }
             );
 

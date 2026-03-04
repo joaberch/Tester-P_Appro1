@@ -25,9 +25,7 @@ export default {
             try {
                 const fetchedModules = await axios
                     .get(APIGetAllModulesCall, {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.token}`
-                        }
+                        withCredentials: true
                     }
                 );
 
@@ -51,9 +49,7 @@ export default {
             try {
                 await axios
                     .post(APICreateTest, payload, {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.token}`
-                        }
+                        withCredentials: true
                     }
                 );
 

@@ -19,7 +19,7 @@ export default {
                 .post(APICall, {
                     login: username,
                     password: password
-                })
+                }, { withCredentials: true })
                 .then((res) => {
                     localStorage.token = res.data.token
                     this.$router.push('/');

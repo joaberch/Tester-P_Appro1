@@ -24,9 +24,7 @@ export default {
 
         const fetchedTest = await axios
           .get(APIGetTestDataCall, {
-            headers: {
-              Authorization: `Bearer ${localStorage.token}`
-            }
+            withCredentials: true
           });
           this.test = fetchedTest.data.data;
       },
@@ -35,9 +33,7 @@ export default {
 
         const fetchedQuestions = await axios
           .get(APIGetTestQuestionsCall, {
-            headers: {
-              Authorization: `Bearer ${localStorage.token}`
-            }
+            withCredentials: true
           })
 
           this.questions = fetchedQuestions.data.data;
@@ -56,9 +52,7 @@ export default {
 
           const createdQuestion = await axios
             .post(APICreateQuestion, payload, {
-              headers: {
-                Authorization: `Bearer ${localStorage.token}`
-              }
+              withCredentials: true
             }
           );
 

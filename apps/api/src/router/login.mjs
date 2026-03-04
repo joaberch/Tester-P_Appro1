@@ -15,7 +15,7 @@ loginRouter.post("/", async (req, res) => {
             return res.status(200).json({ message });
         }
         //TODO err if already connected and work with wrong pwd
-        const user = await User.findOne({ where: { login: req.body.login } })
+        const user = await User.findOne({ where: { login: req.body.login } });
         if (!user) {
             const message = "L'utilisateur n'existe pas";
             return res.status(404).json({ message });
@@ -34,11 +34,18 @@ loginRouter.post("/", async (req, res) => {
         const token = jwt.sign(payload, privateKey, {
             expiresIn: "24h",
         });
+
+        res.cookie("token", token, {
+            httpOnly: true,
+            secure: false, //TODO in prod
+            sameSite: 'lax' //TODO in prod
+        })
+
         const message = "L'utilisateur est connecté."
-        return res.json({ message, data: user.login, token })
+        return res.json({ message, data: user.login })
     } catch (error) {
         const message = "L'utilisateur n'a pas pu être connecté."
-        return res.json({ message, data: error.message });
+        return res.status(500).json({ message, data: error.message });
     }
 })
 

@@ -1,6 +1,6 @@
 <script>
+import axios from "axios";
 import TestsModules from "../components/home/tests-modules.vue"
-import { decodeToken } from "../utils/decodeToken.mjs";
     
 export default {
     components: {
@@ -8,26 +8,39 @@ export default {
     },
     methods: {
         disconnect() {
-            localStorage.removeItem("token");
+            //TODO route that remove cookie in backend
             this.$router.push('/login');
-        }
-    },
-    data() {
-        return {
-            tokenExist: false,
-            token: '',
+        },
+        async getMe() {
+            const APIGetMeCall = 'http://localhost:3000/me';
+
+            try {
+                const res = await axios
+                    .get(APIGetMeCall, {
+                        withCredentials: true
+                    }
+                );
+                this.role = res.data.role
+            } catch (error) {
+                console.error("Erreur:", error)
+            }
         }
     },
     mounted() {
-        localStorage.getItem('token') ? (this.tokenExist = true, this.token = decodeToken(localStorage.token)) : this.tokenExist = false;
-    }
+        this.getMe();
+    },
+    data() {
+        return {
+            role: '',
+        }
+    },
 }
 </script>
 <template>
     <div id="header">
-        <RouterLink class="button" v-if="this.token.role == 'teacher' || this.token.role == 'admin'" :to="{ name: 'create-test' }">Créer un test</RouterLink>
-        <RouterLink class="button" v-if="this.token.role == 'teacher' || this.token.role == 'admin'" :to="{ name: 'create-module'}">Créer un module</RouterLink>
-        <RouterLink class="button" v-if="this.token.role == 'admin'" :to="{ name: 'admin' }">Console admin</RouterLink>
+        <RouterLink class="button" v-if="this.role == 'teacher' || this.role == 'admin'" :to="{ name: 'create-test' }">Créer un test</RouterLink>
+        <RouterLink class="button" v-if="this.role == 'teacher' || this.role == 'admin'" :to="{ name: 'create-module'}">Créer un module</RouterLink>
+        <RouterLink class="button" v-if="this.role == 'admin'" :to="{ name: 'admin' }">Console admin</RouterLink>
         <button @click="disconnect()">Se déconnecter</button>
     </div>
     <TestsModules />

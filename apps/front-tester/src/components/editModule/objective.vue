@@ -21,9 +21,7 @@ export default {
             try {
                 await axios
                     .put(APIUpdateObjectiveCall, payload, {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.token}`
-                        }
+                        withCredentials: true
                     }
                 );
             } catch (error) {
@@ -36,9 +34,7 @@ export default {
             try {
                 await axios
                     .put(APIArchivateObjectiveCall, {}, {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.token}`
-                        }
+                        withCredentials: true
                     }
                 );
 

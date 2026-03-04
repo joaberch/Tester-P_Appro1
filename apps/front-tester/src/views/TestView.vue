@@ -32,9 +32,7 @@ export default {
       let APIGetQuestionsCall = `http://localhost:3000/api/tests/${this.$route.params.id}/questions`;
 
       const fetchedQuestions = await axios.get(APIGetQuestionsCall, {
-        headers: {
-          Authorization: `Bearer ${localStorage.token}`
-        }
+        withCredentials: true
       });
       this.questions = fetchedQuestions.data.data;
     },
@@ -42,9 +40,7 @@ export default {
       let APIGetTestCall = `http://localhost:3000/api/tests/${this.$route.params.id}`;
 
       const fetchedTest = await axios.get(APIGetTestCall, {
-        headers: {
-          Authorization: `Bearer ${localStorage.token}`
-        }
+        withCredentials: true
       });
       this.test = fetchedTest.data.data;
     },
@@ -54,9 +50,7 @@ export default {
       try {
         const fetchedAnswers = await axios
           .get(APIGetQuestionAnswers, {
-            headers: {
-              Authorization: `Bearer ${localStorage.token}`
-            }
+            withCredentials: true
           }
           );
         return fetchedAnswers.data.data;

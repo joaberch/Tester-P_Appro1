@@ -21,9 +21,7 @@ export default {
             try {
                 await axios
                     .post(APICreateModuleCall, payload, {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.token}`
-                        }
+                        withCredentials: true
                     }
                 );
                 

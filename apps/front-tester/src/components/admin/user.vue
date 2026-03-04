@@ -22,9 +22,7 @@ export default {
             try {
                 await axios
                     .put(APIUpdateUserCall, payload, {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.token}`
-                        }
+                        withCredentials: true
                     }
                 );
             } catch (error) {
@@ -37,9 +35,7 @@ export default {
             try {
                 await axios
                     .put(APIArchivateUserCall, {}, {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.token}`
-                        }
+                        withCredentials: true
                     }
                 );
                 this.user.isDeleted = true;

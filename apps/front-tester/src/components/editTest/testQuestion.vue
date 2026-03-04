@@ -19,9 +19,7 @@ export default {
                 
                 await axios
                     .put(APIArchivateQuestionCall, {}, {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.token}`
-                        }
+                        withCredentials: true
                     }
                 );
                 this.question.isDeleted = true; //Change locally to not reload page
@@ -41,9 +39,7 @@ export default {
             try {
                 await axios
                     .put(APIUpdateQuestion, payload, {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.token}`
-                        }
+                        withCredentials: true
                     }
                 );
             } catch (error) {

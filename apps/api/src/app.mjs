@@ -1,9 +1,14 @@
 import express from "express";
-import cors from "cors"
+import cors from "cors";
+import cookieParser from "cookie-parser";
 
 const app = express();
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+    origin: "http://localhost:5173",
+    credentials: true,
+}));
+app.use(cookieParser())
 
 const port = 3000;
 
@@ -20,6 +25,9 @@ app.get('/', (req, res) => {
 app.get('/api/', (req, res) => {
     res.redirect(`http://localhost:${port}/`);
 })
+
+import { meRouter } from "./router/me.mjs";
+app.use("/", meRouter);
 
 import { loginRouter } from "./router/login.mjs";
 app.use("/api/login", loginRouter);

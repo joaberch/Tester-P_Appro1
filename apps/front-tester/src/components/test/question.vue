@@ -23,9 +23,7 @@ export default {
       let APIGetQuestionAnswersCall = `http://localhost:3000/api/questions/${questionId}/answers`;
       try {
         const fetchedAnswers = await axios.get(APIGetQuestionAnswersCall, {
-          headers: {
-            Authorization: `Bearer ${localStorage.token}`
-          }
+          withCredentials: true
         });
         this.answers[questionId] = fetchedAnswers.data.data
       } catch (error) {
@@ -53,9 +51,7 @@ export default {
           .post(APICreateDoneTestCall,
             payload,
             {
-              headers: {
-                Authorization: `Bearer ${localStorage.token}`
-              }
+              withCredentials: true
             });
       } catch (error) {
         console.log("Erreur: ", error);

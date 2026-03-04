@@ -19,14 +19,10 @@ export default {
             let APIGetAllModulesCall = 'http://localhost:3000/api/modules';
     
             let fetchedTests = await axios.get(APIGetAllTestsCall, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.token}`
-                }
+                withCredentials: true
             });
             let fetchedModules = await axios.get(APIGetAllModulesCall, {
-                headers: {
-                    Authorization: `Bearer ${localStorage.token}`
-                }
+                withCredentials: true
             });
             this.tests = fetchedTests.data.data;
             this.modules = fetchedModules.data.data;

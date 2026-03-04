@@ -23,9 +23,7 @@ export default {
             try {
                 await axios
                     .post(APICreateUserCall, payload, {
-                        headers: {
-                            Authorization: `Bearer ${localStorage.token}`
-                        }
+                        withCredentials: true
                     }
                 );
             } catch (error) {
