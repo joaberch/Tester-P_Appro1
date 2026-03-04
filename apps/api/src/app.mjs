@@ -27,7 +27,7 @@ app.get('/api/', (req, res) => {
 })
 
 import { meRouter } from "./router/me.mjs";
-app.use("/", meRouter);
+app.use("/api/me", meRouter);
 
 import { loginRouter } from "./router/login.mjs";
 app.use("/api/login", loginRouter);

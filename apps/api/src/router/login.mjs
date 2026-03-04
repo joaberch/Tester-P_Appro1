@@ -39,8 +39,8 @@ loginRouter.post("/", async (req, res) => {
 
         res.cookie("token", token, {
             httpOnly: true,
-            secure: process.env.COOKIE_SECURE, //TODO in prod
-            sameSite: process.env.COOKIE_SAMESITE //TODO in prod
+            secure: process.env.COOKIE_SECURE,
+            sameSite: process.env.COOKIE_SAMESITE
         });
 
         const message = "L'utilisateur est connecté."
