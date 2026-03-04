@@ -54,7 +54,7 @@ export default {
               withCredentials: true
             });
       } catch (error) {
-        console.log("Erreur: ", error);
+        console.error("Erreur: ", error);
       }
     },
     async send() {

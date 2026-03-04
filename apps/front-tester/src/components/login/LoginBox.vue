@@ -11,7 +11,7 @@ export default {
     methods: {
         async login() {
             let username = document.getElementsByClassName('username')[0].value
-            let password = document.getElementsByClassName('password')[0].value //TODO salt + pepper
+            let password = document.getElementsByClassName('password')[0].value
 
             let APICall = 'http://localhost:3000/api/login'
 
@@ -25,7 +25,7 @@ export default {
                     this.$router.push('/');
                 })
                 .catch((err) => {
-                    console.log(err)
+                    console.error(err)
                     if (err.response || err.response.status == 404 || err.response.status == 401) {
                         this.errorMessage = 'Username or password incorrect'
                     }

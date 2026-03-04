@@ -27,7 +27,7 @@ export default {
             this.tests = fetchedTests.data.data;
             this.modules = fetchedModules.data.data;
         } catch (error) {
-            console.log("error :", error);
+            console.error("error :", error);
         }
     }
 }

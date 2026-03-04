@@ -14,7 +14,6 @@ objectivesRouter.get("/", auth, authorizeRoles("admin", "teacher", "student"), a
         if (!id) {
             return res.status(400).json({ message: "Query not found. Specify a module id." })
         }
-        console.log(id)
 
         const objectives = await Objective.findAll({
             where: { idModule: id }

@@ -27,7 +27,6 @@ export default {
             }
           );
 
-          console.log(updatedTest)
         } catch(error) {
           console.error("Erreur:", error)
         }

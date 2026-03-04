@@ -18,9 +18,7 @@ answersRouter.get("/", auth, authorizeRoles("admin", "teacher"), (req, res) => {
 //Get a specific answer
 answersRouter.get("/:id", auth, authorizeRoles("admin", "teacher"), async (req, res) => { //TODO - check if useful
     try {
-        console.log(req.params.id)
         const answers = await Answer.findByPk(req.params.id);
-        console.log(answers)
         if (answers == null) {
             return res.status(404).json({ message: "Ressource introuvable." })
         }
