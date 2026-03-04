@@ -25,22 +25,6 @@ objectivesRouter.get("/", auth, authorizeRoles("admin", "teacher", "student"), a
     }
 });
 
-//Get a specific objective
-objectivesRouter.get("/:id", auth, authorizeRoles("admin", "teacher", "student"), async (req, res) => { //TODO - check if useful
-    try {
-        const objectiveId = req.params.id;
-        const objective = await Objective.findByPk(objectiveId);
-        if (!objective) {
-            return res.status(404).json({ message: "Ressource introuvable." })
-        }
-
-        const message = `L'objectif avec l'id ${objective.idObjective} a été récupéré.`;
-        res.json(success(message, objective));
-    } catch (error) {
-        return res.status(500).json({ message: "L'objectif n'a pas pu être récupéré."})
-    }
-});
-
 //Create an objective
 objectivesRouter.post("/", auth, authorizeRoles("admin", "teacher"), (req, res) => {
     Objective.create(req.body).then((createdObjective) => {
@@ -68,27 +52,6 @@ objectivesRouter.put("/archivate/:id", auth, authorizeRoles("admin", "teacher"),
         const message = `L'objectif ${archivateObjective.name} a bien été supprimé (archivé).`;
         res.json(success(message, archivateObjective));
     });
-});
-
-//Delete an objective
-objectivesRouter.delete("/:id", auth, authorizeRoles("admin"), async (req, res) => {
-    try {
-        const objectiveId = req.params.id;
-        const objective = await Objective.findByPk(objectiveId);
-        if (!objective) {
-            return res.status(404).json({ message: "Ressource introuvable." })
-        }
-        const deletedObjective = await objective.destroy();
-
-        const message = `L'objectif ${deletedObjective.name} a été supprimé.`;
-        res.json(success(message, deletedObjective))
-    } catch (error) {
-        if (error.name == "SequelizeForeignKeyConstraintError") {
-            return res.status(400).json({ message: "Impossible de supprimer cet objectif car il est encore lié à d'autres tables.", data: error });
-        }
-        const message = "L'objectif n'a pas pu être supprimé. Veuillez réessayer dans un moment.";
-        res.status(500).json({ message, data: error })
-    }
 });
 
 //Edit an objective

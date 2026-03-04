@@ -122,24 +122,6 @@ testsRouter.put("/archivate/:id", auth, authorizeRoles("admin", "teacher"), asyn
     });
 });
 
-//Delete a test
-testsRouter.delete("/:id", auth, authorizeRoles("admin"), (req, res) => {
-    Test.findByPk(req.params.id).then((deletedTest) => {
-        Test.destroy({
-            where: { idTest: deletedTest.idTest },
-        }).then((_) => {
-            const message = `Le test ${deletedTest.name} a été supprimé.`;
-            res.json(success(message, deletedTest))
-        }).catch((error) => {
-            if (error.name == "SequelizeForeignKeyConstraintError") {
-                return res.status(400).json({ message: "Impossible de supprimer ce test car il est encore lié à d'autres tables.", data: error });
-            }
-            const message = "Le test n'a pas pu être supprimé. Veuillez réessayer dans un moment.";
-            res.status(500).json({ message, data: error })
-        })
-    })
-});
-
 //Edit a test
 testsRouter.put("/:id", auth, authorizeRoles("admin", "teacher"), async (req, res) => {
     try {

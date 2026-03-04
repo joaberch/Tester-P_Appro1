@@ -31,23 +31,6 @@ modulesRouter.get("/:id", auth, authorizeRoles("admin", "teacher", "student"), a
     }
 });
 
-//Get all tests of module
-modulesRouter.get("/:id/tests", auth, authorizeRoles("admin", "teacher"), async (req, res) => {
-    try {
-        const moduleId = req.params.id;
-        const tests = await Test.findAll({
-            where: {
-                idModule: moduleId,
-            }
-        });
-
-        const message = `Les tests du module ${moduleId} ont bien été récupéré.`;
-        res.json(success(message, tests));
-    } catch (error) {
-        res.status(500).json({ message: "Erreur lors de la récupération des tests" })
-    }
-})
-
 //Create a module
 modulesRouter.post("/", auth, authorizeRoles("admin", "teacher"), (req, res) => {
     Module.create(req.body).then((createdModule) => {
@@ -75,27 +58,6 @@ modulesRouter.put("/archivate/:id", auth, authorizeRoles("admin", "teacher"), as
         const message = `Le module ${archivateModule.name} a bien été supprimé (archivé).`;
         res.json(success(message, archivateModule));
     });
-});
-
-//Delete a module
-modulesRouter.delete("/:id", auth, authorizeRoles("admin"), async (req, res) => {
-    try {
-        const moduleId = req.params.id;
-        const module = await Module.findByPk(moduleId);
-        if (!module) {
-            return res.status(404).json({ message: "Ressource introuvable." })
-        }
-        const deletedModule = await module.destroy();
-
-        const message = `Le module ${deletedModule.name} a été supprimé.`;
-        res.json(success(message, deletedModule))
-    } catch (error) {
-        if (error.name == "SequelizeForeignKeyConstraintError") {
-            return res.status(400).json({ message: "Impossible de supprimer ce module car il est encore lié à d'autres tables.", data: error });
-        }
-        const message = "Le module n'a pas pu être supprimé. Veuillez réessayer dans un moment.";
-        res.status(500).json({ message, data: error })
-    }
 });
 
 //Edit a module
