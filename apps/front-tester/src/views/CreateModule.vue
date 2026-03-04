@@ -24,7 +24,8 @@ export default {
                         withCredentials: true
                     }
                 );
-                
+
+                this.$router.push("/");
             } catch (error) {
                 console.error("Erreur:", error)
             }
