@@ -51,11 +51,11 @@ export default {
         <div>
             <div class="head">
                 Objectif:
-                <input type="text" v-model="objective.name" placeholder="Nom" @change="updateObjective(objective)" />
+                <input type="text" v-model="objective.name" placeholder="Nom" @input="updateObjective(objective)" />
                 <button class="delete" @click="archivateObjective(objective)">Supprimer</button>
             </div>
 
-            Description:<textarea v-model="objective.description" placeholder="Description" @change="updateObjective(objective)"></textarea>
+            Description:<textarea v-model="objective.description" placeholder="Description" @input="updateObjective(objective)"></textarea>
 
             Niveau de bloom:<select v-model="objective.bloomLevel" @change="updateObjective(objective)">
                 <option :value="1">1 - Connaître</option>

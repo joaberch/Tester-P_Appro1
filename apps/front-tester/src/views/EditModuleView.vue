@@ -57,7 +57,7 @@ export default {
                     .put(APIUpdateModuleCall, payload, {
                         withCredentials: true
                     }
-                );
+                    );
             } catch (error) {
                 console.error("Erreur:", error);
             }
@@ -78,7 +78,7 @@ export default {
                     .post(APICreateObjectiveCall, payload, {
                         withCredentials: true
                     }
-                );
+                    );
 
                 this.objectives.push(createdObjective.data.data)
             } catch (error) {
@@ -100,39 +100,27 @@ export default {
         </div>
 
         <div class="edit-form">
-
             <div class="form-group">
                 <label>Nom du module</label>
-                <input type="text" v-model="module.name" required />
-            </div>
+                <input type="text" v-model="module.name" required @input="save()" /> <!--TODO - debounce-->
 
-            <div class="form-group">
                 <label>Description</label>
-                <textarea v-model="module.description" rows="4"></textarea>
-            </div>
+                <textarea v-model="module.description" rows="4" @input="save()"></textarea> <!--TODO - debounce-->
 
-            <div class="form-group checkbox">
                 <label>
-                    <input type="checkbox" v-model="module.isDeleted" />
-                    Archiver le module
+                    <input type="checkbox" v-model="module.isDeleted" @change="save()" />Archiver le module
                 </label>
-            </div>
-
-            <div class="form-actions">
-                <button type="submit" class="save-btn" @click="save()">
-                    Enregistrer
-                </button>
             </div>
         </div>
 
         <div class="objectives">
             <div v-for="objective in objectives" :key="objective.idObjective">
                 <div v-if="!objective.isDeleted" class="objective">
-                    <Objective :objective="objective"/>
+                    <Objective :objective="objective" />
                 </div>
             </div>
         </div>
-        
+
         <button @click="createObjective()">Créer un objectif</button>
     </div>
 </template>
@@ -280,7 +268,8 @@ textarea {
    Bouton Créer un objectif
    ============================== */
 button {
-    background-color: #10b981; /* vert */
+    background-color: #10b981;
+    /* vert */
     color: white;
     border: none;
     padding: 10px 18px;
@@ -310,7 +299,7 @@ button:hover {
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
 }
 
-.objective-card > div {
+.objective-card>div {
     display: flex;
     flex-direction: column;
     gap: 12px;
@@ -342,7 +331,8 @@ button:hover {
 /* Bouton Supprimer objectif */
 .objective-card .delete {
     align-self: flex-start;
-    background-color: #ef4444; /* rouge */
+    background-color: #ef4444;
+    /* rouge */
     color: white;
     border: none;
     padding: 6px 12px;
