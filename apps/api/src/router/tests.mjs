@@ -125,7 +125,7 @@ testsRouter.put("/archivate/:id", auth, authorizeRoles("admin", "teacher"), asyn
 //Edit a test
 testsRouter.put("/:id", auth, authorizeRoles("admin", "teacher"), async (req, res) => {
     try {
-        const { creatorId, ...testData } = req.body;
+        const creatorId = req.user.userId;
         const testId = req.params.id;
 
         //get test
@@ -136,7 +136,7 @@ testsRouter.put("/:id", auth, authorizeRoles("admin", "teacher"), async (req, re
 
         
         //update test
-        const updatedTest = await test.update(testData);
+        const updatedTest = await test.update(req.body);
         const testMessage = `Le test ${updatedTest.name} avec l'id ${updatedTest.idTest} a été mis à jour.`;
         
         const alreadyExist = await CreatedBy.findOne({ where: { idTest: testId, idUser: creatorId } });
