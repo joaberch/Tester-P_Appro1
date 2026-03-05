@@ -16,11 +16,13 @@ export default {
       questions: [],
       loaded: false,
       isStarted: false,
+      role: '',
     }
   },
   async mounted() {
     this.fetchTest();
     this.fetchQuestions();
+    this.getMe()
     this.loaded = true;
   },
   methods: {
@@ -54,6 +56,20 @@ export default {
           }
           );
         return fetchedAnswers.data.data;
+      } catch (error) {
+        console.error("Erreur:", error)
+      }
+    },
+    async getMe() {
+      const APIGetMeCall = `${import.meta.env.VITE_API_URL}/me`;
+
+      try {
+        const res = await axios
+          .get(APIGetMeCall, {
+            withCredentials: true
+          }
+          );
+        this.role = res.data.role
       } catch (error) {
         console.error("Erreur:", error)
       }
@@ -108,7 +124,7 @@ export default {
     <div v-else>
       <div id="header">
         <RouterLink :to="{ name: 'home' }">Accueil</RouterLink>
-        <div class="right-part">
+        <div class="right-part" v-if="this.role == 'teacher' || this.role == 'admin'">
           <RouterLink class="button" :to="{ name: 'edit-test' }">Modifier le test</RouterLink>
           <!--<RouterLink class="button" :to="{ name: 'correct-test' }">Corriger les tests</RouterLink>-->
         </div>
@@ -119,7 +135,7 @@ export default {
       <div v-if="this.isStarted">
         <Question :questions="this.questions" :test="test" />
       </div>
-      <button @click="exportToPDF()">Exporter en PDF</button>
+      <button @click="exportToPDF()" v-if="this.role == 'teacher' || this.role == 'admin'">Exporter en PDF</button>
     </div>
   </div>
 </template>

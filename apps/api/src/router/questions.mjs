@@ -11,11 +11,24 @@ const questionsRouter = express();
 questionsRouter.get("/:id/answers", auth, authorizeRoles("admin", "teacher", "student"), async (req, res) => { //TODO - if user has test assigned and question type is checkbox
     try {
         const questionId = req.params.id;
-        const answers = await Answer.findAll({
-            where: {
-                idQuestion: questionId,
-            }
-        });
+        let answers;
+
+        if (req.user.role == "student") {
+            answers = await Answer.findAll({
+                where: {
+                    idQuestion: questionId,
+                },
+                attributes: {
+                    exclude: ["isCorrect"]
+                }
+            });
+        } else {
+            answers = await Answer.findAll({
+                where: {
+                    idQuestion: questionId,
+                }
+            });
+        }
 
         const message = `Les réponses de la question ${questionId} ont bien été récupéré.`;
         res.json(success(message, answers));
