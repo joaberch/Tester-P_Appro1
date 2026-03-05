@@ -6,11 +6,13 @@ export default {
         return {
             module: [],
             objectives: [],
+            role: '',
         }
     },
     mounted() {
         this.fetchModule();
         this.fetchObjectives();
+        this.getMe();
     },
     methods: {
         async fetchModule() {
@@ -45,6 +47,20 @@ export default {
         },
         goToEdit() {
           this.$router.push(`/module/edit/${this.$route.params.id}`);
+        },
+        async getMe() {
+            const APIGetMeCall = `${import.meta.env.VITE_API_URL}/me`;
+
+            try {
+                const res = await axios
+                    .get(APIGetMeCall, {
+                        withCredentials: true
+                    }
+                );
+                this.role = res.data.role
+            } catch (error) {
+                console.error("Erreur:", error)
+            }
         }
     }
 }
@@ -54,7 +70,7 @@ export default {
     <div class="header">
       <RouterLink :to="{ name: 'home' }" class="back-btn">Accueil</RouterLink>
       <h2>{{ module.name }}</h2>
-      <button class="edit-btn" @click="goToEdit()">
+      <button v-if="this.role == 'teacher' || this.role == 'admin'" class="edit-btn" @click="goToEdit()">
         Modifier le module
       </button>
     </div>
