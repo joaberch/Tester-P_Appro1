@@ -11,6 +11,7 @@ export default {
     data() {
         return {
             answers: [],
+            saveTimeout: null,
         }
     },
     mounted() {
@@ -49,6 +50,13 @@ export default {
             } catch (error) {
                 console.error("Erreur:", error)
             }
+        },
+        debounceUpdateAnswer(answer) {
+            clearTimeout(this.saveTimeout);
+
+            this.saveTimeout = setTimeout(() => {
+                this.updateAnswer(answer);
+            }, 1000)
         },
         async updateAnswer(answer) {
             const APIUpdateAnswerCall = `${import.meta.env.VITE_API_URL}/answers/${answer.idAnswer}`
@@ -92,8 +100,8 @@ export default {
         <div v-if="this.question.type == 'checkbox'">
             <div v-for="answer in answers">
                 <div v-if="!answer.isDeleted">
-                    <input type="checkbox" v-model="answer.isCorrect" @change="updateAnswer(answer)"/> <!--TODO - debounced save-->
-                    <input type="text" v-model="answer.answer" placeholder="Texte de la réponse" @input="updateAnswer(answer)"/> <!--TODO - debounced save-->
+                    <input type="checkbox" v-model="answer.isCorrect" @change="debounceUpdateAnswer(answer)"/> <!--TODO - debounced save-->
+                    <input type="text" v-model="answer.answer" placeholder="Texte de la réponse" @input="debounceUpdateAnswer(answer)"/> <!--TODO - debounced save-->
                     <button class="delete" @click="archivateAnswer(answer)">Supprimer</button>
                 </div>
             </div>
@@ -102,8 +110,8 @@ export default {
         <div v-else-if="this.question.type == 'radiobox'">
             <div v-for="answer in answers">
                 <div v-if="!answer.isDeleted">
-                    <input type="radio" v-model="answer.isCorrect" :name="'question-' + question.idQuestion" @change="updateAnswer(answer)" /> <!--TODO - debounced save-->
-                    <input type="text" v-model="answer.answer" placeholder="Texte de la réponse" @input="updateAnswer(answer)"/> <!--TODO - debounced save-->
+                    <input type="radio" v-model="answer.isCorrect" :name="'question-' + question.idQuestion" @change="debounceUpdateAnswer(answer)" /> <!--TODO - debounced save-->
+                    <input type="text" v-model="answer.answer" placeholder="Texte de la réponse" @input="debounceUpdateAnswer(answer)"/> <!--TODO - debounced save-->
                     <button class="delete" @click="archivateAnswer(answer)">Supprimer</button>
                 </div>
             </div>

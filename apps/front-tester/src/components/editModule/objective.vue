@@ -8,7 +8,19 @@ export default {
             required: true,
         }
     },
+    data() {
+        return {
+            saveTimeout: null,
+        }
+    },
     methods: {
+        debounceUpdateObjective(objective) {
+            clearTimeout(this.saveTimeout);
+
+            this.saveTimeout = setTimeout(() => {
+                this.updateObjective(objective);
+            }, 1000)
+        },
         async updateObjective(objective) {
             const APIUpdateObjectiveCall = `${import.meta.env.VITE_API_URL}/objectives/${this.objective.idObjective}`;
 

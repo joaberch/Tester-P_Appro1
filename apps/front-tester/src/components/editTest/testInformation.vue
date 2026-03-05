@@ -8,7 +8,19 @@ export default {
             required: true,
         }
     },
+    data() {
+      return {
+        saveTimeout: null,
+      }
+    },
     methods: {
+      debounceSave() {
+        clearTimeout(this.saveTimeout);
+
+        this.saveTimeout = setTimeout(() => {
+          this.save();
+        }, 1000)
+      },
       async save() {
         const APIUpdateTestCall = `${import.meta.env.VITE_API_URL}/tests/${this.test.idTest}`;
 
@@ -46,11 +58,11 @@ export default {
       </label>
       <label>
         Durée (en minutes) :
-        <input @input="save()" type="text" v-model="test.duration" :placeholder="this.test.duration" />
+        <input @input="debounceSave()" type="text" v-model="test.duration" :placeholder="this.test.duration" />
       </label>
       <label class="in-line">
-        Archivé :<input @change="save()" type="checkbox" :checked="this.test.isDeleted" v-model="test.isDeleted" />
-        Formatif :<input @change="save()" type="checkbox" :checked="this.test.isFormative" v-model="test.isFormative" />
+        Archivé :<input @change="debounceSave()" type="checkbox" :checked="this.test.isDeleted" v-model="test.isDeleted" />
+        Formatif :<input @change="debounceSave()" type="checkbox" :checked="this.test.isFormative" v-model="test.isFormative" />
       </label>
     </div>
 </template>

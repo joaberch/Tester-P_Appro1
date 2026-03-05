@@ -12,6 +12,11 @@ export default {
     components: {
         QuestionAnswer,
     },
+    data() {
+        return {
+            saveTimeout: null
+        }
+    },
     methods: {
         async archivateQuestion(idQuestion) {
             try {
@@ -26,6 +31,12 @@ export default {
             } catch (error) {
                 console.error("Erreur :", error)
             }
+        },
+        debounceSaveQuestion(question) {
+            clearTimeout(this.saveTimeout);
+            this.saveTimeout = setTimeout(() => {
+                this.saveQuestion(question);
+            }, 1000)
         },
         async saveQuestion(question) { //TODO - automatically update on exit of input or type changed, check the ressources used
             const APIUpdateQuestion = `${import.meta.env.VITE_API_URL}/questions/${question.idQuestion}`;
@@ -52,14 +63,14 @@ export default {
 <template>
     <div class="question" v-if="!question.isDeleted">
         <div class="question-header">
-            Question : <input type="text" v-model="question.question" placeholder="Texte de la question" @input="saveQuestion(this.question)" />
-            Points : <input type="number" v-model.number="question.point" min="0" class="points" placeholder="Points" @input="saveQuestion(this.question)" />
+            Question : <input type="text" v-model="question.question" placeholder="Texte de la question" @input="debounceSaveQuestion(this.question)" />
+            Points : <input type="number" v-model.number="question.point" min="0" class="points" placeholder="Points" @input="debounceSaveQuestion(this.question)" />
             <button @click="archivateQuestion(question.idQuestion)" class="delete-btn">Supprimer</button>
         </div>
 
         <label>
             Type :
-            <select v-model="question.type" @change="saveQuestion(this.question)">
+            <select v-model="question.type" @change="debounceSaveQuestion(this.question)">
                 <option value="checkbox">checkbox</option>
                 <option value="open">Ouverte</option>
                 <option value="radiobox">radiobox</option>

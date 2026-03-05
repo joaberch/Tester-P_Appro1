@@ -10,6 +10,7 @@ export default {
         return {
             module: [],
             objectives: [],
+            saveTimeout: null,
         }
     },
     methods: {
@@ -44,6 +45,7 @@ export default {
             }
         },
         async save() {
+            console.log("save")
             const APIUpdateModuleCall = `${import.meta.env.VITE_API_URL}/modules/${this.$route.params.id}`
 
             const payload = {
@@ -61,6 +63,13 @@ export default {
             } catch (error) {
                 console.error("Erreur:", error);
             }
+        },
+        debounceSave() {
+            clearTimeout(this.saveTimeout);
+
+            this.saveTimeout = setTimeout(() => {
+                this.save()
+            }, 1000)
         },
         async createObjective() {
             const APICreateObjectiveCall = `${import.meta.env.VITE_API_URL}/objectives/`
@@ -102,13 +111,13 @@ export default {
         <div class="edit-form">
             <div class="form-group">
                 <label>Nom du module</label>
-                <input type="text" v-model="module.name" required @input="save()" /> <!--TODO - debounce-->
+                <input type="text" v-model="module.name" required @input="debounceSave()" /> <!--TODO - debounce-->
 
                 <label>Description</label>
-                <textarea v-model="module.description" rows="4" @input="save()"></textarea> <!--TODO - debounce-->
+                <textarea v-model="module.description" rows="4" @input="debounceSave()"></textarea> <!--TODO - debounce-->
 
                 <label>
-                    <input type="checkbox" v-model="module.isDeleted" @change="save()" />Archiver le module
+                    <input type="checkbox" v-model="module.isDeleted" @change="debounceSave()" />Archiver le module
                 </label>
             </div>
         </div>
