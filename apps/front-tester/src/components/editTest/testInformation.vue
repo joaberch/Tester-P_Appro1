@@ -21,7 +21,7 @@ export default {
         }
 
         try {
-          const updatedTest = await axios
+          await axios
             .put(APIUpdateTestCall, payload, {
               withCredentials: true
             }
@@ -46,18 +46,13 @@ export default {
       </label>
       <label>
         Durée (en minutes) :
-        <input type="text" v-model="test.duration" :placeholder="this.test.duration" />
+        <input @input="save()" type="text" v-model="test.duration" :placeholder="this.test.duration" />
       </label>
       <label class="in-line">
-        Archivé :
-        <input type="checkbox" :checked="this.test.isDeleted" v-model="test.isDeleted" />
-      </label>
-      <label class="in-line">
-        Formatif :
-        <input type="checkbox" :checked="this.test.isFormative" v-model="test.isFormative" />
+        Archivé :<input @change="save()" type="checkbox" :checked="this.test.isDeleted" v-model="test.isDeleted" />
+        Formatif :<input @change="save()" type="checkbox" :checked="this.test.isFormative" v-model="test.isFormative" />
       </label>
     </div>
-    <button id="save-btn" @click="save()">Enregistrer</button>
 </template>
 <style scoped>
 #save-btn {
@@ -104,9 +99,6 @@ export default {
   align-items: center;
   gap: 0.5rem;
   font-weight: normal;
-}
-
-.in-line input[type="checkbox"] {
   width: auto;
   margin: 0;
 }

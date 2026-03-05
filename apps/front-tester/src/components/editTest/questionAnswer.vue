@@ -92,8 +92,8 @@ export default {
         <div v-if="this.question.type == 'checkbox'">
             <div v-for="answer in answers">
                 <div v-if="!answer.isDeleted">
-                    <input type="checkbox" :value="answer.idAnswer" v-model="answer.isCorrect" @change="updateAnswer(answer)"/>
-                    <input type="text" v-model="answer.answer" placeholder="Texte de la réponse" @change="updateAnswer(answer)"/>
+                    <input type="checkbox" v-model="answer.isCorrect" @change="updateAnswer(answer)"/> <!--TODO - debounced save-->
+                    <input type="text" v-model="answer.answer" placeholder="Texte de la réponse" @input="updateAnswer(answer)"/> <!--TODO - debounced save-->
                     <button class="delete" @click="archivateAnswer(answer)">Supprimer</button>
                 </div>
             </div>
@@ -102,8 +102,8 @@ export default {
         <div v-else-if="this.question.type == 'radiobox'">
             <div v-for="answer in answers">
                 <div v-if="!answer.isDeleted">
-                    <input type="radio" :value="answer.idAnswer" v-model="answer.isCorrect" :name="'question-' + question.idQuestion" @change="updateAnswer(answer)" />
-                    <input type="text" v-model="answer.answer" placeholder="Texte de la réponse" @change="updateAnswer(answer)"/>
+                    <input type="radio" v-model="answer.isCorrect" :name="'question-' + question.idQuestion" @change="updateAnswer(answer)" /> <!--TODO - debounced save-->
+                    <input type="text" v-model="answer.answer" placeholder="Texte de la réponse" @input="updateAnswer(answer)"/> <!--TODO - debounced save-->
                     <button class="delete" @click="archivateAnswer(answer)">Supprimer</button>
                 </div>
             </div>

@@ -52,8 +52,8 @@ export default {
 <template>
     <div class="question" v-if="!question.isDeleted">
         <div class="question-header">
-            Question : <input type="text" v-model="question.question" placeholder="Texte de la question" @change="saveQuestion(this.question)" />
-            Points : <input type="number" v-model.number="question.point" min="0" class="points" placeholder="Points" @change="saveQuestion(this.question)" />
+            Question : <input type="text" v-model="question.question" placeholder="Texte de la question" @input="saveQuestion(this.question)" />
+            Points : <input type="number" v-model.number="question.point" min="0" class="points" placeholder="Points" @input="saveQuestion(this.question)" />
             <button @click="archivateQuestion(question.idQuestion)" class="delete-btn">Supprimer</button>
         </div>
 
