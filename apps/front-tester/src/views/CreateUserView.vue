@@ -5,6 +5,7 @@ export default {
     data() {
         return {
             user: {},
+            error: '',
         }
     },
     methods: {
@@ -20,14 +21,25 @@ export default {
                 isDeleted: this.user.isDeleted,
             }
 
+            if (!payload.firstname || !payload.name || !payload.login || !payload.password || !payload.role) {
+              this.error = "Champ vide.";
+              return;
+            } else if (payload.login.length != 7) {
+              this.error = `Le login doit avoir 7 caractères de long, il en a ${payload.login.length}.`;
+              return;
+            }
+
             try {
                 await axios
                     .post(APICreateUserCall, payload, {
                         withCredentials: true
                     }
                 );
+
+                this.$router.push('/admin')
             } catch (error) {
-                console.error("Erreur:", error.name)
+              console.error("Erreur:", error.name)
+              this.error = `Erreur lors de la création de l'utilisateur, veuillez vérifier qu'aucun utilisateur avec l'identifiant ${payload.login} n'existe déjà.`
             }
         }
     }
@@ -50,7 +62,8 @@ export default {
 
     <div class="input">
       <label for="login">Login :</label> <!--7 length-->
-      <input type="login" v-model="user.login" placeholder="Entrez le login de l'utilisateur" />
+      <input type="login" v-model="user.login" placeholder="Entrez le login de l'utilisateur (7 caractères)" />
+      <p></p>
     </div>
 
     <div class="input">
@@ -75,11 +88,29 @@ export default {
       </label>
     </div>
 
+    <div class="error" v-if="error">
+      <p>Erreur : {{ error }}</p>
+    </div>
+
     <button class="save-btn" @click="createUser()">Créer</button>
   </div>
 </template>
-
 <style scoped>
+.error {
+  background-color: #ffe6e6;
+  border: 1px solid #ff4d4f;
+  color: #b00020;
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin: 12px 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.error p {
+  margin: 0;
+}
+
 .back-btn {
   display: inline-block;
   padding: 8px 14px;
