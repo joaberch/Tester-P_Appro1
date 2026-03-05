@@ -67,7 +67,7 @@ export default {
 <template>
   <div class="edit-test-page">
     <div id="header">
-      <RouterLink :to="{ name: 'home' }">Accueil</RouterLink>
+      <RouterLink class="back-btn" :to="{ name: 'home' }">Accueil</RouterLink>
       <h1>Modifier le test</h1>
     </div>
 
@@ -82,6 +82,22 @@ export default {
   </div>
 </template>
 <style scoped>
+.back-btn {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background-color: #e5e7eb;
+  color: #2c3e50;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.back-btn:hover {
+  background-color: #d1d5db;
+}
+
 .in-line {
   display: flex; /*TODO*/
 }

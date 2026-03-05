@@ -123,7 +123,7 @@ export default {
     <div v-if="!this.loaded">Chargement du test...</div>
     <div v-else>
       <div id="header">
-        <RouterLink :to="{ name: 'home' }">Accueil</RouterLink>
+        <RouterLink class="back-btn" :to="{ name: 'home' }">Accueil</RouterLink>
         <div class="right-part" v-if="this.role == 'teacher' || this.role == 'admin'">
           <RouterLink class="button" :to="{ name: 'edit-test' }">Modifier le test</RouterLink>
           <!--<RouterLink class="button" :to="{ name: 'correct-test' }">Corriger les tests</RouterLink>-->
@@ -177,17 +177,6 @@ button:active {
   margin-bottom: 30px;
 }
 
-#header a {
-  text-decoration: none;
-  color: #3498db;
-  font-weight: bold;
-  font-size: 16px;
-}
-
-#header a:hover {
-  text-decoration: underline;
-}
-
 #header .button {
   padding: 8px 16px;
   border: none;
@@ -213,5 +202,21 @@ div[v-if] {
   font-size: 18px;
   text-align: center;
   padding: 40px;
+}
+
+.back-btn {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background-color: #e5e7eb;
+  color: #2c3e50;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.back-btn:hover {
+  background-color: #d1d5db;
 }
 </style>

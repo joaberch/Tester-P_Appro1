@@ -41,7 +41,7 @@ export default {
 </script>
 <template>
     <div class="header">
-        <RouterLink class="button" :to="{ name: 'home' }">Accueil</RouterLink>
+        <RouterLink class="button back-btn" :to="{ name: 'home' }">Accueil</RouterLink>
         <RouterLink class="button" :to="{ name: 'create-user' }">Créer un utilisateur</RouterLink>
     </div>
     <div class="users">
@@ -66,6 +66,44 @@ export default {
     </div>
 </template>
 <style scoped>
+.header {
+    display: flex;
+    justify-content: space-between;
+    margin-left: 25px;
+    margin-right: 25px;
+}
+.button {
+    background-color: #0084ff; /* rouge */
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+    text-decoration: none;
+}
+
+.button:hover {
+    background-color: #0400ff; /* rouge plus foncé au survol */
+}
+
+.back-btn {
+  display: inline-block;
+  padding: 8px 14px;
+  border-radius: 8px;
+  background-color: #e5e7eb;
+  color: #2c3e50;
+  text-decoration: none;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+}
+
+.back-btn:hover {
+  background-color: #d1d5db;
+}
+
 .users {
     display: flex;
     gap: 40px;
