@@ -38,13 +38,14 @@ export default {
     <div class="global">
         <div class="wrapper">
             <form @submit.prevent="login()" action="">
-                <h1>Login</h1>
+                <h1>Connexion</h1>
                 <div class="input-box">
-                    Username: <input type="text" placeholder="px11xxx" class="username" required>
+                    Login:
+                    <input type="text" placeholder="  px11xxx" class="username" required>
                 </div>
 
                 <div class="input-box">
-                    Password: <input :type="isPasswordDisplayed ? 'text' : 'password'" placeholder="Password" class="password" required>
+                    Mot de passe: <input :type="isPasswordDisplayed ? 'text' : 'password'" placeholder="  Mot de passeyyyyy" class="password" required>
                     <i :class="isPasswordDisplayed ? 'bx bx-show' : 'bx bxs-hide'" @mousedown="isPasswordDisplayed = !isPasswordDisplayed"
                         @mouseup="isPasswordDisplayed = !isPasswordDisplayed"></i>
                     <p class="error">{{ errorMessage }}</p>
@@ -86,7 +87,7 @@ h1 {
 
 .input-box input {
     width: 100%;
-    padding: 12px 15px;
+    padding: 12px 0px;
     border: 1px solid #ccc;
     border-radius: 8px;
     outline: none;

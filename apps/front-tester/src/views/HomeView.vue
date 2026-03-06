@@ -64,7 +64,7 @@ export default {
 }
 
 #header button, .button {
-    background-color: #e74c3c; /* rouge */
+    background-color: #0084ff; /* rouge */
     color: white;
     border: none;
     padding: 8px 16px;
@@ -76,6 +76,6 @@ export default {
 }
 
 #header button:hover, .button:hover {
-    background-color: #c0392b; /* rouge plus foncé au survol */
+    background-color: #0400ff; /* rouge plus foncé au survol */
 }
 </style>
