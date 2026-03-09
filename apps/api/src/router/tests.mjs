@@ -15,55 +15,6 @@ testsRouter.get("/", auth, authorizeRoles("admin", "teacher", "student"), (req, 
     })
 });
 
-//Get a specific test
-testsRouter.get("/:id", auth, authorizeRoles("admin", "teacher", "student"), async (req, res) => { //TODO - student only if assigned
-    try {
-        const testId = req.params.id;
-        const test = await Test.findByPk(testId);
-        if (!test) {
-            return res.status(404).json({ message: "Ressource introuvable." })
-        }
-
-        const message = `Le test avec l'id ${test.idTest} a été récupéré.`;
-        res.json(success(message, test));
-    } catch (error) {
-        return res.status(500).json({ message: "Le test n'a pas pu être récupéré."});
-    }
-});
-
-//Get all questions
-testsRouter.get("/:id/questions", auth, authorizeRoles("admin", "teacher", "student"), async (req, res) => { //TODO - student only if test assigned
-    try {
-        const testId = req.params.id;
-        const questions = await Question.findAll({
-            where: {
-                idTest: testId,
-            }
-        });
-    
-        const message = `Les questions du test ${testId} ont bien été récupéré.`;
-        res.json(success(message, questions));
-    } catch (error) {
-        res.status(500).json({ message: "Les questions du test n'ont pas pu être récupéré.", data: error.message });
-    }
-})
-
-//Get all attachements
-testsRouter.get("/:id/attachements", auth, authorizeRoles("admin", "teacher", "student"), async (req, res) => { //TODO - student only if test assigned
-    try {
-        const testId = req.params.id;
-        const attachements = await Attachement.findAll({
-            where: {
-                idTest: testId,
-            }
-        })
-
-        const message = `Les pièces jointes du test ${testId} ont bien été récupéré.`;
-        res.json(success(message, attachements));
-    } catch (error) {
-        res.status(500).json({ message: "Les pièces jointes n'ont pas pu être récupéré.", data: error.message});
-    }
-});
 
 //Create a test
 testsRouter.post("/", auth, authorizeRoles("admin", "teacher"), async (req, res) => {
@@ -72,7 +23,7 @@ testsRouter.post("/", auth, authorizeRoles("admin", "teacher"), async (req, res)
         if (!creatorId || !creatorId.length === 0) {
             return res.status(400).json({ message: "Le créateur n'a pas pu être trouvé." });
         }
-
+        
         //Get creator information and check role
         const teacher = await User.findAll({
             where: {
@@ -89,11 +40,11 @@ testsRouter.post("/", auth, authorizeRoles("admin", "teacher"), async (req, res)
             creatorId: creatorId,
             ...req.body
         }
-
+        
         //Create test
         const newTest = await Test.create(testData)
         const testMessage = `Le test ${newTest.name} a été créé`;
-
+        
         //Create created_by
         const created_by = { "idUser": creatorId, "idTest": newTest.idTest } //TODO - warning
         const newCreatedBy = await CreatedBy.create(created_by)
@@ -111,7 +62,7 @@ testsRouter.post("/", auth, authorizeRoles("admin", "teacher"), async (req, res)
 testsRouter.put("/archivate/:id", auth, authorizeRoles("admin", "teacher"), async (req, res) => {
     const testId = req.params.id;
     let archivateTest = await Test.findByPk(testId);
-
+    
     if (!archivateTest) {
         return res.status(404).json({ message: "Test non trouvé" });
     }
@@ -127,7 +78,7 @@ testsRouter.put("/:id", auth, authorizeRoles("admin", "teacher"), async (req, re
     try {
         const creatorId = req.user.userId;
         const testId = req.params.id;
-
+        
         //get test
         const test = await Test.findByPk(testId);
         if (!test) {
@@ -140,7 +91,7 @@ testsRouter.put("/:id", auth, authorizeRoles("admin", "teacher"), async (req, re
         const testMessage = `Le test ${updatedTest.name} avec l'id ${updatedTest.idTest} a été mis à jour.`;
         
         const alreadyExist = await CreatedBy.findOne({ where: { idTest: testId, idUser: creatorId } });
-
+        
         //get creator data
         if (!alreadyExist) {
             const teacher = await User.findAll({
@@ -222,6 +173,75 @@ testsRouter.delete("/:testId/user/:userId", auth, authorizeRoles("admin", "teach
     }
 });
 
-//Get tests done TODO
+//Get assigned test
+testsRouter.get("/assigned", auth, authorizeRoles("admin", "teacher", "student"), async (req, res) => {
+    try {
+        const idUser = req.user.userId
+        
+        const user = await User.findByPk(idUser, {
+            include: [
+                {
+                    model: Test,
+                    as: "assigned_by",
+                    through: { attributes: [] },
+                },
+            ],
+        });
+
+        res.json(success("Les tests assignés ont bien été récupéré.", user.assigned_by));
+    } catch (error) {
+        res.status(500).json({ message: "Impossible de récupérer les tests assignés.", data: error });
+    }
+})
+
+//Get a specific test
+testsRouter.get("/:id", auth, authorizeRoles("admin", "teacher", "student"), async (req, res) => { //TODO - student only if assigned
+    try {
+        const testId = req.params.id;
+        const test = await Test.findByPk(testId);
+        if (!test) {
+            return res.status(404).json({ message: "Ressource introuvable." })
+        }
+
+        const message = `Le test avec l'id ${test.idTest} a été récupéré.`;
+        res.json(success(message, test));
+    } catch (error) {
+        return res.status(500).json({ message: "Le test n'a pas pu être récupéré."});
+    }
+});
+
+//Get all questions
+testsRouter.get("/:id/questions", auth, authorizeRoles("admin", "teacher", "student"), async (req, res) => { //TODO - student only if test assigned
+    try {
+        const testId = req.params.id;
+        const questions = await Question.findAll({
+            where: {
+                idTest: testId,
+            }
+        });
+    
+        const message = `Les questions du test ${testId} ont bien été récupéré.`;
+        res.json(success(message, questions));
+    } catch (error) {
+        res.status(500).json({ message: "Les questions du test n'ont pas pu être récupéré.", data: error.message });
+    }
+})
+
+//Get all attachements
+testsRouter.get("/:id/attachements", auth, authorizeRoles("admin", "teacher", "student"), async (req, res) => { //TODO - student only if test assigned
+    try {
+        const testId = req.params.id;
+        const attachements = await Attachement.findAll({
+            where: {
+                idTest: testId,
+            }
+        })
+
+        const message = `Les pièces jointes du test ${testId} ont bien été récupéré.`;
+        res.json(success(message, attachements));
+    } catch (error) {
+        res.status(500).json({ message: "Les pièces jointes n'ont pas pu être récupéré.", data: error.message});
+    }
+});
 
 export { testsRouter };

@@ -10,24 +10,66 @@ export default {
         return {
             displayed: "tests", //tests or modules
             tests: [],
-            modules: []
+            modules: [],
+            role: '',
         }
     },
     async mounted() {
         try {
-            let APIGetAllTestsCall = `${import.meta.env.VITE_API_URL}/tests`;
-            let APIGetAllModulesCall = `${import.meta.env.VITE_API_URL}/modules`;
-    
-            let fetchedTests = await axios.get(APIGetAllTestsCall, {
+            await this.getMe()
+            this.fetchAllModules();
+
+            console.log(this.role)
+            if (this.role == "student") {
+                this.fetchAssignedTests()
+            } else if (this.role == "teacher" || this.role == "admin") {
+                this.fetchAllTests();
+            }
+        } catch (error) {
+            console.error("error :", error);
+        }
+    },
+    methods: {
+        async fetchAllTests() {
+            const APIGetAllTestsCall = `${import.meta.env.VITE_API_URL}/tests`;
+
+            const fetchedTests = await axios.get(APIGetAllTestsCall, {
                 withCredentials: true
             });
+
+            this.tests = fetchedTests.data.data;
+        },
+        async fetchAssignedTests() {
+            const APIGetAssignedTestsCall = `${import.meta.env.VITE_API_URL}/tests/assigned`;
+
+            const fetchedTests = await axios.get(APIGetAssignedTestsCall, {
+                withCredentials: true
+            });
+
+            this.tests = fetchedTests.data.data;
+        },
+        async fetchAllModules() {
+            let APIGetAllModulesCall = `${import.meta.env.VITE_API_URL}/modules`;
+    
             let fetchedModules = await axios.get(APIGetAllModulesCall, {
                 withCredentials: true
             });
-            this.tests = fetchedTests.data.data;
+            
             this.modules = fetchedModules.data.data;
-        } catch (error) {
-            console.error("error :", error);
+        },
+        async getMe() {
+            const APIGetMeCall = `${import.meta.env.VITE_API_URL}/me`;
+
+            try {
+                const res = await axios
+                    .get(APIGetMeCall, {
+                        withCredentials: true
+                    }
+                );
+                this.role = res.data.role
+            } catch (error) {
+                console.error("Erreur:", error)
+            }
         }
     }
 }
