@@ -13,6 +13,7 @@ export default {
             },
             modules: [],
             moduleChosen: null,
+            error: '',
         }
     },
     mounted() {
@@ -46,6 +47,15 @@ export default {
                 idModule: this.moduleChosen,
             }
 
+            if (!payload.idModule) {
+                this.error = `Erreur lors de la création du test. Veuillez spécifier un module lié au test.`;
+                return;
+            }
+            if (payload.name.length == 0) {
+                this.error = `Erreur lors de la création du test. Veuillez spécifier le titre du test.`;
+                return;
+            }
+
             try {
                 await axios
                     .post(APICreateTest, payload, {
@@ -55,9 +65,6 @@ export default {
 
                 this.$router.push('/')
             } catch (error) {
-                if (error instanceof SequelizeValidationError) {
-                    console.error("Propriété manquante.")
-                }
                 console.error("Erreur:", error)
             }
         }
@@ -107,10 +114,25 @@ export default {
             </select>
         </div>
 
+        <div v-if="error" class="error">
+            {{ error }}
+        </div>
+
         <button class="save-btn" @click="createTest()">Créer le test</button>
     </div>
 </template>
 <style scoped>
+.error {
+  background-color: #ffe6e6;
+  border: 1px solid #ff4d4f;
+  color: #b00020;
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin: 12px 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
 .back-btn {
     display: inline-block;
     padding: 8px 14px;
