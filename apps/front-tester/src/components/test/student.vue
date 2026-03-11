@@ -64,7 +64,7 @@ export default {
 }
 </script>
 <template>
-    <div class="box" :class="{'isactive': selected}" @dblclick="changeAssignment()" @click="selected=true">
+    <div class="box" @click="changeAssignment()">
         <span>{{ student.firstname }} {{ student.name }}</span>
     </div>
 </template>
@@ -85,15 +85,5 @@ export default {
   background-color: #ececec;
   transform: translateY(-1px);
   box-shadow: 0 2px 6px #8b8b8b;
-}
-
-.isactive {
-  background-color: #8b8b8b;
-  color: white;
-  box-shadow: 0 3px 8px rgba(79,140,255,0.35);
-}
-
-.isactive:hover {
-  background-color: #8b8b8b;
 }
 </style>
