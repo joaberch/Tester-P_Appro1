@@ -19,7 +19,6 @@ export default {
             await this.getMe()
             this.fetchAllModules();
 
-            console.log(this.role)
             if (this.role == "student") {
                 this.fetchAssignedTests()
             } else if (this.role == "teacher" || this.role == "admin") {

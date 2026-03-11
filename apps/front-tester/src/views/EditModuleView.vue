@@ -45,7 +45,6 @@ export default {
             }
         },
         async save() {
-            console.log("save")
             const APIUpdateModuleCall = `${import.meta.env.VITE_API_URL}/modules/${this.$route.params.id}`
 
             const payload = {

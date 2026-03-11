@@ -1,6 +1,6 @@
 import express from "express";
 import { success } from "../helper.mjs";
-import { User } from "../db/sequelize.mjs";
+import { User, Test } from "../db/sequelize.mjs";
 import { ValidationError } from "sequelize";
 import { auth } from "../auth/authMiddleware.mjs";
 import authorizeRoles from "../auth/roleMiddleware.mjs";
@@ -92,5 +92,28 @@ usersRouter.post("/", auth, authorizeRoles("admin"), async (req, res) => { //TOD
         res.status(500).json({ message, data: error.message });
     }
 });
+
+//Get students assigned to a test
+usersRouter.get("/assignedTo/:id", auth, authorizeRoles("teacher", "admin"), async (req, res) => {
+    try {
+        const id = req.params.id;
+
+        const test = await Test.findByPk(id, {
+            include: [
+                {
+                    model: User,
+                    as: "assignedUser",
+                    through: { attributes: [] },
+                    where: { role: 'student', isDeleted: false },
+                },
+            ],
+        });
+
+        const message = `Les élèves assignés à ce test ont bien été récupérés.`
+        res.json(success(message, test))
+    } catch (error) {
+        res.status(500).json({ message: "Les élèves assignés à ce test n'ont pas pu être récupérés.", data: error.message })
+    }
+})
 
 export { usersRouter };
