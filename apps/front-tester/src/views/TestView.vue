@@ -199,7 +199,10 @@ export default {
 <template>
   <div v-if="isAssigned" class="assign-page" @click.self="isAssigned = false">
     <div class="form">
-      <input type="text" placeholder="Recherche" v-model="filter" @input="updateFilter()"/>
+      <div class="header">
+        <input class="searchbar" type="text" placeholder="Recherche" v-model="filter" @input="updateFilter()"/>
+        <span class="exit" @click="isAssigned=false">X</span>
+      </div>
       <div class="students-container">
         <div class="unassigned">
           <h2>Non assigné</h2>
@@ -243,6 +246,37 @@ export default {
   </div>
 </template>
 <style scoped>
+.exit {
+  cursor: pointer;
+  font-weight: bold;
+  font-size: 16px;
+  margin-left: 10px;
+  transition: color 0.2s ease;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.searchbar {
+  flex: 1;
+  padding: 8px 12px;
+  font-size: 14px;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  outline: none;
+  transition: border 0.2s ease, box-shadow 0.2s ease;
+}
+
+.searchbar:focus {
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
+}
+
 .students-container {
   display: flex;
   flex-direction: row;
@@ -300,7 +334,7 @@ export default {
 
   display: flex;
   flex-direction: column;
-  gap: 40px;
+  gap: 10px;
 
   box-shadow: 0 20px 50px rgba(0,0,0,0.25);
 
