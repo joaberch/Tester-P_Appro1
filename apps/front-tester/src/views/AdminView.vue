@@ -8,12 +8,6 @@ export default {
             users: [],
         }
     },
-    props: {
-        user: {
-            type: Object,
-            required: true,
-        }
-    },
     components: {
         User
     },
