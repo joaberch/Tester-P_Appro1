@@ -5,6 +5,7 @@ export default {
     data() {
         return {
             module: {},
+            error: '',
         }
     },
     methods: {
@@ -18,6 +19,11 @@ export default {
                 isDeleted: this.module.isDeleted,
             }
 
+            if (!payload.name) {
+              this.error = `Erreur : Le module n'a pas pu être créé. Veuillez spécifier le titre du module.`;
+              return;
+            }
+
             try {
                 await axios
                     .post(APICreateModuleCall, payload, {
@@ -27,7 +33,7 @@ export default {
 
                 this.$router.push("/");
             } catch (error) {
-                console.error("Erreur:", error)
+              console.error("Erreur:", error)
             }
         }
     }
@@ -55,11 +61,26 @@ export default {
       </label>
     </div>
 
+    <div class="error" v-if="error">
+      {{ error }}
+    </div>
+
     <button class="save-btn" @click="create()">Créer le module</button>
   </div>
 </template>
 
 <style scoped>
+.error {
+  background-color: #ffe6e6;
+  border: 1px solid #ff4d4f;
+  color: #b00020;
+  padding: 12px 16px;
+  border-radius: 6px;
+  margin: 12px 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
 .back-btn {
   display: inline-block;
   padding: 8px 14px;
