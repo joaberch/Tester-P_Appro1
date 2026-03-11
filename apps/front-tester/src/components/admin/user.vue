@@ -10,6 +10,12 @@ export default {
             required: true,
         }
     },
+    data() {
+        return {
+            isDisplayed: false,
+            localUser: {},
+        }
+    },
     methods: {
         async updateUser() {
             const APIUpdateUserCall = `${VITE_API_URL}/users/${this.user.idUser}`
@@ -27,6 +33,8 @@ export default {
                         withCredentials: true
                     }
                 );
+                Object.assign(this.user, this.localUser);
+                this.isDisplayed = false;
             } catch (error) {
                 console.error("Erreur:", error)
             }
@@ -45,53 +53,81 @@ export default {
                 console.error("Erreur:", error)
             }
         },
+        openUser() {
+            this.localUser = { ...this.user };
+            this.isDisplayed = true;
+        }
     }
 }
 </script>
 <template>
-    <div class="user">
-        <span>login: <input type="text" v-model="user.login" @change="updateUser()"/></span> <!--must have length of 7-->
-        <span>Prénom: <input type="text" v-model="user.firstname" @change="updateUser()" /></span>
-        <span>Nom: <input type="text" v-model="user.name" @change="updateUser()" /></span>
+    <div class="user-card" @click="openUser()" v-if="!isDisplayed">
+        <span>{{ user.firstname }} {{ user.name }}</span>
+        <span>{{ user.login }}</span>
+    </div>
+    <div class="user" v-else>
+        <span>login: <input type="text" v-model="localUser.login" /></span> <!--must have length of 7-->
+        <span>Prénom: <input type="text" v-model="localUser.firstname" /></span>
+        <span>Nom: <input type="text" v-model="localUser.name" /></span>
         <span>Rôle: 
-            <select v-model="user.role" @change="updateUser()">
+            <select v-model="localUser.role">
                 <option value="student">Élève</option>
                 <option value="teacher">Professeur</option>
                 <option value="admin">Administrateur</option>
             </select>
         </span>
         <p>Créé le {{ user.createdAt }}</p>
-        <button @click="archivateUser()">Supprimer</button>
+        <button class="save" @click="updateUser()">Sauvegarder</button>
+        <button class="delete" @click="archivateUser()">Supprimer</button>
     </div>
 </template>
 <style scoped>
+.user-card {
+    padding: 15px;
+    border-radius: 12px;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.user-card:hover {
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transform: translateY(-2px);
+}
+
 .user {
     display: flex;
     flex-direction: column;
-    gap: 10px;
-    padding: 15px;
-    border-radius: 10px;
-    background-color: #fafafa;
+    gap: 12px;
+    padding: 20px;
+    border-radius: 12px;
+    background-color: #f9fafb;
     border: 1px solid #e5e7eb;
-    transition: 0.2s ease;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
 }
 
 .user:hover {
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.08);
 }
 
 .user span {
     display: flex;
     flex-direction: column;
     font-size: 14px;
-    color: #555;
+    color: #4b5563;
 }
 
 .user input,
 .user select {
-    margin-top: 5px;
-    padding: 8px 10px;
-    border-radius: 6px;
+    margin-top: 6px;
+    padding: 10px 12px;
+    border-radius: 8px;
     border: 1px solid #d1d5db;
     font-size: 14px;
     transition: 0.2s ease;
@@ -106,23 +142,50 @@ export default {
 
 .user p {
     font-size: 12px;
-    color: #888;
+    color: #9ca3af;
     margin-top: 5px;
 }
 
 .user button {
-    margin-top: 10px;
-    padding: 8px 12px;
+    margin-top: 12px;
+    padding: 10px 14px;
     border: none;
-    border-radius: 6px;
-    background-color: #ef4444;
-    color: white;
+    border-radius: 8px;
     cursor: pointer;
     font-size: 14px;
-    transition: 0.2s ease;
+    transition: all 0.2s ease;
 }
 
-.user button:hover {
+.user button.save {
+    background-color: #3b82f6;
+    color: white;
+}
+
+.user button.save:hover {
+    background-color: #2563eb;
+}
+
+.user button.delete {
+    background-color: #ef4444;
+    color: white;
+}
+
+.user button.delete:hover {
     background-color: #dc2626;
+}
+
+/* Responsive small screens */
+@media (max-width: 480px) {
+    .user, .user-card {
+        padding: 15px;
+    }
+    .user input, .user select {
+        font-size: 13px;
+        padding: 8px 10px;
+    }
+    .user button {
+        font-size: 13px;
+        padding: 8px 10px;
+    }
 }
 </style>
