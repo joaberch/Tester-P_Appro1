@@ -50,11 +50,11 @@ export default {
     <div id="test-info">
       <label>
         Titre du test :
-        <input type="text" v-model="test.name" :placeholder="this.test.name" />
+        <input @change="debounceSave()" type="text" v-model="test.name" :placeholder="this.test.name" />
       </label>
       <label>
         Description :
-        <textarea v-model="test.description" :placeholder="this.test.description"></textarea>
+        <textarea @change="debounceSave()" v-model="test.description" :placeholder="this.test.description"></textarea>
       </label>
       <label>
         Durée (en minutes) :

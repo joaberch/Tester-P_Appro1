@@ -15,7 +15,6 @@ testsRouter.get("/", auth, authorizeRoles("admin", "teacher", "student"), (req, 
     })
 });
 
-
 //Create a test
 testsRouter.post("/", auth, authorizeRoles("admin", "teacher"), async (req, res) => {
     try {
