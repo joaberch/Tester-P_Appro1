@@ -1,15 +1,11 @@
 import express from "express";
 import { auth } from "../auth/authMiddleware.mjs";
+import { disconnect, getMe } from "../controllers/me.mjs";
 
 const meRouter = express();
 
-meRouter.get('/', auth, (req, res) => {
-    res.json({ userId: req.user.userId, role: req.user.role });
-});
+meRouter.get('/', auth, getMe);
 
-meRouter.post('/disconnect', (req, res) => {
-    res.clearCookie("token");
-    return res.status(200).json({ message: "Déconnexion réussi." })
-})
+meRouter.post('/disconnect', disconnect)
 
 export { meRouter };

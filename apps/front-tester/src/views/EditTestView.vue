@@ -26,7 +26,7 @@ export default {
           .get(APIGetTestDataCall, {
             withCredentials: true
           });
-          this.test = fetchedTest.data.data;
+          this.test = fetchedTest.data;
       },
       async fetchTestQuestions() {
         const APIGetTestQuestionsCall = `${import.meta.env.VITE_API_URL}/tests/${this.$route.params.id}/questions`
@@ -36,7 +36,7 @@ export default {
             withCredentials: true
           })
 
-          this.questions = fetchedQuestions.data.data;
+          this.questions = fetchedQuestions.data;
       },
       async createQuestion() {
         try {
@@ -56,7 +56,7 @@ export default {
             }
           );
 
-          this.questions.push(createdQuestion.data.data);
+          this.questions.push(createdQuestion.data);
         } catch(error) {
           console.error(error)
         }

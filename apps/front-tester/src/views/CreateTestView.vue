@@ -30,7 +30,7 @@ export default {
                     }
                 );
 
-                this.modules = fetchedModules.data.data;
+                this.modules = fetchedModules.data;
             } catch(error) {
 
             }

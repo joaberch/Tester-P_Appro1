@@ -25,7 +25,7 @@ export default {
         const fetchedAnswers = await axios.get(APIGetQuestionAnswersCall, {
           withCredentials: true
         });
-        this.answers[questionId] = fetchedAnswers.data.data
+        this.answers[questionId] = fetchedAnswers.data;
       } catch (error) {
         console.error("Erreur: ", error);
       }

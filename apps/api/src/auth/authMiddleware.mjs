@@ -9,7 +9,8 @@ const auth = (req, res, next) => {
 
     try {
         const decodedToken = jwt.verify(token, privateKey);
-        req.user = decodedToken;next();
+        req.user = decodedToken;
+        next();
     } catch (error) {
         return res.status(401).json({ message: "Access denied" });
     }

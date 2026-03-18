@@ -27,7 +27,7 @@ export default {
                 }
                 );
 
-            this.answers = fetchedAnswers.data.data;
+            this.answers = fetchedAnswers.data;
         },
         async createAnswer() {
             const newAnswer = {
@@ -46,7 +46,7 @@ export default {
                     }
                     );
 
-                    this.answers.push(createdAnswer.data.data);
+                    this.answers.push(createdAnswer.data);
             } catch (error) {
                 console.error("Erreur:", error)
             }
@@ -77,12 +77,12 @@ export default {
                 console.error("Erreur:", error)
             }
         },
-        async archivateAnswer(answer) {
-            const APIArchivateAnswerCall = `${import.meta.env.VITE_API_URL}/answers/archivate/${answer.idAnswer}`
+        async archiveAnswer(answer) {
+            const APIArchiveAnswerCall = `${import.meta.env.VITE_API_URL}/answers/archive/${answer.idAnswer}`
 
             try {
                 await axios
-                    .put(APIArchivateAnswerCall, {}, {
+                    .put(APIArchiveAnswerCall, {}, {
                         withCredentials: true
                     }
                 );
@@ -102,7 +102,7 @@ export default {
                 <div v-if="!answer.isDeleted">
                     <input type="checkbox" v-model="answer.isCorrect" @change="debounceUpdateAnswer(answer)"/> <!--TODO - debounced save-->
                     <input type="text" v-model="answer.answer" placeholder="Texte de la réponse" @input="debounceUpdateAnswer(answer)"/> <!--TODO - debounced save-->
-                    <button class="delete" @click="archivateAnswer(answer)">Supprimer</button>
+                    <button class="delete" @click="archiveAnswer(answer)">Supprimer</button>
                 </div>
             </div>
             <button class="add-answer-btn" @click="createAnswer()">Ajouter une réponse possible</button>
@@ -112,7 +112,7 @@ export default {
                 <div v-if="!answer.isDeleted">
                     <input type="radio" v-model="answer.isCorrect" :name="'question-' + question.idQuestion" @change="debounceUpdateAnswer(answer)" /> <!--TODO - debounced save-->
                     <input type="text" v-model="answer.answer" placeholder="Texte de la réponse" @input="debounceUpdateAnswer(answer)"/> <!--TODO - debounced save-->
-                    <button class="delete" @click="archivateAnswer(answer)">Supprimer</button>
+                    <button class="delete" @click="archiveAnswer(answer)">Supprimer</button>
                 </div>
             </div>
             <button class="add-answer-btn" @click="createAnswer()">Ajouter une réponse possible</button>

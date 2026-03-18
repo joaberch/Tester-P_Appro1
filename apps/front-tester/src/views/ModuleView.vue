@@ -25,7 +25,7 @@ export default {
                     }
                 );
 
-                this.module = fetchedModule.data.data;
+                this.module = fetchedModule.data;
             } catch (error) {
                 console.error("Erreur:", error)
             }
@@ -40,7 +40,7 @@ export default {
               }
             );
 
-            this.objectives = fetchedObjectives.data.data.filter(o => o.isDeleted == false);
+            this.objectives = fetchedObjectives.data.filter(o => o.isDeleted == false);
           } catch (error) {
             console.error("Erreur:", error)
           }

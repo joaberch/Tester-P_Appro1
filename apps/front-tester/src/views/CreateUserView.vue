@@ -38,7 +38,7 @@ export default {
 
                 this.$router.push('/admin')
             } catch (error) {
-              console.error("Erreur:", error.name)
+              console.error("Erreur:", error)
               this.error = `Erreur lors de la création de l'utilisateur, veuillez vérifier qu'aucun utilisateur avec l'identifiant ${payload.login} n'existe déjà.`
             }
         }

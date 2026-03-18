@@ -4,91 +4,24 @@ import { Attachment } from "../db/sequelize.mjs";
 import authorizeRoles from "../auth/roleMiddleware.mjs";
 import { ValidationError } from "sequelize";
 import { auth } from "../auth/authMiddleware.mjs";
+import { createAttachment, getAttachment } from "../services/attachments.mjs";
+import { archiveAttachment, deleteAttachment, editAttachment } from "../controllers/attachments.mjs";
 
 const attachmentsRouter = express();
 
 //Get a specific attachment
-attachementsRouter.get("/:id", auth, authorizeRoles("admin", "teacher", "student"), async (req, res) => { //TODO - check if useful since we can get the attachments from a test and check user assignation
-    try {
-        const attachementId = req.params.id;
-        let attachment = await Attachement.findByPk(attachementId);
-
-        if (!attachment) {
-            return res.status(404).json({ message: "Pièce jointe non trouvé" });
-        }
-        
-        const message = `La pièce jointe ${attachment.idAttachement} a été récupéré.`;
-        res.json(success(message, attachment))
-    } catch (error) {
-        const message = "La pièce jointe n'a pas pu être récupéré.";
-        res.status(500).json({ message, data: error.message })
-    }
-});
+attachmentsRouter.get("/:id", auth, authorizeRoles("admin", "teacher", "student"), getAttachment); //Check if used - TODO
 
 //Create an attachment
-attachementsRouter.post("/", auth, authorizeRoles("admin", "teacher"), (req, res) => {
-    Attachement.create(req.body).then((createdAttachement) => {
-        const message = `La pièce jointe ${createdAttachement.idAttachement} a été créé.`;
-        res.json(success(message, createdAttachement));
-    }).catch((error) => {
-        if (error instanceof ValidationError) {
-            return res.status(400).json({ message: error.message, data: error });
-        }
-        const message = "La pièce jointe n'a pas été ajouté. Veuillez réessayer dans un moment.";
-        res.status(500).json({ message, data: error });
-    })
-});
+attachmentsRouter.post("/", auth, authorizeRoles("admin", "teacher"), createAttachment);
 
-//Archivate an attachment
-attachementsRouter.put("/archivate/:id", auth, authorizeRoles("admin", "teacher"), async (req, res) => {
-    const attachementId = req.params.id;
-    let archivateAttachement = await Attachement.findByPk(attachementId);
-
-    if (!archivateAttachement) {
-        return res.status(404).json({ message: "Pièce jointe non trouvé" });
-    }
-
-    await archivateAttachement.update({ isDeleted: true }).then((_) => {
-        const message = `La pièce jointe ${archivateAttachement.idAttachement} a bien été supprimé (archivé).`;
-        res.json(success(message, archivateAttachement));
-    });
-});
+//Archive an attachment
+attachmentsRouter.put("/archive/:id", auth, authorizeRoles("admin", "teacher"), archiveAttachment);
 
 //Delete an attachment
-attachementsRouter.delete("/:id", auth, authorizeRoles("admin", "teacher"), async (req, res) => {
-    try {
-        const attachementId = req.params.id;
-        const attachementToDelete = await Attachement.findByPk(attachementId);
-        if (!attachementToDelete) {
-            return res.status(404).json({ message: "Ressource introuvable." })
-        }
-        const deletedAttachement = await attachementToDelete.destroy();
-
-        const message = `La pièce jointe ${deletedAttachement.idAttachement} a été supprimé.`;
-        res.json(success(message, deletedAttachement));
-    } catch (error) {
-        if (error.name == "SequelizeForeignKeyConstraintError") {
-            return res.status(400).json({ message: "Impossible de supprimer cette pièce jointe car elle est encore lié à d'autres tables.", data: error });
-        }
-        const message = "La pièce jointe n'a pas pu être supprimé. Veuillez réessayer dans un moment.";
-        res.status(500).json({ message, data: error.message })
-    }
-});
+attachmentsRouter.delete("/:id", auth, authorizeRoles("admin", "teacher"), deleteAttachment);
 
 //Edit an attachment
-attachementsRouter.put("/:id", auth, authorizeRoles("admin", "teacher"), async (req, res) => {
-    try {
-        const attachementId = req.params.id;
-        const attachementToUpdate = await Attachement.findByPk(attachementId);
-        if (!attachementToUpdate) {
-            return res.status(404).json({ message: "Ressource introuvable." })
-        }
-        const attachementUpdated = await attachementToUpdate.update(req.body);
-        const message = `La pièce jointe ${attachementUpdated.idAttachement} avec l'id ${attachementUpdated.idAttachement} a été mis à jour.`;
-        res.json(success(message, attachementUpdated));
-    } catch (error) {
-        res.status(500).json({ message: "Erreur lors de la modification de la pièce jointe.", data: error })
-    }
-});
+attachmentsRouter.put("/:id", auth, authorizeRoles("admin", "teacher"), editAttachment);
 
 export { attachmentsRouter };

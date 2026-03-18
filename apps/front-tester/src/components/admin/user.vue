@@ -21,10 +21,10 @@ export default {
             const APIUpdateUserCall = `${VITE_API_URL}/users/${this.user.idUser}`
 
             const payload = {
-                login: this.user.login,
-                firstname: this.user.firstname,
-                name: this.user.name,
-                role: this.user.role,
+                login: this.localUser.login,
+                firstname: this.localUser.firstname,
+                name: this.localUser.name,
+                role: this.localUser.role,
             }
 
             try {
@@ -39,12 +39,12 @@ export default {
                 console.error("Erreur:", error)
             }
         },
-        async archivateUser() {
-            const APIArchivateUserCall = `${VITE_API_URL}/users/archivate/${this.user.idUser}`;
+        async archiveUser() {
+            const APIArchiveUserCall = `${VITE_API_URL}/users/archive/${this.user.idUser}`;
 
             try {
                 await axios
-                    .put(APIArchivateUserCall, {}, {
+                    .put(APIArchiveUserCall, {}, {
                         withCredentials: true
                     }
                 );
@@ -78,7 +78,7 @@ export default {
         </span>
         <p>Créé le {{ user.createdAt }}</p>
         <button class="save" @click="updateUser()">Sauvegarder</button>
-        <button class="delete" @click="archivateUser()">Supprimer</button>
+        <button class="delete" @click="archiveUser()">Supprimer</button>
     </div>
 </template>
 <style scoped>

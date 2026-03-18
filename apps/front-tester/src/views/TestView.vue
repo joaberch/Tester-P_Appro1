@@ -45,7 +45,7 @@ export default {
       const fetchedQuestions = await axios.get(APIGetQuestionsCall, {
         withCredentials: true
       });
-      this.questions = fetchedQuestions.data.data;
+      this.questions = fetchedQuestions.data;
     },
     async fetchTest() {
       let APIGetTestCall = `${import.meta.env.VITE_API_URL}/tests/${this.$route.params.id}`;
@@ -53,7 +53,7 @@ export default {
       const fetchedTest = await axios.get(APIGetTestCall, {
         withCredentials: true
       });
-      this.test = fetchedTest.data.data;
+      this.test = fetchedTest.data;
     },
     async getQuestionAnswer(id) {
       const APIGetQuestionAnswers = `${import.meta.env.VITE_API_URL}/questions/${id}/answers`;
@@ -64,7 +64,7 @@ export default {
             withCredentials: true
           }
           );
-        return fetchedAnswers.data.data;
+        return fetchedAnswers.data;
       } catch (error) {
         console.error("Erreur:", error)
       }
@@ -130,7 +130,7 @@ export default {
           withCredentials: true
         });
 
-        let allStudents = fetchedStudents.data.data;
+        let allStudents = fetchedStudents.data;
         this.fetchedStudents = allStudents.filter(student => !this.assignedStudents.some(assigned => assigned.idUser == student.idUser));
         this.students = this.fetchedStudents;
       } catch (error) {
@@ -152,7 +152,7 @@ export default {
           withCredentials: true
         });
 
-        this.fetchedAssignedStudents = res.data.data.assignedUser;
+        this.fetchedAssignedStudents = res.data.assignedUser;
         this.assignedStudents = this.fetchedAssignedStudents
       } catch (error) {
         console.error("Erreur:", error)

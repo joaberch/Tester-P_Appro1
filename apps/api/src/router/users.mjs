@@ -19,8 +19,8 @@ usersRouter.get("/", auth, authorizeRoles("admin"), getUsers);
 //Update user
 usersRouter.put("/:id", auth, authorizeRoles("admin"), updateUser);
 
-//Archivate an user
-usersRouter.put("/archivate/:id", auth, authorizeRoles("admin"), archiveUser); //TODO - who can do in documentation
+//Archive an user
+usersRouter.put("/archive/:id", auth, authorizeRoles("admin"), archiveUser); //TODO - who can do in documentation
 
 //Create user
 usersRouter.post("/", auth, authorizeRoles("admin"), createUser); //TODO - who can do in documentation

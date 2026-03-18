@@ -36,7 +36,7 @@ export default {
                 withCredentials: true
             });
 
-            this.tests = fetchedTests.data.data;
+            this.tests = fetchedTests.data;
         },
         async fetchAssignedTests() {
             const APIGetAssignedTestsCall = `${import.meta.env.VITE_API_URL}/tests/assigned`;
@@ -45,7 +45,7 @@ export default {
                 withCredentials: true
             });
 
-            this.tests = fetchedTests.data.data;
+            this.tests = fetchedTests.data;
         },
         async fetchAllModules() {
             let APIGetAllModulesCall = `${import.meta.env.VITE_API_URL}/modules`;
@@ -54,7 +54,7 @@ export default {
                 withCredentials: true
             });
             
-            this.modules = fetchedModules.data.data;
+            this.modules = fetchedModules.data;
         },
         async getMe() {
             const APIGetMeCall = `${import.meta.env.VITE_API_URL}/me`;

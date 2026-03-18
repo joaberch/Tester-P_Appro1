@@ -1,4 +1,5 @@
 import { Test, User } from "../db/sequelize.mjs";
+import bcrypt from "bcrypt";
 
 export async function getStudents() {
     const users = User.findAll({
@@ -15,7 +16,7 @@ export async function getUsers() {
     return users;
 }
 
-export async function updateUser(id) {
+export async function updateUser(id, body) {
     const user = await User.findByPk(id);
 
     if (!user) {
@@ -24,7 +25,8 @@ export async function updateUser(id) {
         throw error;
     }
 
-    const updatedUser = await user.update(req.body); //TODO prevent hashedPassword to be edited?
+    const payload = { ...body };
+    const updatedUser = await user.update(payload); //TODO prevent hashedPassword to be edited?
     return updatedUser;
 }
 
@@ -41,19 +43,22 @@ export async function archiveUser(id) {
     return updatedUser;
 }
 
-export async function createUser() {
+export async function createUser(body) {
     const userData = {
-        ...req.body,
+        ...body,
         isDeleted: false
     }
-    if (!req.body.password) {
-        return res.status(400).json({ message: "Mot de passe requis." });
+    if (!body.password) {
+        const error = new Error(`Mot de passe requis`);
+        error.status = 400;
+        throw error;
     }
-    userData.hashedPassword = await bcrypt.hash(req.body.password + process.env.PEPPER, parseInt(process.env.SALT_NBR));
+    userData.hashedPassword = await bcrypt.hash(body.password + process.env.PEPPER, parseInt(process.env.SALT_NBR));
 
     const createdUser = await User.create(userData);
 
     const { hashedPassword, ...safeUser } = createdUser.toJSON();
+    return safeUser
 }
 
 export async function getAssignedUsers(id) {
@@ -64,8 +69,9 @@ export async function getAssignedUsers(id) {
                 as: "assignedUser",
                 through: { attributes: [] },
                 where: { role: 'student', isDeleted: false },
+                required: false,
             },
         ],
     });
-    return test.assignedUser;
+    return test;
 }

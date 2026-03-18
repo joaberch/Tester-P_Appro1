@@ -24,7 +24,7 @@ export default {
                     }
                     );
 
-                this.module = fetchedModule.data.data;
+                this.module = fetchedModule.data;
             } catch (error) {
                 console.error("Erreur:", error)
             }
@@ -39,7 +39,7 @@ export default {
                     }
                     );
 
-                this.objectives = fetchedObjectives.data.data;
+                this.objectives = fetchedObjectives.data;
             } catch (error) {
                 console.error("Erreur:", error)
             }
@@ -88,7 +88,7 @@ export default {
                     }
                     );
 
-                this.objectives.push(createdObjective.data.data)
+                this.objectives.push(createdObjective.data);
             } catch (error) {
                 console.error("Erreur:", error)
             }

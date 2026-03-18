@@ -18,12 +18,12 @@ export default {
         }
     },
     methods: {
-        async archivateQuestion(idQuestion) {
+        async archiveQuestion(idQuestion) {
             try {
-                const APIArchivateQuestionCall = `${import.meta.env.VITE_API_URL}/questions/archivate/${idQuestion}`
+                const APIArchiveQuestionCall = `${import.meta.env.VITE_API_URL}/questions/archive/${idQuestion}`
                 
                 await axios
-                    .put(APIArchivateQuestionCall, {}, {
+                    .put(APIArchiveQuestionCall, {}, {
                         withCredentials: true
                     }
                 );
@@ -65,7 +65,7 @@ export default {
         <div class="question-header">
             Question : <input type="text" v-model="question.question" placeholder="Texte de la question" @input="debounceSaveQuestion(this.question)" />
             Points : <input type="number" v-model.number="question.point" min="0" class="points" placeholder="Points" @input="debounceSaveQuestion(this.question)" />
-            <button @click="archivateQuestion(question.idQuestion)" class="delete-btn">Supprimer</button>
+            <button @click="archiveQuestion(question.idQuestion)" class="delete-btn">Supprimer</button>
         </div>
 
         <label>

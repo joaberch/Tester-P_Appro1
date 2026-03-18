@@ -25,7 +25,7 @@ export default {
                     }
                 );
 
-                this.users = fetchedStudents.data.data;
+                this.users = fetchedStudents.data;
             } catch(error) {
                 console.error("Erreur:", error)
             }

@@ -40,12 +40,12 @@ export default {
                 console.error("Erreur:", error)
             }
         },
-        async archivateObjective() {
-            const APIArchivateObjectiveCall = `${import.meta.env.VITE_API_URL}/objectives/archivate/${this.objective.idObjective}`;
+        async archiveObjective() {
+            const APIArchiveObjectiveCall = `${import.meta.env.VITE_API_URL}/objectives/archive/${this.objective.idObjective}`;
 
             try {
                 await axios
-                    .put(APIArchivateObjectiveCall, {}, {
+                    .put(APIArchiveObjectiveCall, {}, {
                         withCredentials: true
                     }
                 );
@@ -64,7 +64,7 @@ export default {
             <div class="head">
                 Objectif:
                 <input type="text" v-model="objective.name" placeholder="Nom" @input="updateObjective(objective)" />
-                <button class="delete" @click="archivateObjective(objective)">Supprimer</button>
+                <button class="delete" @click="archiveObjective(objective)">Supprimer</button>
             </div>
 
             Description:<textarea v-model="objective.description" placeholder="Description" @input="updateObjective(objective)"></textarea>
