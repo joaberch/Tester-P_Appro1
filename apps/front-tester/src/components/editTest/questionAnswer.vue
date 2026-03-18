@@ -12,6 +12,7 @@ export default {
         return {
             answers: [],
             saveTimeout: null,
+            selectedRadioBoxAnswer: null,
         }
     },
     mounted() {
@@ -24,10 +25,14 @@ export default {
             const fetchedAnswers = await axios
                 .get(APIGetAnswersOfQuestionCall, {
                     withCredentials: true
-                }
-                );
+                });
 
             this.answers = fetchedAnswers.data;
+
+            const correct = this.answers.find(a => a.isCorrect);
+            if (correct) {
+                this.selectedRadioBoxAnswer = correct.idAnswer;
+            }
         },
         async createAnswer() {
             const newAnswer = {
@@ -91,6 +96,12 @@ export default {
             } catch (error) {
                 console.error("Erreur: ", error)
             }
+        },
+        async updateRadioboxAnswer(selectedAnswer) {
+            this.answers.forEach(answer => {
+                answer.isCorrect = answer.idAnswer === selectedAnswer.idAnswer;
+                this.updateAnswer(answer)
+            })
         }
     }
 }
@@ -98,20 +109,20 @@ export default {
 <template>
     <div class="answers">
         <div v-if="this.question.type == 'checkbox'">
-            <div v-for="answer in answers">
+            <div v-for="answer in answers" :key="answer.idAnswer">
                 <div v-if="!answer.isDeleted">
-                    <input type="checkbox" v-model="answer.isCorrect" @change="debounceUpdateAnswer(answer)"/> <!--TODO - debounced save-->
-                    <input type="text" v-model="answer.answer" placeholder="Texte de la réponse" @input="debounceUpdateAnswer(answer)"/> <!--TODO - debounced save-->
+                    <input type="checkbox" v-model="answer.isCorrect" @change="debounceUpdateAnswer(answer)"/>
+                    <input type="text" v-model="answer.answer" placeholder="Texte de la réponse" @input="debounceUpdateAnswer(answer)"/>
                     <button class="delete" @click="archiveAnswer(answer)">Supprimer</button>
                 </div>
             </div>
             <button class="add-answer-btn" @click="createAnswer()">Ajouter une réponse possible</button>
         </div>
         <div v-else-if="this.question.type == 'radiobox'">
-            <div v-for="answer in answers">
+            <div v-for="answer in answers" :key="answer.idAnswer">
                 <div v-if="!answer.isDeleted">
-                    <input type="radio" v-model="answer.isCorrect" :name="'question-' + question.idQuestion" @change="debounceUpdateAnswer(answer)" /> <!--TODO - debounced save-->
-                    <input type="text" v-model="answer.answer" placeholder="Texte de la réponse" @input="debounceUpdateAnswer(answer)"/> <!--TODO - debounced save-->
+                    <input type="radio" :value="answer.idAnswer" v-model="selectedRadioBoxAnswer" :name="'question-' + question.idQuestion" @change="updateRadioboxAnswer(answer)" />
+                    <input type="text" v-model="answer.answer" placeholder="Texte de la réponse" @input="debounceUpdateAnswer(answer)"/>
                     <button class="delete" @click="archiveAnswer(answer)">Supprimer</button>
                 </div>
             </div>
