@@ -1,6 +1,6 @@
 import { DataTypes, Sequelize } from "sequelize";
 import { AnswerModel } from "../models/answers.mjs";
-import { AttachementModel } from "../models/attachments.mjs";
+import { AttachmentModel } from "../models/attachments.mjs";
 import { ModuleModel } from "../models/modules.mjs";
 import { ObjectiveModel } from "../models/objectives.mjs";
 import { QuestionModel } from "../models/questions.mjs";
@@ -31,7 +31,7 @@ const sequelize = new Sequelize(
 )
 
 const Answer = AnswerModel(sequelize, DataTypes);
-const Attachement = AttachementModel(sequelize, DataTypes);
+const Attachment = AttachmentModel(sequelize, DataTypes);
 const Module = ModuleModel(sequelize, DataTypes);
 const Objective = ObjectiveModel(sequelize, DataTypes);
 const Question = QuestionModel(sequelize, DataTypes);
@@ -57,10 +57,10 @@ Test.hasMany(Question, {
     foreignKey: "idTest",
 });
 
-Test.hasMany(Attachement, {
+Test.hasMany(Attachment, {
     foreignKey: "idTest",
 });
-Attachement.belongsTo(Test, {
+Attachment.belongsTo(Test, {
     foreignKey: "idTest",
 });
 
@@ -152,4 +152,4 @@ User.belongsToMany(Test, {
     otherKey: 'idTest'
 });
 
-export { sequelize, Answer, Attachement, Module, Objective, Question, Test, User, AssignedTo, CreatedBy, TestDone, AnswerDone, AnswerChosen };
+export { sequelize, Answer, Attachment, Module, Objective, Question, Test, User, AssignedTo, CreatedBy, TestDone, AnswerDone, AnswerChosen };

@@ -57,7 +57,7 @@ INSERT INTO t_answers (answer, isCorrect, isDeleted, idQuestion) VALUES
 -- =========================
 -- ATTACHMENTS
 -- =========================
-INSERT INTO t_attachements (file, isDeleted, idTest) VALUES
+INSERT INTO t_attachments (file, isDeleted, idTest) VALUES
 ('diagramme_examen_bdd.pdf', FALSE, 2),
 ('annexe_sql.pdf', FALSE, 1);
 

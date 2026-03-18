@@ -58,12 +58,12 @@ CREATE TABLE IF NOT EXISTS t_questions(
    FOREIGN KEY(idTest) REFERENCES t_tests(idTest)
 );
 
-CREATE TABLE IF NOT EXISTS t_attachements(
-   idAttachement INT NOT NULL AUTO_INCREMENT,
+CREATE TABLE IF NOT EXISTS t_attachments(
+   idAttachment INT NOT NULL AUTO_INCREMENT,
    file TEXT,
    isDeleted BOOLEAN,
    idTest INT NOT NULL,
-   PRIMARY KEY(idAttachement),
+   PRIMARY KEY(idAttachment),
    FOREIGN KEY(idTest) REFERENCES t_tests(idTest)
 );
 

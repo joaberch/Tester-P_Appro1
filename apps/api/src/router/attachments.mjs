@@ -1,11 +1,11 @@
 import express from "express";
 import { success } from "../helper.mjs";
-import { Attachement } from "../db/sequelize.mjs";
+import { Attachment } from "../db/sequelize.mjs";
 import authorizeRoles from "../auth/roleMiddleware.mjs";
 import { ValidationError } from "sequelize";
 import { auth } from "../auth/authMiddleware.mjs";
 
-const attachementsRouter = express();
+const attachmentsRouter = express();
 
 //Get a specific attachment
 attachementsRouter.get("/:id", auth, authorizeRoles("admin", "teacher", "student"), async (req, res) => { //TODO - check if useful since we can get the attachments from a test and check user assignation
@@ -91,4 +91,4 @@ attachementsRouter.put("/:id", auth, authorizeRoles("admin", "teacher"), async (
     }
 });
 
-export { attachementsRouter };
+export { attachmentsRouter };

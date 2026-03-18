@@ -5,113 +5,27 @@ import { ValidationError } from "sequelize";
 import { auth } from "../auth/authMiddleware.mjs";
 import authorizeRoles from "../auth/roleMiddleware.mjs";
 import bcrypt from "bcrypt";
+import { createUser, getAssignedUsers, getStudents, getUsers, updateUser } from "../controllers/users.mjs";
+import { archiveUser } from "../services/users.mjs";
 
 const usersRouter = express();
 
 //Get all students
-usersRouter.get("/students", auth, authorizeRoles("admin", "teacher"), (req, res) => {
-    User.findAll({
-        where: {
-            role: "student",
-            isDeleted: false, //TODO don't return hashedPassword
-        }
-    }).then((students) => {
-        const message = "Tous les étudiants ont été récupérés.";
-        res.json(success(message, students));
-    });
-});
+usersRouter.get("/students", auth, authorizeRoles("admin", "teacher"), getStudents);
 
 //Get all users
-usersRouter.get("/", auth, authorizeRoles("admin"), (req, res) => {
-    User.findAll({
-    }).then((teachers) => {
-        const message = "Tous les utilisateurs ont été récupérés."; //TODO don't return hashedPassword
-        res.json(success(message, teachers));
-    });
-});
+usersRouter.get("/", auth, authorizeRoles("admin"), getUsers);
 
 //Update user
-usersRouter.put("/:id", auth, authorizeRoles("admin"), async (req, res) => {
-    const userId = req.params.id;
-
-    try {
-        const user = await User.findByPk(userId);
-    
-        if (!user) {
-            return res.status(404).json({ message: "Utilisateur non trouvé" });
-        }
-    
-        await user.update(req.body); //TODO prevent hashedPassword to be edited?
-
-        const message = `L'utilisateur ${user.login} a été modifié.`;
-        res.json(success(message, user));
-    } catch (error) {
-        console.error("Erreur:", error)
-    }
-});
+usersRouter.put("/:id", auth, authorizeRoles("admin"), updateUser);
 
 //Archivate an user
-usersRouter.put("/archivate/:id", auth, authorizeRoles("admin"), async (req, res) => { //TODO - can teacher do this? Only to student? - TODO in rapport
-    const userId = req.params.id;
-    let updatedUser = await User.findByPk(userId);
-
-    if (!updatedUser) {
-        return res.status(404).json({ message: "Utilisateur non trouvé" });
-    }
-
-    await updatedUser.update({ isDeleted: true }).then((_) => {
-        const message = `L'utilisateur ${updatedUser.login} est maintenant désactivé.`;
-        res.json(success(message, updatedUser));
-    });
-});
+usersRouter.put("/archivate/:id", auth, authorizeRoles("admin"), archiveUser); //TODO - who can do in documentation
 
 //Create user
-usersRouter.post("/", auth, authorizeRoles("admin"), async (req, res) => { //TODO - can teacher do?
-    try {
-        const userData = {
-            ...req.body,
-            isDeleted: false
-        }
-        if (!req.body.password) {
-            return res.status(400).json({ message: "Mot de passe requis." });
-        }
-        userData.hashedPassword = await bcrypt.hash(req.body.password + process.env.PEPPER, parseInt(process.env.SALT_NBR));
-
-        const createdUser = await User.create(userData);
-
-        const { hashedPassword, ...safeUser } = createdUser.toJSON();
-        const message = `L'utilisateur' ${safeUser.name} a été créé.`;
-        res.json(success(message, safeUser));
-    } catch (error) {
-        if (error instanceof ValidationError) {
-            return res.status(400).json({ message: error.message, data: error });
-        }
-        const message = "L'utilisateur n'a pas été créé. Veuillez réessayer dans un moment.";
-        res.status(500).json({ message, data: error.message });
-    }
-});
+usersRouter.post("/", auth, authorizeRoles("admin"), createUser); //TODO - who can do in documentation
 
 //Get students assigned to a test
-usersRouter.get("/assignedTo/:id", auth, authorizeRoles("teacher", "admin"), async (req, res) => {
-    try {
-        const id = req.params.id;
-
-        const test = await Test.findByPk(id, {
-            include: [
-                {
-                    model: User,
-                    as: "assignedUser",
-                    through: { attributes: [] },
-                    where: { role: 'student', isDeleted: false },
-                },
-            ],
-        });
-
-        const message = `Les élèves assignés à ce test ont bien été récupérés.`
-        res.json(success(message, test))
-    } catch (error) {
-        res.status(500).json({ message: "Les élèves assignés à ce test n'ont pas pu être récupérés.", data: error.message })
-    }
-})
+usersRouter.get("/assignedTo/:id", auth, authorizeRoles("teacher", "admin"), getAssignedUsers)
 
 export { usersRouter };

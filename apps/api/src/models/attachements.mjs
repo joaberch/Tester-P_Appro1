@@ -1,6 +1,6 @@
-const AttachementModel = (sequelize, DataTypes) => {
-    return sequelize.define("Attachement", {
-        idAttachement: {
+const AttachmentModel = (sequelize, DataTypes) => {
+    return sequelize.define("Attachment", {
+        idAttachment: {
             type: DataTypes.INTEGER,
             primaryKey: true,
             autoIncrement: true,
@@ -24,9 +24,9 @@ const AttachementModel = (sequelize, DataTypes) => {
             createdAt: false,
             updatedAt: false,
             freezeTableName: true,
-            tableName: "t_attachements",
+            tableName: "t_attachments",
         }
     );
 };
 
-export { AttachementModel };
+export { AttachmentModel };
