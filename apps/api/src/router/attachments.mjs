@@ -7,25 +7,25 @@ import { auth } from "../auth/authMiddleware.mjs";
 
 const attachementsRouter = express();
 
-//Get a specific attachement
+//Get a specific attachment
 attachementsRouter.get("/:id", auth, authorizeRoles("admin", "teacher", "student"), async (req, res) => { //TODO - check if useful since we can get the attachments from a test and check user assignation
     try {
         const attachementId = req.params.id;
-        let attachement = await Attachement.findByPk(attachementId);
+        let attachment = await Attachement.findByPk(attachementId);
 
-        if (!attachement) {
+        if (!attachment) {
             return res.status(404).json({ message: "Pièce jointe non trouvé" });
         }
         
-        const message = `La pièce jointe ${attachement.idAttachement} a été récupéré.`;
-        res.json(success(message, attachement))
+        const message = `La pièce jointe ${attachment.idAttachement} a été récupéré.`;
+        res.json(success(message, attachment))
     } catch (error) {
         const message = "La pièce jointe n'a pas pu être récupéré.";
         res.status(500).json({ message, data: error.message })
     }
 });
 
-//Create an attachement
+//Create an attachment
 attachementsRouter.post("/", auth, authorizeRoles("admin", "teacher"), (req, res) => {
     Attachement.create(req.body).then((createdAttachement) => {
         const message = `La pièce jointe ${createdAttachement.idAttachement} a été créé.`;
@@ -39,7 +39,7 @@ attachementsRouter.post("/", auth, authorizeRoles("admin", "teacher"), (req, res
     })
 });
 
-//Archivate an attachement
+//Archivate an attachment
 attachementsRouter.put("/archivate/:id", auth, authorizeRoles("admin", "teacher"), async (req, res) => {
     const attachementId = req.params.id;
     let archivateAttachement = await Attachement.findByPk(attachementId);
@@ -54,7 +54,7 @@ attachementsRouter.put("/archivate/:id", auth, authorizeRoles("admin", "teacher"
     });
 });
 
-//Delete an attachement
+//Delete an attachment
 attachementsRouter.delete("/:id", auth, authorizeRoles("admin", "teacher"), async (req, res) => {
     try {
         const attachementId = req.params.id;
@@ -75,7 +75,7 @@ attachementsRouter.delete("/:id", auth, authorizeRoles("admin", "teacher"), asyn
     }
 });
 
-//Edit an attachement
+//Edit an attachment
 attachementsRouter.put("/:id", auth, authorizeRoles("admin", "teacher"), async (req, res) => {
     try {
         const attachementId = req.params.id;

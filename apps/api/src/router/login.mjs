@@ -3,8 +3,6 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { User } from "../db/sequelize.mjs";
 import { privateKey } from "../auth/private_key.mjs";
-import dotenv from "dotenv";
-dotenv.config();
 
 const loginRouter = express();
 

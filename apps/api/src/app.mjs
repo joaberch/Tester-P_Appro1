@@ -50,8 +50,8 @@ app.use("/api/objectives", objectivesRouter);
 import { modulesRouter } from "./router/modules.mjs";
 app.use("/api/modules", modulesRouter);
 
-import { attachementsRouter } from "./router/attachements.mjs";
-app.use("/api/attachements", attachementsRouter);
+import { attachementsRouter } from "./router/attachments.mjs";
+app.use("/api/attachments", attachementsRouter);
 
 import { answersRouter } from "./router/answers.mjs";
 app.use("/api/answers", answersRouter);

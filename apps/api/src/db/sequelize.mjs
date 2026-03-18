@@ -1,7 +1,6 @@
 import { DataTypes, Sequelize } from "sequelize";
-import dotenv from "dotenv";
 import { AnswerModel } from "../models/answers.mjs";
-import { AttachementModel } from "../models/attachements.mjs";
+import { AttachementModel } from "../models/attachments.mjs";
 import { ModuleModel } from "../models/modules.mjs";
 import { ObjectiveModel } from "../models/objectives.mjs";
 import { QuestionModel } from "../models/questions.mjs";
@@ -12,7 +11,6 @@ import { CreatedByModel } from "../models/created_by.mjs";
 import { TestDoneModel } from '../models/testDone.mjs';
 import { AnswerDoneModel } from "../models/answerDone.mjs";
 import { AnswerChosenModel } from '../models/answers_chosen.mjs';
-dotenv.config()
 
 const DB_NAME = process.env.DB_NAME;
 const USERNAME = process.env.DB_USER;

@@ -5,8 +5,6 @@ import { ValidationError } from "sequelize";
 import { auth } from "../auth/authMiddleware.mjs";
 import authorizeRoles from "../auth/roleMiddleware.mjs";
 import bcrypt from "bcrypt";
-import dotenv from "dotenv";
-dotenv.config();
 
 const usersRouter = express();
 
