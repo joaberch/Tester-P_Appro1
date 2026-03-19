@@ -70,6 +70,17 @@ export default {
                 console.error("Erreur:", error)
             }
         }
+    },
+    computed: {
+        myTests() {
+            return this.tests.filter(t => t.isMine && !t.isDeleted);
+        },
+        otherTests() {
+            return this.tests.filter(t => !t.isMine && !t.isDeleted);
+        },
+        archivedTests() {
+            return this.tests.filter(t => t.isDeleted);
+        }
     }
 }
 </script>
@@ -81,7 +92,16 @@ export default {
         </div>
         <div id="content-tests" v-if="displayed == 'tests'">
             <div class="content">
-                <Element v-for="element in this.tests" :key="element.id" :element="element" :isTest="true"/>
+                <h2>Mes tests</h2>
+                <Element v-for="element in myTests" :key="element.id" :element="element" :isTest="true"/>
+            </div>
+            <div class="content">
+                <h2>Autres tests</h2>
+                <Element v-for="element in otherTests" :key="element.id" :element="element" :isTest="true"/>
+            </div>
+            <div class="content">
+                <h2>Tests archivés</h2>
+                <Element v-for="element in archivedTests" :key="element.id" :element="element" :isTest="true"/>
             </div>
         </div>
         <div id="content-modules" v-else>

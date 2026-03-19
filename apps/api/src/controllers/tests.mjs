@@ -3,7 +3,7 @@ import * as testsService from "../services/tests.mjs";
 
 export async function getTests(req, res) {
     try {
-        const test = await testsService.getTests();
+        const test = await testsService.getTests(req.user.userId);
         res.status(200).json(test);
     } catch (err) {
         res.status(err.status || 500).json({ message: err.message });

@@ -1,7 +1,41 @@
+import { Sequelize } from "sequelize";
 import { AssignedTo, Attachment as Attachment, CreatedBy, Question, Test, User } from "../db/sequelize.mjs";
 
-export async function getTests() {
-    const tests = Test.findAll();
+export async function getTests(userId) {
+    if (!userId) {
+        throw new Error(`userid is required`)
+    }
+
+    const tests = await Test.findAll({
+        include: [
+            {
+                model: User,
+                association: 'createdTest',
+                attributes: [],
+                through: { attributes: [] },
+                where: { idUser: userId },
+                required: false
+            }
+        ],
+        attributes: {
+            include: [
+                [
+                    Sequelize.literal(`createdTest.idUser IS NOT NULL`),
+                    'isMine'
+                ]
+            ]
+        },
+        order: [ //1. User test - 2. Other test 3. Archived test
+            [
+                'isDeleted',
+                'ASC'
+            ],
+            [
+                Sequelize.literal(`createdTest.idUser IS NOT NULL`),
+                'DESC'
+            ]
+        ]
+    });
     return tests;
 }
 
