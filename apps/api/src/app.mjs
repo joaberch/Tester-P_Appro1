@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import { errorHandler } from "./middlewares/errorHandler.mjs";
 
 const app = express();
 app.use(express.json());
@@ -18,13 +19,9 @@ sequelize
     .then((_) => console.log("La connexion à la base de données a bien été créé."))
     .catch((error) => console.error(`Impossible de se connecter à la base de données :\n- ${error}`));
 
-app.get('/', (req, res) => {
-    res.send('Hello World!');
-})
-
 app.get('/api/', (req, res) => {
     res.redirect(`http://localhost:${port}/`);
-})
+});
 
 import { meRouter } from "./router/me.mjs";
 app.use("/api/me", meRouter);
@@ -33,7 +30,7 @@ import { loginRouter } from "./router/login.mjs";
 app.use("/api/login", loginRouter);
 
 import { testDoneRouter } from "./router/testDone.mjs";
-app.use("/api/testsDone", testDoneRouter)
+app.use("/api/testsDone", testDoneRouter);
 
 import { testsRouter } from "./router/tests.mjs";
 app.use("/api/tests", testsRouter);
@@ -55,6 +52,8 @@ app.use("/api/attachments", attachmentsRouter);
 
 import { answersRouter } from "./router/answers.mjs";
 app.use("/api/answers", answersRouter);
+
+app.use(errorHandler)
 
 app.use(({ res }) => {
     const message = "Impossible de trouver la ressource.";
