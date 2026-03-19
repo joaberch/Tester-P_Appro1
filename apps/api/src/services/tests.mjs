@@ -161,6 +161,7 @@ export async function getTestQuestions(testId) {
     const questions = await Question.findAll({
         where: {
             idTest: test.idTest,
+            isDeleted: false,
         }
     });
     return questions;
