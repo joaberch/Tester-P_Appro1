@@ -5,7 +5,7 @@ export async function getStudents() {
     const users = User.findAll({
         where: {
             role: "student",
-            isDeleted: false, //TODO return hashedPassword
+            isDeleted: false,
         },
         attributes: { exclude: ['hashedPassword']}
     });
@@ -15,7 +15,7 @@ export async function getStudents() {
 export async function getUsers() {
     const users = User.findAll({
         attributes: { exclude: ['hashedPassword'] }
-    }); //TODO return hashedPassword
+    });
     return users;
 }
 
