@@ -25,7 +25,7 @@ export async function getTests(userId) {
                 ]
             ]
         },
-        order: [ //1. User test - 2. Other test 3. Archived test
+        order: [ //1. User test - 2. Other test 3. Archived test - 4. On alphabetical order from name
             [
                 'isDeleted',
                 'ASC'
@@ -33,6 +33,10 @@ export async function getTests(userId) {
             [
                 Sequelize.literal(`createdTest.idUser IS NOT NULL`),
                 'DESC'
+            ],
+            [
+                'name',
+                'ASC'
             ]
         ]
     });

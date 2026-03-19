@@ -91,15 +91,15 @@ export default {
             <p class="header" :class="{ active: displayed === 'modules' }" @click="displayed = 'modules'">Modules</p>
         </div>
         <div id="content-tests" v-if="displayed == 'tests'">
-            <div class="content">
+            <div class="content" v-if="myTests.length>0">
                 <h2>Mes tests</h2>
                 <Element v-for="element in myTests" :key="element.id" :element="element" :isTest="true"/>
             </div>
-            <div class="content">
-                <h2>Autres tests</h2>
+            <div class="content" v-if="otherTests.length>0">
+                <h2>Tests</h2>
                 <Element v-for="element in otherTests" :key="element.id" :element="element" :isTest="true"/>
             </div>
-            <div class="content">
+            <div class="content" v-if="archivedTests.length>0">
                 <h2>Tests archivés</h2>
                 <Element v-for="element in archivedTests" :key="element.id" :element="element" :isTest="true"/>
             </div>
