@@ -103,6 +103,10 @@ export default {
                 <h2>Tests archivés</h2>
                 <Element v-for="element in archivedTests" :key="element.id" :element="element" :isTest="true"/>
             </div>
+            
+            <div class="content" v-if="tests.length==0 && role=='student'">
+                Vous n'avez aucun test d'assigné.
+            </div>
         </div>
         <div id="content-modules" v-else>
             <div class="content">
