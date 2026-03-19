@@ -75,14 +75,14 @@ export default {
 <template>
   <div id="questions">
     <div v-for="question in this.questions" :key="question.idQuestion">
-      <div v-if="!question.isDeleted" class="question" :class="question.type">
+      <div class="question" :class="question.type">
         <div class="question-header">
           <p class="question-title">{{ question.question }}</p>
           <span class="question-points">{{ question.point }}pts</span>
         </div>
         <ul class="question-checkbox" v-if="question.type == 'checkbox'">
           <li v-for="answer in answers[question.idQuestion]" :key="answer.idAnswer">
-            <label v-if="!answer.isDeleted && !answer.answer==''">
+            <label>
               <input type="checkbox" :value="answer.idAnswer" v-model="selectedAnswers[question.idQuestion]" />
               {{ answer.answer }}
             </label>
@@ -93,7 +93,7 @@ export default {
         </div>
         <ul v-else-if="question.type == 'radiobox'">
           <li v-for="answer in answers[question.idQuestion]" :key="answer.idAnswer">
-            <label v-if="!answer.isDeleted && !answer.answer==''">
+            <label>
               <input type="radio" :value="answer.idAnswer" v-model="selectedAnswers[question.idQuestion]" :name="'question-' + question.idQuestion"/>
               {{ answer.answer }}
             </label>

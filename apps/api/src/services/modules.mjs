@@ -1,7 +1,11 @@
 import { Module } from "../db/sequelize.mjs";
 
 export async function getModules() {
-    const modules = await Module.findAll()
+    const modules = await Module.findAll({
+        where: {
+            isDeleted: false,
+        }
+    })
     return modules
 }
 

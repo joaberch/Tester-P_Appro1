@@ -9,7 +9,10 @@ export async function getObjectivesOfModule(id) {
     }
 
     const objectives = await Objective.findAll({
-        where: { idModule: id }
+        where: {
+            idModule: id,
+            isDeleted: false
+        }
     })
     return objectives;
 }

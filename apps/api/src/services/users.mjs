@@ -5,14 +5,14 @@ export async function getStudents() {
     const users = User.findAll({
         where: {
             role: "student",
-            isDeleted: false, //TODO check return hashedPassword
+            isDeleted: false, //TODO return hashedPassword
         }
     });
     return users;
 }
 
 export async function getUsers() {
-    const users = User.findAll(); //TODO check return hashedPassword
+    const users = User.findAll(); //TODO return hashedPassword
     return users;
 }
 

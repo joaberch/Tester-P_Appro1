@@ -180,6 +180,9 @@ export async function getAssignedTest(idUser) {
                 through: { attributes: [] },
             },
         ],
+        where: {
+            isDeleted: false,
+        }
     });
     return user.assigned_by;
 }
@@ -212,6 +215,7 @@ export async function getTestAttachments(testId) {
     const attachments = await Attachment.findAll({
         where: {
             idTest: test.idTest,
+            isDeleted: false,
         }
     });
     return attachments;

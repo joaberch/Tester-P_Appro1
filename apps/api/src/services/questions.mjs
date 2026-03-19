@@ -14,6 +14,7 @@ export async function getQuestionAnswers(id, role) {
         answers = await Answer.findAll({
             where: {
                 idQuestion: id,
+                isDeleted: false,
             },
             attributes: {
                 exclude: ["isCorrect"]
@@ -23,6 +24,7 @@ export async function getQuestionAnswers(id, role) {
         answers = await Answer.findAll({
             where: {
                 idQuestion: id,
+                isDeleted: false
             }
         });
     }

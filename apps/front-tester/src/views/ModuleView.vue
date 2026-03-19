@@ -40,7 +40,7 @@ export default {
               }
             );
 
-            this.objectives = fetchedObjectives.data.filter(o => o.isDeleted == false);
+            this.objectives = fetchedObjectives.data;
           } catch (error) {
             console.error("Erreur:", error)
           }
