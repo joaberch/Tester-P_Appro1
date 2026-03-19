@@ -6,17 +6,24 @@ export async function getStudents() {
         where: {
             role: "student",
             isDeleted: false, //TODO return hashedPassword
-        }
+        },
+        attributes: { exclude: ['hashedPassword']}
     });
     return users;
 }
 
 export async function getUsers() {
-    const users = User.findAll(); //TODO return hashedPassword
+    const users = User.findAll({
+        attributes: { exclude: ['hashedPassword'] }
+    }); //TODO return hashedPassword
     return users;
 }
 
 export async function updateUser(id, body) {
+    if (!id || !body) {
+        throw new Error(`id and body are required`)
+    }
+
     const user = await User.findByPk(id);
 
     if (!user) {
@@ -25,9 +32,16 @@ export async function updateUser(id, body) {
         throw error;
     }
 
-    const payload = { ...body };
-    const updatedUser = await user.update(payload); //TODO prevent hashedPassword to be edited?
-    return updatedUser;
+    const payload = {
+        login: body.login,
+        firstname: body.firstname,
+        name: body.name,
+        role: body.role,
+        isDeleted: body.isDeleted,
+    };
+    const updatedUser = await user.update(payload);
+    const { hashedPassword, ...safeUser } = updatedUser.toJSON();
+    return safeUser;
 }
 
 export async function archiveUser(id) {
@@ -40,13 +54,18 @@ export async function archiveUser(id) {
     }
 
     const updatedUser = await user.update({ isDeleted: true });
-    return updatedUser;
+    const { hashedPassword, ...safeUser } = updatedUser.toJSON();
+    return safeUser;
 }
 
 export async function createUser(body) {
     const userData = {
-        ...body,
-        isDeleted: false
+        login: body.login,
+        firstname: body.firstname,
+        name: body.name,
+        role: body.role,
+        isDeleted: false,
+        createdAt: body.createdAt,
     }
     if (!body.password) {
         const error = new Error(`Mot de passe requis`);
@@ -67,6 +86,7 @@ export async function getAssignedUsers(id) {
             {
                 model: User,
                 as: "assignedUser",
+                attributes: { exclude: ['hashedPassword'] },
                 through: { attributes: [] },
                 where: { role: 'student', isDeleted: false },
                 required: false,

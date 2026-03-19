@@ -33,7 +33,13 @@ export async function getQuestionAnswers(id, role) {
 }
 
 export async function createQuestion(body) {
-    const payload = { ...body };
+    const payload = {
+        question: body.question,
+        point: body.point,
+        type: body.type,
+        isDeleted: false,
+        idTest: body.idTest,
+    };
 
     const question = Question.create(payload);
     return question;
@@ -60,7 +66,12 @@ export async function editQuestion(id, body) {
         throw error;
     }
     
-    const payload = { ...body };
+    const payload = {
+        question: body.question,
+        point: body.point,
+        type: body.type,
+        isDeleted: body.isDeleted,
+    };
     const updatedQuestion = await question.update(payload);
     return updatedQuestion;
 }

@@ -18,7 +18,13 @@ export async function getObjectivesOfModule(id) {
 }
 
 export async function createObjective(body) {
-    const payload = { ...body }
+    const payload = {
+        name: body.name,
+        description: body.description,
+        bloomLevel: body.bloomLevel,
+        isDeleted: false,
+        idModule: body.idModule,
+    }
 
     const objective = Objective.create(payload);
     return objective;
@@ -38,7 +44,12 @@ export async function archiveObjective(id) {
 }
 
 export async function editObjective(id, body) {
-    const payload = { ...body };
+    const payload = {
+        name: body.name,
+        description: body.description,
+        bloomLevel: body.bloomLevel,
+        isDeleted: body.isDeleted,
+    };
 
     const objective = await Objective.findByPk(id);
     if (!objective) {

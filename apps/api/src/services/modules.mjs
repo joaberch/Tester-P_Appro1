@@ -21,7 +21,11 @@ export async function getModule(id) {
 }
 
 export async function createModule(body) {
-    const payload = { ...body }
+    const payload = {
+        name: body.name,
+        description: body.description,
+        isDeleted: false,
+    }
 
     const module = Module.create(payload);
     return module;
@@ -48,7 +52,11 @@ export async function editModule(id, body) {
         throw error;
     }
 
-    const payload = { ...body };
+    const payload = {
+        name: body.name,
+        description: body.description,
+        isDeleted: body.isDeleted,
+    };
     const updatedModule = await module.update(payload);
     return updatedModule;
 }

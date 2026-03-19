@@ -11,7 +11,11 @@ export async function getAttachment(id) {
 }
 
 export async function createAttachment(body) {
-    const payload = { ...body };
+    const payload = {
+        file: body.file,
+        isDeleted: false,
+        idTest: body.idTest,
+    };
     const attachment = Attachment.create(payload);
     return attachment
 }
@@ -47,7 +51,10 @@ export async function editAttachment(id, body) {
         throw error;
     }
 
-    const payload = { ...body };
+    const payload = {
+        file: body.file,
+        isDeleted: body.isDeleted,
+    };
     const attachmentUpdated = await attachmentToUpdate.update(payload);
     return attachmentUpdated;
 

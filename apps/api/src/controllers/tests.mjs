@@ -21,8 +21,8 @@ export async function getTest(req, res) {
 
 export async function createTest(req, res) {
     try {
-        const { test, created_by } = await testsService.createTest(req.user.userId, req.body);
-        res.status(201).json(test, created_by);
+        const { newTest, newCreatedBy } = await testsService.createTest(req.user.userId, req.body);
+        res.status(201).json({newTest, newCreatedBy});
     } catch (err) {
         if (err instanceof ValidationError) {
             return res.status(400).json({ message: err.message, data: err });

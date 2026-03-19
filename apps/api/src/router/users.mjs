@@ -1,12 +1,7 @@
 import express from "express";
-import { success } from "../helper.mjs";
-import { User, Test } from "../db/sequelize.mjs";
-import { ValidationError } from "sequelize";
 import { auth } from "../auth/authMiddleware.mjs";
 import authorizeRoles from "../auth/roleMiddleware.mjs";
-import bcrypt from "bcrypt";
-import { createUser, getAssignedUsers, getStudents, getUsers, updateUser } from "../controllers/users.mjs";
-import { archiveUser } from "../services/users.mjs";
+import { createUser, getAssignedUsers, getStudents, getUsers, updateUser, archiveUser } from "../controllers/users.mjs";
 
 const usersRouter = express();
 

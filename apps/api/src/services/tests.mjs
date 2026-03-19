@@ -58,19 +58,24 @@ export async function createTest(creatorId, body) {
     }
 
     const payload = {
-        creatorId: creatorId,
-        ...body
+        name: body.name,
+        description: body.description,
+        duration: body.duration,
+        isDeleted: false,
+        isFormative: body.isFormative,
+        createdAt: body.createdAt,
+        idModule: body.idModule,
     }
 
     //Create test
-    const newTest = await Test.create(payload)
+    const newTest = await Test.create(payload);
 
     //Create created_by
     const created_by = {
-        "idUser": creatorId,
-        "idTest": newTest.idTest
-    } //TODO - warning
-    const newCreatedBy = await CreatedBy.create(created_by)
+        idUser: creatorId,
+        idTest: newTest.idTest,
+    }
+    const newCreatedBy = await CreatedBy.create(created_by);
 
     return { newTest, newCreatedBy };
 }
@@ -98,7 +103,13 @@ export async function editTest(creatorId, testId, body) {
     }
 
     //update test
-    const payload = { ...body }
+    const payload = {
+        name: body.name,
+        description: body.description,
+        duration: body.duration,
+        isDeleted: body.isDeleted,
+        isFormative: body.isFormative,
+    }
     const updatedTest = await test.update(payload);
     let newCreatedBy;
 
@@ -107,8 +118,8 @@ export async function editTest(creatorId, testId, body) {
     //add creator
     if (!alreadyExist) {
         const created_by = {
-            "idUser": creatorId,
-            "idTest": test.idTest
+            idUser: creatorId,
+            idTest: test.idTest
         }
         newCreatedBy = await CreatedBy.create(created_by);
     }
