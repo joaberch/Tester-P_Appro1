@@ -32,9 +32,13 @@ export default {
     },
     async fetchAllAnswers() {
       for (const question of this.questions) {
+        await this.fetchAnswers(question.idQuestion);
         if (question.type == "checkbox") {
-          await this.fetchAnswers(question.idQuestion);
           this.selectedAnswers[question.idQuestion] = []; //Checkbox can have multiple correct answer
+        } else if (question.type == "radiobox") {
+          this.selectedAnswers[question.idQuestion] = null;
+        } else if (question.type == "open") {
+          this.selectedAnswers[question.idQuestion] = "";
         }
       }
     },
@@ -70,38 +74,32 @@ export default {
 </script>
 <template>
   <div id="questions">
-    <div class="question" v-for="question in this.questions" :key="question.idQuestion" :class="question.type">
-      <div class="question-header">
-        <p class="question-title">{{ question.question }}</p>
-        <span class="question-points">{{ question.point }}pts</span>
+    <div v-for="question in this.questions" :key="question.idQuestion" :class="question.type">
+      <div v-if="!question.isDeleted" class="question" :class="question.type">
+        <div class="question-header">
+          <p class="question-title">{{ question.question }}</p>
+          <span class="question-points">{{ question.point }}pts</span>
+        </div>
+        <ul class="question-checkbox" v-if="question.type == 'checkbox'">
+          <li v-for="answer in answers[question.idQuestion]" :key="answer.idAnswer">
+            <label>
+              <input type="checkbox" :value="answer.idAnswer" v-model="selectedAnswers[question.idQuestion]" />
+              {{ answer.answer }}
+            </label>
+          </li>
+        </ul>
+        <div class="question-open" v-else-if="question.type == 'open'">
+          <input type="text" v-model="selectedAnswers[question.idQuestion]" placeholder="Votre réponse">
+        </div>
+        <ul v-else-if="question.type == 'radiobox'">
+          <li v-for="answer in answers[question.idQuestion]" :key="answer.idAnswer">
+            <label v-if="!answer.isDeleted">
+              <input type="radio" :value="answer.idAnswer" v-model="selectedAnswers[question.idQuestion]" :name="'question-' + question.idQuestion"/>
+              {{ answer.answer }}
+            </label>
+          </li>
+        </ul>
       </div>
-      <ul class="question-checkbox" v-if="question.type == 'checkbox'">
-        <li v-for="answer in answers[question.idQuestion]" :key="answer.idAnswer">
-          <label>
-            <input type="checkbox" :value="answer.idAnswer" v-model="selectedAnswers[question.idQuestion]" />
-            {{ answer.answer }}
-          </label>
-        </li>
-      </ul>
-      <div class="question-open" v-else-if="question.type == 'open'">
-        <input type="text" v-model="selectedAnswers[question.idQuestion]" placeholder="Votre réponse">
-      </div>
-      <ul v-else-if="question.type == 'radiobox'">
-        <li>
-          <label>
-            <input type="radio" v-model="selectedAnswers[question.idQuestion]" :name="'question-' + question.idQuestion"
-              value="true" />
-            Vrai
-          </label>
-        </li>
-        <li>
-          <label>
-            <input type="radio" v-model="selectedAnswers[question.idQuestion]" :name="'question-' + question.idQuestion"
-              value="false" />
-            Faux
-          </label>
-        </li>
-      </ul>
     </div>
   </div>
   <button @click="send">Envoyer</button>
