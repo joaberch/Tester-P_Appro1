@@ -1,0 +1,131 @@
+on:
+  push:
+    branches: #dev
+      - main
+    tags: #prod
+      - 'v*'
+      
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6 #v4?
+    
+      - name: Setup Node #https://github.com/actions/setup-node
+        uses: actions/setup-node@v6 #v4?
+        with:
+          node-version: 22 #or 24?
+          #cache: 'npm'
+        
+      - name: Build frontend
+        working-directory: apps/front-tester
+        env:
+          VITE_API_URL: ${{ secrets.VITE_API_URL_DEV }}
+        run: |
+          npm ci
+          npm run build
+      
+      - name: Build backend #https://learn.microsoft.com/en-us/azure/app-service/app-service-key-vault-references?tabs=azure-cli
+        working-directory: apps/api
+        run: |
+          npm ci
+          npm test
+      
+      - name: Save frontend
+        uses: actions/upload-artifact@v4 #v4?
+        with:
+          name: frontend
+          path: apps/front-tester/dist
+          
+      - name: Save backend
+        uses: actions/upload-artifact@v4 #v4?
+        with:
+          name: backend
+          path: apps/api
+  
+  deploy-dev:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    #environment: development
+    steps:
+      - name: Download frontend
+        uses: actions/download-artifact@v4 #v4?
+        with:
+          name: frontend
+          path: frontend
+          
+      - name: Download backend
+        uses: actions/download-artifact@v4 #v4?
+        with:
+          name: backend
+          path: backend
+      
+      - name: Azure login
+        uses: azure/login@v2 #https://github.com/marketplace/actions/azure-login
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      
+      - name: Deploy API in Azure (dev)
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: tester-api
+          #slot-name: staging
+          publish-profile: ${{ secrets.AZURE_API_PUBLISH_PROFILE }} #same as front?
+          package: backend
+      
+      - name: Deploy Front in Azure (dev)
+        uses: azure/webapps-deploy@v2 #https://github.com/marketplace/actions/azure-webapp
+        with:
+          app-name: tester
+          #slot-name: staging
+          publish-profile: ${{ secrets.AZURE_FRONT_PUBLISH_PROFILE }} #same as API?
+          package: frontend
+      
+      #- name: Deploy Database
+        #uses: azure/mysql@v1 #https://github.com/Azure/mysql
+        #with:
+          #server-name: ${{ secrets.DB_HOST }}
+          #username: ${{ secrets.DB_USER }}
+          #password: ${{ secrets.DB_PASSWORD }}
+          #database: ${{ secrets.DB_NAME }}
+          #sql-file: |
+            #./db/database.sql
+            #./db/mock-data.sql
+          
+  deploy-prod:
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+    #environment: production
+    steps:
+      - name: Download frontend
+        uses: actions/download-artifact@v4
+        with:
+          name: frontend
+          path: frontend
+      
+      - name: Download backend
+        uses: actions/download-artifact@v4
+        with:
+          name: backend
+          path: backend
+          
+      - name: Azure login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      
+      - name: Deploy API in Azure (prod)
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: tester-api
+          publish-profile: ${{ secrets.AZURE_API_PUBLISH_PROFILE }} #same as front?
+          package: backend
+          
+      - name: Deploy front in Azure (prod)
+        uses: azure/webapps-deploy@v2
+        with:
+          app-name: tester
+          publish-profile: ${{ secrets.AZURE_FRONT_PUBLISH_PROFILE }} #same as API?
+          package: frontend
