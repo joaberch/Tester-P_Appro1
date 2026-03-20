@@ -2,66 +2,116 @@
 import axios from "axios";
 import TestInformation from "../components/editTest/testInformation.vue";
 import TestQuestion from "../components/editTest/testQuestion.vue";
+import TestAttachment from "../components/editTest/testAttachment.vue";
 
 export default {
-    components: {
-      TestInformation,
-      TestQuestion
-    },
-    data() {
-        return {
-            test: [],
-            questions: [],
-        }
-    },
-    mounted() {
-      this.fetchTestData();
-      this.fetchTestQuestions();
-    },
-    methods: {
-      async fetchTestData() {
-        const APIGetTestDataCall = `${import.meta.env.VITE_API_URL}/tests/${this.$route.params.id}`
+  components: {
+    TestInformation,
+    TestQuestion,
+    TestAttachment,
+  },
+  data() {
+    return {
+      test: [],
+      questions: [],
+      attachments: []
+    }
+  },
+  async mounted() {
+    await this.fetchTestData();
+    await this.fetchTestQuestions();
+    await this.fetchTestAttachments();
+  },
+  methods: {
+    async fetchTestData() {
+      const APIGetTestDataCall = `${import.meta.env.VITE_API_URL}/tests/${this.$route.params.id}`
 
-        const fetchedTest = await axios
-          .get(APIGetTestDataCall, {
-            withCredentials: true
-          });
-          this.test = fetchedTest.data;
-      },
-      async fetchTestQuestions() {
-        const APIGetTestQuestionsCall = `${import.meta.env.VITE_API_URL}/tests/${this.$route.params.id}/questions`
+      const fetchedTest = await axios
+        .get(APIGetTestDataCall, {
+          withCredentials: true
+        });
+      this.test = fetchedTest.data;
+    },
+    async fetchTestQuestions() {
+      const APIGetTestQuestionsCall = `${import.meta.env.VITE_API_URL}/tests/${this.$route.params.id}/questions`
 
-        const fetchedQuestions = await axios
-          .get(APIGetTestQuestionsCall, {
+      const fetchedQuestions = await axios
+        .get(APIGetTestQuestionsCall, {
+          withCredentials: true
+        })
+
+      this.questions = fetchedQuestions.data;
+    },
+    async fetchTestAttachments() {
+      const APIGetTestAttachmentsCall = `${import.meta.env.VITE_API_URL}/tests/${this.$route.params.id}/attachments`;
+
+      try {
+        const fetchedAttachments = await axios
+          .get(APIGetTestAttachmentsCall, {
             withCredentials: true
           })
 
-          this.questions = fetchedQuestions.data;
-      },
-      async createQuestion() {
-        try {
-          const APICreateQuestion = `${import.meta.env.VITE_API_URL}/questions`
-  
-          const payload = {
-            question: '', //base value
-            point: 1, //base value
-            type: 'open', //base value
-            isDeleted: false,
-            idTest: this.test.idTest,
-          }
+        this.attachments = fetchedAttachments.data;
+      } catch (error) {
+        console.error(error);
+      }
+    },
+    async createQuestion() {
+      try {
+        const APICreateQuestion = `${import.meta.env.VITE_API_URL}/questions`
 
-          const createdQuestion = await axios
-            .post(APICreateQuestion, payload, {
-              withCredentials: true
-            }
+        const payload = {
+          question: '', //base value
+          point: 1, //base value
+          type: 'open', //base value
+          isDeleted: false,
+          idTest: this.test.idTest,
+        }
+
+        const createdQuestion = await axios
+          .post(APICreateQuestion, payload, {
+            withCredentials: true
+          }
           );
 
-          this.questions.push(createdQuestion.data);
-        } catch(error) {
-          console.error(error)
+        this.questions.push(createdQuestion.data);
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    async createAttachment() {
+      try {
+        const input = document.createElement('input');
+        input.type = 'file';
+
+        input.onchange = async (event) => {
+          const file = event.target.files[0];
+          if (!file) {
+            return
+          }
+
+          const formData = new FormData();
+          formData.append('fileContent', file);
+          formData.append('fileName', file.name);
+          formData.append('isDeleted', false);
+          formData.append('idTest', this.test.idTest);
+
+          const APICreateAttachmentCall = `${import.meta.env.VITE_API_URL}/attachments`;
+
+          const res = await axios
+            .post(APICreateAttachmentCall, formData, {
+              withCredentials: true,
+            })
+
+          this.attachments.push(res.data);
         }
+
+        input.click();
+      } catch (error) {
+        console.error(error);
       }
     }
+  }
 }
 </script>
 <template>
@@ -71,13 +121,18 @@ export default {
       <h1>Modifier le test</h1>
     </div>
 
-    <TestInformation :test="this.test"/>
+    <TestInformation :test="this.test" />
 
+    <div id="attachments">
+      <TestAttachment v-for="attachment in attachments" :attachment="attachment" class="attachments" />
+      <button @click="createAttachment()" class="add-question-btn">Ajouter une pièce jointe</button>
+    </div>
     <div id="questions">
       <h2>Questions</h2>
-      
-      <TestQuestion :question="question" v-for="(question, index) in questions" class="question" :key="question.idQuestion || index"/>
-      <button @click="createQuestion()" id="add-question-btn">Ajouter une question</button>
+
+      <TestQuestion :question="question" v-for="(question, index) in questions" class="question"
+        :key="question.idQuestion || index" />
+      <button @click="createQuestion()" class="add-question-btn">Ajouter une question</button>
     </div>
   </div>
 </template>
@@ -99,7 +154,8 @@ export default {
 }
 
 .in-line {
-  display: flex; /*TODO*/
+  display: flex;
+  /*TODO*/
 }
 
 .edit-test-page {
@@ -184,7 +240,7 @@ export default {
   flex: 1;
 }
 
-#add-question-btn,
+.add-question-btn,
 button[id="save-btn"] {
   margin-top: 1rem;
   padding: 0.6rem 1rem;
@@ -195,7 +251,7 @@ button[id="save-btn"] {
   cursor: pointer;
 }
 
-#add-question-btn:hover,
+.add-question-btn:hover,
 button[id="save-btn"]:hover {
   background-color: #40a9ff;
 }
