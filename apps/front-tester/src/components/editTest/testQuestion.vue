@@ -105,6 +105,10 @@ export default {
     border-radius: 3px;
 }
 
+.delete-btn:hover {
+    background-color: #c0392b;
+}
+
 .answers {
     margin-top: 0.5rem;
 }
