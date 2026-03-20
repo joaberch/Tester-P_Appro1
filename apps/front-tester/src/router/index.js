@@ -68,6 +68,12 @@ const router = createRouter({
             name: "create-user",
             component: () => import('../views/CreateUserView.vue'),
             meta: { roles: ["admin"] },
+        },
+        {
+            path: "/documents",
+            name: "document",
+            component: () => import('../views/DocumentsView.vue'),
+            meta: { roles: ["admin", "teacher", "student"]}
         }
     ],
 });

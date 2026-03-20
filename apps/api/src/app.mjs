@@ -53,6 +53,9 @@ app.use("/api/attachments", attachmentsRouter);
 import { answersRouter } from "./router/answers.mjs";
 app.use("/api/answers", answersRouter);
 
+import { documentsRouter } from "./router/documents.mjs";
+app.use("/api/documents", documentsRouter);
+
 app.use(errorHandler)
 
 app.use(({ res }) => {

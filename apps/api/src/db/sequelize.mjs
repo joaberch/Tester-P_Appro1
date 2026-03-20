@@ -11,6 +11,7 @@ import { CreatedByModel } from "../models/created_by.mjs";
 import { TestDoneModel } from '../models/testDone.mjs';
 import { AnswerDoneModel } from "../models/answerDone.mjs";
 import { AnswerChosenModel } from '../models/answers_chosen.mjs';
+import { DocumentModel } from '../models/documents.mjs';
 
 const DB_NAME = process.env.DB_NAME;
 const USERNAME = process.env.DB_USER;
@@ -42,6 +43,7 @@ const CreatedBy = CreatedByModel(sequelize, DataTypes);
 const TestDone = TestDoneModel(sequelize, DataTypes);
 const AnswerDone = AnswerDoneModel(sequelize, DataTypes);
 const AnswerChosen = AnswerChosenModel(sequelize, DataTypes);
+const Document = DocumentModel(sequelize, DataTypes)
 
 Answer.belongsTo(Question, {
     foreignKey: "idQuestion",
@@ -152,4 +154,4 @@ User.belongsToMany(Test, {
     otherKey: 'idTest'
 });
 
-export { sequelize, Answer, Attachment, Module, Objective, Question, Test, User, AssignedTo, CreatedBy, TestDone, AnswerDone, AnswerChosen };
+export { sequelize, Answer, Attachment, Module, Objective, Question, Test, User, AssignedTo, CreatedBy, TestDone, AnswerDone, AnswerChosen, Document };

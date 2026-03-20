@@ -89,16 +89,23 @@ CREATE TABLE IF NOT EXISTS t_testDone(
    FOREIGN KEY(idUser) REFERENCES t_users(idUser)
 );
 
--- openText is optionnal if question was open
 CREATE TABLE IF NOT EXISTS t_answerDone(
    idAnswerDone INT NOT NULL AUTO_INCREMENT,
-   openText VARCHAR(1000),
+   openText VARCHAR(1000), -- openText is optionnal if question was open
    pointGotten INT,
    idQuestion INT NOT NULL,
    idTestDone INT NOT NULL,
    PRIMARY KEY(idAnswerDone),
    FOREIGN KEY(idQuestion) REFERENCES t_questions(idQuestion),
    FOREIGN KEY(idTestDone) REFERENCES t_testDone(idTestDone)
+);
+
+CREATE TABLE IF NOT EXISTS t_documents(
+   idDocument INT NOT NULL AUTO_INCREMENT,
+   name VARCHAR(100),
+   content LONGBLOB,
+   isDeleted BOOLEAN,
+   PRIMARY KEY(idDocument)
 );
 
 -- many-to-many table
