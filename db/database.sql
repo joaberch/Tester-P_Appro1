@@ -60,7 +60,8 @@ CREATE TABLE IF NOT EXISTS t_questions(
 
 CREATE TABLE IF NOT EXISTS t_attachments(
    idAttachment INT NOT NULL AUTO_INCREMENT,
-   file TEXT,
+   fileName VARCHAR(100),
+   fileContent LONGBLOB,
    isDeleted BOOLEAN,
    idTest INT NOT NULL,
    PRIMARY KEY(idAttachment),

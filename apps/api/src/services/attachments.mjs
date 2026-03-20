@@ -10,14 +10,15 @@ export async function getAttachment(id) {
     return attachment;
 }
 
-export async function createAttachment(body) {
+export async function createAttachment(body, content) {
     const payload = {
-        file: body.file,
+        fileName: body.fileName,
+        fileContent: content,
         isDeleted: false,
-        idTest: body.idTest,
+        idTest: parseInt(body.idTest, 10),
     };
-    const attachment = Attachment.create(payload);
-    return attachment
+    const attachment = await Attachment.create(payload);
+    return attachment;
 }
 
 export async function archiveAttachment(id) {
@@ -52,10 +53,9 @@ export async function editAttachment(id, body) {
     }
 
     const payload = {
-        file: body.file,
+        fileName: body.fileName,
         isDeleted: body.isDeleted,
     };
     const attachmentUpdated = await attachmentToUpdate.update(payload);
     return attachmentUpdated;
-
 }

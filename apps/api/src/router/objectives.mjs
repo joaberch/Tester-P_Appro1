@@ -1,7 +1,4 @@
 import express from "express";
-import { success } from "../helper.mjs";
-import { Objective } from "../db/sequelize.mjs";
-import { ValidationError } from "sequelize";
 import { auth } from "../auth/authMiddleware.mjs";
 import authorizeRoles from "../auth/roleMiddleware.mjs";
 import { archiveObjective, createObjective, editObjective, getObjectivesOfModule } from "../controllers/objectives.mjs";

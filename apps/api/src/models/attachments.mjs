@@ -5,8 +5,12 @@ const AttachmentModel = (sequelize, DataTypes) => {
             primaryKey: true,
             autoIncrement: true,
         },
-        file: {
-            type: DataTypes.BLOB,
+        fileName: {
+            type: DataTypes.STRING,
+            allowNull: false,
+        },
+        fileContent: {
+            type: DataTypes.BLOB('long'),
             allowNull: false,
         },
         isDeleted: {

@@ -1,19 +1,18 @@
 import express from "express";
-import { success } from "../helper.mjs";
-import { Attachment } from "../db/sequelize.mjs";
 import authorizeRoles from "../auth/roleMiddleware.mjs";
-import { ValidationError } from "sequelize";
 import { auth } from "../auth/authMiddleware.mjs";
-import { createAttachment, getAttachment } from "../services/attachments.mjs";
-import { archiveAttachment, deleteAttachment, editAttachment } from "../controllers/attachments.mjs";
+import { archiveAttachment, deleteAttachment, editAttachment, createAttachment, getAttachment } from "../controllers/attachments.mjs";
+import multer from "multer";
 
-const attachmentsRouter = express();
+const upload = multer();
+
+const attachmentsRouter = express.Router();
 
 //Get a specific attachment
 attachmentsRouter.get("/:id", auth, authorizeRoles("admin", "teacher", "student"), getAttachment); //Check if used - TODO
 
 //Create an attachment
-attachmentsRouter.post("/", auth, authorizeRoles("admin", "teacher"), createAttachment);
+attachmentsRouter.post("/", auth, authorizeRoles("admin", "teacher"), upload.single("fileContent"), createAttachment);
 
 //Archive an attachment
 attachmentsRouter.put("/archive/:id", auth, authorizeRoles("admin", "teacher"), archiveAttachment);

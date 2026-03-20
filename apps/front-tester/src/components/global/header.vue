@@ -34,8 +34,8 @@ export default {
             }
         }
     },
-    mounted() {
-        this.getMe();
+    async mounted() {
+        await this.getMe();
     },
     data() {
         return {

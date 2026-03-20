@@ -32,7 +32,7 @@ testsRouter.get("/:id", auth, authorizeRoles("admin", "teacher", "student"), get
 //Get all questions of a test
 testsRouter.get("/:id/questions", auth, authorizeRoles("admin", "teacher", "student"), getTestQuestions)
 
-//Get all attachments
+//Get attachments of test
 testsRouter.get("/:id/attachments", auth, authorizeRoles("admin", "teacher", "student"), getTestAttachments);
 
 export { testsRouter };

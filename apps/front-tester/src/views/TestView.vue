@@ -5,12 +5,14 @@ import TestDescription from "../components/test/testDescription.vue";
 import Question from "../components/test/question.vue";
 import { jsPDF } from "jspdf";
 import Student from "../components/test/student.vue";
+import Attachment from "../components/test/attachment.vue";
 
 export default {
   components: {
     TestDescription,
     Question,
-    Student
+    Student,
+    Attachment
   },
   data() {
     return {
@@ -20,6 +22,7 @@ export default {
       assignedStudents: [],
       fetchedStudents: [],
       fetchedAssignedStudents: [],
+      attachments: [],
       loaded: false,
       isStarted: false,
       role: '',
@@ -31,6 +34,7 @@ export default {
   async mounted() {
     this.fetchTest();
     this.fetchQuestions();
+    this.fetchTestAttachments();
     this.getMe()
     this.loaded = true;
   },
@@ -191,7 +195,20 @@ export default {
   
         this.assignedStudents = this.fetchedAssignedStudents.filter(s => s.firstname.toLowerCase().includes(filter) || s.name.toLowerCase().includes(filter));
       }
+    },
+    async fetchTestAttachments() {
+      try {
+        const APIGetTestAttachmentsCall = `${import.meta.env.VITE_API_URL}/tests/${this.$route.params.id}/attachments`;
 
+        const fetchedAttachments = await axios
+          .get(APIGetTestAttachmentsCall, {
+            withCredentials: true
+          })
+
+        this.attachments = fetchedAttachments.data;
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
 }
@@ -239,6 +256,7 @@ export default {
         <TestDescription @start-test="startTest" :test="test" />
       </div>
       <div v-if="this.isStarted">
+        <Attachment :attachments="attachments"/>
         <Question :questions="this.questions" :test="test" />
       </div>
       <button @click="exportToPDF()" v-if="this.role == 'teacher' || this.role == 'admin'">Exporter en PDF</button>

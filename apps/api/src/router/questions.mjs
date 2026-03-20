@@ -1,8 +1,7 @@
 import express from "express";
 import { auth } from "../auth/authMiddleware.mjs";
 import authorizeRoles from "../auth/roleMiddleware.mjs";
-import { archiveQuestion, getQuestionAnswers } from "../controllers/questions.mjs";
-import { createQuestion, editQuestion } from "../services/questions.mjs";
+import { archiveQuestion, getQuestionAnswers, createQuestion, editQuestion } from "../controllers/questions.mjs";
 
 const questionsRouter = express();
 

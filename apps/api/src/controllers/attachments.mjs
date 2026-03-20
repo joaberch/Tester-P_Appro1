@@ -6,7 +6,11 @@ export async function getAttachment(req, res) {
 }
 
 export async function createAttachment(req, res) {
-    const attachment = await attachmentsService.createAttachment(req.body);
+    console.log("controller debug");
+    console.log("req.file:", req.file);
+    console.log("req.body:", req.body);
+
+    const attachment = await attachmentsService.createAttachment(req.body, req.file?.buffer);
     res.status(201).json(attachment);
 }
 
