@@ -57,13 +57,13 @@ export default {
             }
 
             try {
-                await axios
+                const res = await axios
                     .post(APICreateTest, payload, {
                         withCredentials: true
                     }
                 );
 
-                this.$router.push('/')
+                this.$router.push(`/test/edit/${res.data.newTest.idTest}`)
             } catch (error) {
                 console.error("Erreur:", error)
             }
