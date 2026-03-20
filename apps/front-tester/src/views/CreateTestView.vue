@@ -94,11 +94,6 @@ export default {
 
         <div class="checkbox-group">
             <label>
-                <input type="checkbox" v-model="test.isDeleted" />
-                Archivé
-            </label>
-
-            <label>
                 <input type="checkbox" v-model="test.isFormative" />
                 Formatif
             </label>

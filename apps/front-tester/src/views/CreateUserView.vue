@@ -63,7 +63,6 @@ export default {
     <div class="input">
       <label for="login">Login :</label> <!--7 length-->
       <input type="login" v-model="user.login" placeholder="Entrez le login de l'utilisateur (7 caractères)" />
-      <p></p>
     </div>
 
     <div class="input">
@@ -79,13 +78,6 @@ export default {
         <option value="teacher">Enseignant</option>
         <option value="student">Étudiant</option>
       </select>
-    </div>
-
-    <div class="checkbox-group">
-      <label>
-        <input type="checkbox" v-model="user.isDeleted" />
-        Archivé
-      </label>
     </div>
 
     <div class="error" v-if="error">

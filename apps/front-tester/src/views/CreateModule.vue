@@ -54,13 +54,6 @@ export default {
       <textarea id="module-description" v-model="module.description" placeholder="Entrez la description"></textarea>
     </div>
 
-    <div class="checkbox-group">
-      <label>
-        <input type="checkbox" v-model="module.isDeleted" />
-        Archivé
-      </label>
-    </div>
-
     <div class="error" v-if="error">
       {{ error }}
     </div>
