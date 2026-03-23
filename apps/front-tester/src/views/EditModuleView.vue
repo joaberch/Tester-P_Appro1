@@ -1,6 +1,6 @@
 <script>
 import axios from 'axios';
-import Objective from '../components/editModule/Objective.vue';
+import Objective from '../components/editModule/objective.vue';
 
 export default {
     components: {
