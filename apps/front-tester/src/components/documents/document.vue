@@ -1,4 +1,6 @@
 <script>
+import { PDFDocument } from "pdf-lib";
+
 export default {
     props: {
         document: {
@@ -14,13 +16,19 @@ export default {
     watch: {
         document: {
             immediate: true,
-            handler(newDoc) {
+            async handler(newDoc) {
                 if (newDoc && newDoc.content) {
                     const buffer = newDoc.content;
-
                     const uint8Array = new Uint8Array(buffer.data);
-                    const blob = new Blob([uint8Array], { type: 'application/pdf' });
                     
+                    const pdfDoc = await PDFDocument.load(uint8Array);
+                    const page = pdfDoc.getPages()[0];
+                    const pdfBytes = await pdfDoc.save();
+                    const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+
+                    if (this.pdfUrl) {
+                        URL.revokeObjectURL(blob);
+                    }
                     this.pdfUrl = URL.createObjectURL(blob);
                 } else {
                     this.pdfUrl = null;
@@ -44,6 +52,7 @@ export default {
         <div v-else>
             Chargement de l'affichage du PDF.
         </div>
+        <button>Télécharger</button>
     </div>
 </template>
 <style scoped>
