@@ -19,7 +19,7 @@ export default {
                     const buffer = newDoc.content;
 
                     const uint8Array = new Uint8Array(buffer.data);
-                    const blob = new Blob([uint8Array]);
+                    const blob = new Blob([uint8Array], { type: 'application/pdf' });
                     
                     this.pdfUrl = URL.createObjectURL(blob);
                 } else {
@@ -40,7 +40,6 @@ export default {
         <h3>{{ document.name }}</h3>
         <div v-if="pdfUrl">
             <iframe :src="pdfUrl" width="100%" height="500px"></iframe>
-            <embed :src="pdfUrl" type="application/pdf" />
         </div>
         <div v-else>
             Chargement de l'affichage du PDF.

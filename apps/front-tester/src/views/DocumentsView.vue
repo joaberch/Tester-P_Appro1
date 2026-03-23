@@ -25,6 +25,9 @@ export default {
             } catch (error) {
                 console.error(error);
             }
+        },
+        updateDocument(value) {
+            this.documentIndex = (this.documentIndex + value + this.documents.length) % this.documents.length;
         }
     },
     async mounted() {
@@ -32,15 +35,15 @@ export default {
     },
     computed: {
         selectedDocument() {
-            return this.documents.find(d => d.idDocument == this.documentIndex) || null;
+            return this.documents[this.documentIndex] || {};
         }
     }
 }
 </script>
 <template>
     <div class="documents">
-        <button @click="--documentIndex"><-</button>
-        <button @click="++documentIndex">-></button>
+        <button @click="updateDocument(-1)"><-</button>
+        <button @click="updateDocument(1)">-></button>
         <Document :document="selectedDocument"/>
     </div>
 </template>
