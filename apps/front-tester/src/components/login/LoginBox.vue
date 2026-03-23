@@ -1,35 +1,32 @@
 <script>
-import axios from "axios"
+import msalInstance, { loginRequest } from "../../config/authConfig";
 
 export default {
     data() {
         return {
             isPasswordDisplayed: false,
-            errorMessage: ''
+            errorMessage: '',
+            msalInstance: null,
+            isLogin: false,
         }
     },
     methods: {
         async login() {
-            let username = document.getElementsByClassName('username')[0].value
-            let password = document.getElementsByClassName('password')[0].value
+            if (this.isLogin) {
+                console.error("Une tentative de connexion est déjà en cours.");
+                return;
+            }
+            this.isLogin = true;
 
-            let APICall = `${import.meta.env.VITE_API_URL}/login`
-
-            await axios
-                .post(APICall, {
-                    login: username,
-                    password: password
-                }, { withCredentials: true })
-                .then((res) => {
-                    localStorage.token = res.data.token
-                    this.$router.push('/');
-                })
-                .catch((err) => {
-                    console.error(err)
-                    if (err.response || err.response.status == 404 || err.response.status == 401) {
-                        this.errorMessage = 'Username or password incorrect'
-                    }
-                });
+            try {
+                const loginResponse = await msalInstance.loginPopup(loginRequest);
+                const token = loginResponse.accessToken;
+                console.log(loginResponse)
+            } catch (error) {
+                console.error(error);
+            } finally {
+                this.isLogin = false;
+            }
         }
     }
 }
@@ -37,22 +34,10 @@ export default {
 <template>
     <div class="global">
         <div class="wrapper">
-            <form @submit.prevent="login()" action="">
+            <div>
                 <h1>Connexion</h1>
-                <div class="input-box">
-                    Login:
-                    <input type="text" placeholder="  px11xxx" class="username" required>
-                </div>
-
-                <div class="input-box">
-                    Mot de passe: <input :type="isPasswordDisplayed ? 'text' : 'password'" placeholder="  Mot de passeyyyyy" class="password" required>
-                    <i :class="isPasswordDisplayed ? 'bx bx-show' : 'bx bxs-hide'" @mousedown="isPasswordDisplayed = !isPasswordDisplayed"
-                        @mouseup="isPasswordDisplayed = !isPasswordDisplayed"></i>
-                    <p class="error">{{ errorMessage }}</p>
-                </div>
-
-                <button type="submit" class="btn">Login</button>
-            </form>
+                <button @click="login()" class="btn">Login</button>
+            </div>
         </div>
     </div>
 </template>
