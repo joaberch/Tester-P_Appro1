@@ -46,7 +46,6 @@ export async function getTests(userId) {
 export async function getTest(id) { //TODO students only if assigned
     const test = await Test.findByPk(id);
     if (!test) {
-        console.log(id)
         const error = new Error(`Le test est introuvable.`);
         error.status = 404;
         throw error;
