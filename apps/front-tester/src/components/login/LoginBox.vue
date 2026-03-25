@@ -1,5 +1,6 @@
 <script>
 import msalInstance, { loginRequest } from "../../config/authConfig";
+import axios from "axios";
 
 export default {
     data() {
@@ -11,7 +12,7 @@ export default {
         }
     },
     methods: {
-        async login() {
+        async azureLogin() {
             if (this.isLogin) {
                 console.error("Une tentative de connexion est déjà en cours.");
                 return;
@@ -26,6 +27,29 @@ export default {
             } finally {
                 this.isLogin = false;
             }
+        },
+        async login() {
+            try {
+                let username = document.getElementsByClassName('username')[0].value;
+                let password = document.getElementsByClassName('password')[0].value;
+
+                let APICall = `${import.meta.env.VITE_API_URL}/login`
+
+                const res = await axios.post(APICall, {
+                        login: username,
+                        password: password
+                    },
+                    { withCredentials: true }
+                );
+
+                localStorage.token = res.data.token;
+                this.$router.push('/');
+            } catch (error) {
+                console.error(error);
+                if (error.response || error.response.status == 404 || error.response.status == 401) {
+                    this.errorMessage = `Login ou mot de passe incorrect.`
+                }
+            }
         }
     }
 }
@@ -33,10 +57,24 @@ export default {
 <template>
     <div class="global">
         <div class="wrapper">
-            <div>
+            <form @submit.prevent="login()">
                 <h1>Connexion</h1>
-                <button @click="login()" class="btn">Login</button>
-            </div>
+                <div class="input-box">
+                    Login:
+                    <input type="text" placeholder="  px11xxx" class="username" required>
+                </div>
+
+                <div class="input-box">
+                    Mot de passe: <input :type="isPasswordDisplayed ? 'text' : 'password'"
+                        placeholder="  Mot de passe" class="password" required>
+                    <i :class="isPasswordDisplayed ? 'bx bx-show' : 'bx bxs-hide'"
+                        @mousedown="isPasswordDisplayed = !isPasswordDisplayed"
+                        @mouseup="isPasswordDisplayed = !isPasswordDisplayed"></i>
+                    <p class="error">{{ errorMessage }}</p>
+                </div>
+                <button type="submit" class="btn">Se connecter</button>
+                <button @click="azureLogin()" class="btn">Connexion Azure</button>
+            </form>
         </div>
     </div>
 </template>

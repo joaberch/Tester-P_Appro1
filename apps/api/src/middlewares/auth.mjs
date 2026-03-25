@@ -47,7 +47,7 @@ function verifyToken(token) {
 const authenticate = async (req, res, next) => {
   next()
 
-  /*const token = req.cookies.token
+  const token = req.cookies.token
   if (!token) {
     return res.status(401).send('Accès refusé: Pas de token fourni.')
   }
@@ -59,7 +59,23 @@ const authenticate = async (req, res, next) => {
   } catch (error) {
     console.error('La vérification du token a échoué.', error)
     res.status(400).send('Token invalide')
-  }*/
+  }
 }
 
+const auth = (req, res, next) => {
+    const token = req.cookies.token;
+    if (!token) {
+        return res.status(401).json({ message: "Access denied" });
+    }
+
+    try {
+        const decodedToken = jwt.verify(token, privateKey);
+        req.user = decodedToken;
+        next();
+    } catch (error) {
+        return res.status(401).json({ message: "Access denied" });
+    }
+};
+
+export { auth };
 export default authenticate;

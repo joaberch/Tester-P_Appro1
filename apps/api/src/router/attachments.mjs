@@ -1,6 +1,6 @@
 import express from "express";
 import authorizeRoles from "../middlewares/role.mjs";
-import auth from "../middlewares/auth.mjs";
+import { auth } from "../middlewares/auth.mjs";
 import { archiveAttachment, deleteAttachment, editAttachment, createAttachment, getAttachment } from "../controllers/attachments.mjs";
 import multer from "multer";
 

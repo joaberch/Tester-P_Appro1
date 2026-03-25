@@ -36,7 +36,7 @@ export default {
                 withCredentials: true
             });
 
-            this.tests = fetchedTests.data;
+            this.tests = fetchedTests.data.data;
         },
         async fetchAssignedTests() {
             const APIGetAssignedTestsCall = `${import.meta.env.VITE_API_URL}/tests/assigned`;

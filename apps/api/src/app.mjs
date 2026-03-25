@@ -23,7 +23,7 @@ sequelize
 import authRouter from "./router/auth.mjs";
 app.use("/auth", authRouter);
 
-app.use(authenticate);
+//app.use(authenticate);
 
 import { meRouter } from "./router/me.mjs";
 app.use("/api/me", meRouter);

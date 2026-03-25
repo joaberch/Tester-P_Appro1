@@ -20,9 +20,9 @@ export default {
             }
         },
         async getMe() {
-            const APIGetMeCall = `${import.meta.env.VITE_API_URL}/me`;
-
             try {
+                const APIGetMeCall = `${import.meta.env.VITE_API_URL}/me`;
+
                 const res = await axios
                     .get(APIGetMeCall, {
                         withCredentials: true
@@ -35,7 +35,9 @@ export default {
         }
     },
     async mounted() {
-        await this.getMe();
+        if (this.$route.path != "/") {
+            await this.getMe();
+        }
     },
     data() {
         return {
@@ -45,7 +47,7 @@ export default {
 }
 </script>
 <template>
-    <div id="header">
+    <div id="header" v-if="this.role">
         <RouterLink class="button" v-if="this.role == 'teacher' || this.role == 'admin'" :to="{ name: 'create-test' }">Créer un test</RouterLink>
         <RouterLink class="button" v-if="this.role == 'teacher' || this.role == 'admin'" :to="{ name: 'create-module'}">Créer un module</RouterLink>
         <RouterLink class="button" v-if="this.role == 'admin'" :to="{ name: 'admin' }">Console admin</RouterLink>

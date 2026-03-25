@@ -1,5 +1,5 @@
 import express from "express";
-import auth from "../middlewares/auth.mjs";
+import { auth } from "../middlewares/auth.mjs";
 import authorizeRoles from "../middlewares/role.mjs";
 import { createUser, getAssignedUsers, getStudents, getUsers, updateUser, archiveUser, getMe } from "../controllers/users.mjs";
 
