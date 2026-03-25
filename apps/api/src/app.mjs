@@ -21,7 +21,7 @@ sequelize
     .catch((error) => console.error(`Impossible de se connecter à la base de données :\n- ${error}`));
 
 import authRouter from "./router/auth.mjs";
-app.use("/auth", authRouter);
+app.use("/api/auth", authRouter);
 
 //app.use(authenticate);
 

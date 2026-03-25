@@ -10,7 +10,7 @@ export async function storeToken(req, res) {
     res.cookie('token', token, {
         httpOnly: true,
         secure: false,
-        sameSite: 'Lax',
+        sameSite: 'None',
         maxAge: 3600000 //Durée de validité du cookie (en ms), 3600000 = 1h
     });
 
@@ -24,7 +24,7 @@ export async function checkToken(req, res) {
     if (token) {
         res.json({ token });
     } else {
-        res.status(401).json({ error: 'Token non trouvé' });
+        res.status(404).json({ error: 'Token non trouvé' });
     }
 }
 

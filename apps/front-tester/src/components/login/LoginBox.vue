@@ -7,7 +7,6 @@ export default {
         return {
             isPasswordDisplayed: false,
             errorMessage: '',
-            msalInstance: null,
             isLogin: false,
         }
     },
@@ -49,15 +48,29 @@ export default {
                     this.errorMessage = `Login ou mot de passe incorrect.`
                 }
             }
+        },
+        async debug() {
+            try {
+                const APIDebugCall = `${import.meta.env.VITE_API_URL}/auth/check`
+
+                await axios.get(APIDebugCall, {
+                    withCredentials: true
+                })
+            } catch (error) {
+                console.error(error)
+            }
         }
     },
     async mounted() {
         try {
             const res = await msalInstance.handleRedirectPromise();
+            if (!res) return;
 
-            if (res) {
-                console.log("res:", res)
-            }
+            const token = res.accessToken;
+            const APIStoreTokenCall = `${import.meta.env.VITE_API_URL}/auth/token`;
+            await axios.post(APIStoreTokenCall, { token: token }, {
+                withCredentials: true,
+            });
         } catch (error) {
             console.error(error);
         }
@@ -84,6 +97,7 @@ export default {
                 </div>
                 <button type="submit" class="btn">Se connecter</button>
                 <button @click="azureLogin()" class="btn">Connexion Azure</button>
+                <button @click="debug()">Debug</button>
             </form>
         </div>
     </div>
