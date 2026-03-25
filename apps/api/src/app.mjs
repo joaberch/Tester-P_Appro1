@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
 import { errorHandler } from "./middlewares/errorHandler.mjs";
+import authenticate from "./middlewares/auth.mjs";
 
 const app = express();
 app.use(express.json());
@@ -19,9 +20,10 @@ sequelize
     .then((_) => console.log("La connexion à la base de données a bien été créé."))
     .catch((error) => console.error(`Impossible de se connecter à la base de données :\n- ${error}`));
 
-app.get('/api/', (req, res) => {
-    res.redirect(`http://localhost:${port}/`);
-});
+import authRouter from "./router/auth.mjs";
+app.use("/auth", authRouter);
+
+app.use(authenticate);
 
 import { meRouter } from "./router/me.mjs";
 app.use("/api/me", meRouter);
