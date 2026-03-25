@@ -99,8 +99,33 @@ export default {
 </script>
 <template>
     <div class="documents">
-        <button @click="updateDocument(-1)"><-</button>
-        <button @click="updateDocument(1)">-></button>
+        <RouterLink :to="{ name: 'home' }" class="button">Menu</RouterLink>
+        <div>
+            <button @click="updateDocument(-1)"><-</button>
+            <button @click="updateDocument(1)">-></button>
+        </div>
         <Document :document="selectedDocument" :dataType="formData" :map="fieldMap"/>
     </div>
 </template>
+<style scoped>
+.button {
+    background-color: #0084ff;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+    text-decoration: none;
+    margin-bottom: 16px;
+    max-width: 50px;
+}
+.button:hover {
+    background-color: #0400ff;
+}
+.documents {
+    display: flex;
+    flex-direction: column;
+}
+</style>
