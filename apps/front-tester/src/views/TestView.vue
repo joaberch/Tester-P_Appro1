@@ -149,7 +149,7 @@ export default {
       this.isAssigned = true;
     },
     async fetchAssignedStudents() {
-      const APIFetchAssignedStudentsCall = `http://localhost:3000/api/users/assignedTo/${this.test.idTest}`;
+      const APIFetchAssignedStudentsCall = `${import.meta.env.VITE_API_URL}/users/assignedTo/${this.test.idTest}`;
 
       try {
         const res = await axios.get(APIFetchAssignedStudentsCall, {
@@ -163,7 +163,7 @@ export default {
       }
     },
     async assign() {
-      const APIAssignStudentsCall = `http://localhost:3000/api/tests/${this.test.idTest}/user/${this.selectedStudents}`;
+      const APIAssignStudentsCall = `${import.meta.env.VITE_API_URL}/tests/${this.test.idTest}/user/${this.selectedStudents}`;
 
       const payload = {}
 

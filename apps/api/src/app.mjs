@@ -6,12 +6,12 @@ import { errorHandler } from "./middlewares/errorHandler.mjs";
 const app = express();
 app.use(express.json());
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: "http://localhost:3000",
     credentials: true,
 }));
 app.use(cookieParser())
 
-const port = 3000;
+const port = 3001;
 
 import { sequelize } from "./db/sequelize.mjs";
 sequelize

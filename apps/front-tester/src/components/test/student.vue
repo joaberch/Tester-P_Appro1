@@ -37,7 +37,7 @@ export default {
             this.selected = false;
         },
         async assignStudent() {
-            const APIAssignStudentsCall = `http://localhost:3000/api/tests/${this.idTest}/user/${this.student.idUser}`;
+            const APIAssignStudentsCall = `${import.meta.env.VITE_API_URL}/tests/${this.idTest}/user/${this.student.idUser}`;
 
             const payload = {}
 
@@ -50,7 +50,7 @@ export default {
             }
         },
         async unassignStudent() {
-            const APIUnassignStudentsCall = `http://localhost:3000/api/tests/${this.idTest}/user/${this.student.idUser}`;
+            const APIUnassignStudentsCall = `${import.meta.env.VITE_API_URL}/tests/${this.idTest}/user/${this.student.idUser}`;
 
             try {
                 await axios.delete(APIUnassignStudentsCall, {
