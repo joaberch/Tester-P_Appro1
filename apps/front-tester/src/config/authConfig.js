@@ -13,14 +13,6 @@ export const msalConfig = {
         clientId: client_id,
         authority: `https://login.microsoftonline.com/${tenant_id}`,
         redirectUri: redirect_uri,
-    },
-    system: {
-        loggerOptions: {
-            loggerCallback: (level, message) => {
-                console.log("MSAL", message);
-            },
-            logLevel: 3
-        }
     }
 }
 

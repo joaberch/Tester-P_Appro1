@@ -20,8 +20,7 @@ export default {
             this.isLogin = true;
 
             try {
-                const loginResponse = await msalInstance.loginPopup(loginRequest);
-                console.log("loginres:", loginResponse)
+                await msalInstance.loginRedirect(loginRequest);
             } catch (error) {
                 console.error(error);
             } finally {
@@ -50,6 +49,17 @@ export default {
                     this.errorMessage = `Login ou mot de passe incorrect.`
                 }
             }
+        }
+    },
+    async mounted() {
+        try {
+            const res = await msalInstance.handleRedirectPromise();
+
+            if (res) {
+                console.log("res:", res)
+            }
+        } catch (error) {
+            console.error(error);
         }
     }
 }

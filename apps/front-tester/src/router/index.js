@@ -74,6 +74,10 @@ const router = createRouter({
             name: "document",
             component: () => import('../views/DocumentsView.vue'),
             meta: { roles: ["admin", "teacher", "student"]}
+        },
+        {
+            path: "/auth-response",
+            redirect: "/login"
         }
     ],
 });
