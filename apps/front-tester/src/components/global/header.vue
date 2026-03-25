@@ -35,19 +35,14 @@ export default {
         }
     },
     async mounted() {
-        if (this.$route.path != "/") {
+        if (this.$route.name != "login") {
             await this.getMe();
-        }
-    },
-    data() {
-        return {
-            role: '',
         }
     },
 }
 </script>
 <template>
-    <div id="header" v-if="this.role">
+    <div id="header" v-if="this.$route.name != 'login'">
         <RouterLink class="button" v-if="this.role == 'teacher' || this.role == 'admin'" :to="{ name: 'create-test' }">Créer un test</RouterLink>
         <RouterLink class="button" v-if="this.role == 'teacher' || this.role == 'admin'" :to="{ name: 'create-module'}">Créer un module</RouterLink>
         <RouterLink class="button" v-if="this.role == 'admin'" :to="{ name: 'admin' }">Console admin</RouterLink>
