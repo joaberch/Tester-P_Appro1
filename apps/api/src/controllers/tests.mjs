@@ -3,7 +3,8 @@ import * as testsService from "../services/tests.mjs";
 export async function getTests(req, res) {
     const userId = req.user.userId;
     const page = parseInt(req.query.page) || 1;
-    const test = await testsService.getTests(userId, page);
+    const pageSize = parseInt(req.query.pageSize) || 20;
+    const test = await testsService.getTests(userId, page, pageSize);
     res.status(200).json(test);
 }
 

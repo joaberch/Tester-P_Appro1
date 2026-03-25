@@ -12,6 +12,13 @@ export default {
             tests: [],
             modules: [],
             role: '',
+            page: 1,
+            pageSize: 20,
+            totalPages: 1,
+            isLoading: false,
+            myTestsFilter: true,
+            otherTestsFilter: true,
+            archivedTestsFilter: true,
         }
     },
     async mounted() {
@@ -29,14 +36,25 @@ export default {
         }
     },
     methods: {
-        async fetchAllTests() {
-            const APIGetAllTestsCall = `${import.meta.env.VITE_API_URL}/tests`;
+        async fetchAllTests(page=1) {
+            if (this.isLoading) return;
+            this.isLoading = true;
 
-            const fetchedTests = await axios.get(APIGetAllTestsCall, {
-                withCredentials: true
-            });
-
-            this.tests = fetchedTests.data.data;
+            try {
+                const APIGetAllTestsCall = `${import.meta.env.VITE_API_URL}/tests?page=${page}&pageSize=${this.pageSize}`;
+    
+                const fetchedTests = await axios.get(APIGetAllTestsCall, {
+                    withCredentials: true
+                });
+                
+                this.tests = fetchedTests.data.data;
+                this.page = fetchedTests.data.page;
+                this.totalPages = fetchedTests.data.totalPages;
+            } catch (error) {
+                console.error(error);
+            } finally {
+                this.isLoading = false;
+            }
         },
         async fetchAssignedTests() {
             const APIGetAssignedTestsCall = `${import.meta.env.VITE_API_URL}/tests/assigned`;
@@ -69,6 +87,10 @@ export default {
             } catch (error) {
                 console.error("Erreur:", error)
             }
+        },
+        changePageSize() {
+            this.page = 1;
+            this.fetchAllTests(this.page);
         }
     },
     computed: {
@@ -91,6 +113,23 @@ export default {
             <p class="header" :class="{ active: displayed === 'modules' }" @click="displayed = 'modules'">Modules</p>
         </div>
         <div id="content-tests" v-if="displayed == 'tests'">
+            <div class="pagination">
+                <p>Page {{ page }}/{{ totalPages }}</p>
+                <button @click="fetchAllTests(page-1)" v-if="page-1 > 0" :disabled="isLoading"><-</button>
+                <button @click="fetchAllTests(page+1)" v-if="page+1 <= totalPages" :disabled="isLoading">-></button>
+                <p>Nombre de test affiché par page :</p>
+                <select v-model.number="pageSize" @change="changePageSize">
+                    <option :value="5">5</option>
+                    <option :value="10">10</option>
+                    <option :value="20">20</option>
+                    <option :value="50">50</option>
+                    <option :value="100">100</option>
+                    <option :value="1000">1000</option>
+                </select>
+                <input type="checkbox" :checked="myTestsFilter">Mes tests
+                <input type="checkbox" :checked="otherTestsFilter">Autres tests
+                <input type="checkbox" :checked="archivedTestsFilter">Tests archivés
+            </div>
             <div class="content" v-if="myTests.length>0">
                 <h2>Mes tests</h2>
                 <Element v-for="element in myTests" :key="element.id" :element="element" :isTest="true"/>
@@ -116,6 +155,10 @@ export default {
     </div>
 </template>
 <style scoped>
+.pagination {
+    display: flex;
+    align-items: center;
+}
 #global {
     font-family: Arial, sans-serif;
     width: 80%;
