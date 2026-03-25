@@ -1,12 +1,15 @@
 import { Sequelize } from "sequelize";
 import { AssignedTo, Attachment as Attachment, CreatedBy, Question, Test, User } from "../db/sequelize.mjs";
 
-export async function getTests(userId) {
+export async function getTests(userId, page=1, pageSize=20) {
     if (!userId) {
         throw new Error(`userid is required`)
     }
 
-    const tests = await Test.findAll({
+    const offset = (page-1)*pageSize;
+
+    const tests = await Test.findAndCountAll({
+        subQuery: false,
         include: [
             {
                 model: User,
@@ -38,9 +41,18 @@ export async function getTests(userId) {
                 'name',
                 'ASC'
             ]
-        ]
+        ],
+        limit: pageSize,
+        offset: offset,
+        distinct: true,
     });
-    return tests;
+    return {
+        data: tests.rows,
+        total: tests.count,
+        page,
+        pageSize,
+        totalPages: Math.ceil(tests.count / pageSize)
+    }
 }
 
 export async function getTest(id) { //TODO students only if assigned
