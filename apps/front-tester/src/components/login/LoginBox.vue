@@ -20,8 +20,7 @@ export default {
 
             try {
                 const loginResponse = await msalInstance.loginPopup(loginRequest);
-                const token = loginResponse.accessToken;
-                console.log(loginResponse)
+                console.log("loginres:", loginResponse)
             } catch (error) {
                 console.error(error);
             } finally {

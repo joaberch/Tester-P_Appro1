@@ -13,6 +13,14 @@ export const msalConfig = {
         clientId: client_id,
         authority: `https://login.microsoftonline.com/${tenant_id}`,
         redirectUri: redirect_uri,
+    },
+    system: {
+        loggerOptions: {
+            loggerCallback: (level, message) => {
+                console.log("MSAL", message);
+            },
+            logLevel: 3
+        }
     }
 }
 
@@ -20,12 +28,12 @@ export const loginRequest = {
     scopes: ["openid", "profile", "email"]
 }
 
-const msalInstance = new PublicClientApplication(msalConfig)
+const msalInstance = new PublicClientApplication(msalConfig);
 
 msalInstance.initialize().then(() => {
-    console.log("MSAL Init")
+    console.log("MSAL Init");
 }).catch ((error) => {
-    console.log("Error : MSAL did not init", error)
+    console.log("Error : MSAL did not init", error);
 })
 
 export default msalInstance
