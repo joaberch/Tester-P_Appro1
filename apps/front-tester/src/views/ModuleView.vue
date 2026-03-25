@@ -147,7 +147,6 @@ export default {
   transition: all 0.3s ease;
 }
 
-/* Header */
 .header {
   display: flex;
   justify-content: space-between;
@@ -165,7 +164,6 @@ export default {
   letter-spacing: 0.5px;
 }
 
-/* Module info */
 .module-info {
   margin-bottom: 35px;
 }
@@ -186,7 +184,6 @@ export default {
   font-size: 14px;
 }
 
-/* Objectives Section */
 .objectives-section h3 {
   margin-bottom: 20px;
   font-size: 18px;
@@ -232,7 +229,6 @@ export default {
   color: #6b7280;
 }
 
-/* Buttons */
 .edit-btn {
   background: linear-gradient(135deg, #3b82f6, #2563eb);
   color: white;
@@ -255,7 +251,6 @@ export default {
   box-shadow: none;
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .module-container {
     padding: 25px;

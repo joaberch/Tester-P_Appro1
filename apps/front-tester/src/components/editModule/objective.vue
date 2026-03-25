@@ -81,9 +81,6 @@ export default {
     </div>
 </template>
 <style scoped>
-/* ==============================
-   Carte objectif
-   ============================== */
 .objective-card {
     background-color: #fdfdfd;
     border: 1px solid #e2e8f0;
@@ -96,14 +93,12 @@ export default {
     box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
 }
 
-/* Conteneur interne pour inputs et textarea */
 .objective-card > div {
     display: flex;
     flex-direction: column;
     gap: 14px;
 }
 
-/* Ligne contenant nom et bouton supprimer */
 .objective-card > div > div:first-child {
     display: flex;
     justify-content: space-between;
@@ -111,9 +106,6 @@ export default {
     gap: 10px;
 }
 
-/* ==============================
-   Inputs et textarea
-   ============================== */
 input,
 select {
     padding: 10px 12px;
@@ -147,9 +139,6 @@ textarea {
     min-height: 70px;
 }
 
-/* ==============================
-   Bouton Supprimer
-   ============================== */
 .delete {
     background-color: #ef4444;
     color: white;
@@ -166,14 +155,10 @@ textarea {
     background-color: #dc2626;
 }
 
-/* ==============================
-   Sélecteur Bloom
-   ============================== */
 select {
     max-width: 200px;
 }
 
-/* Responsive léger pour mobile */
 @media (max-width: 500px) {
     .objective-card > div > div:first-child {
         flex-direction: column;

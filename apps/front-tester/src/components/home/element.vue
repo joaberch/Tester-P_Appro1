@@ -66,7 +66,6 @@ export default {
   border-color: #d1d5db;
 }
 
-/* HEADER (nom + infos à droite) */
 .element-card strong {
   font-size: 1.05rem;
   font-weight: 600;
@@ -77,7 +76,6 @@ export default {
   margin-top: 4px;
 }
 
-/* Première ligne = alignement horizontal */
 .element-card-header {
   display: flex;
   justify-content: space-between;
@@ -85,7 +83,6 @@ export default {
   gap: 12px;
 }
 
-/* Badge Formatif */
 .badge {
   display: inline-block;
   background: #e0edff;

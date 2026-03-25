@@ -155,7 +155,6 @@ export default {
 
 .in-line {
   display: flex;
-  /*TODO*/
 }
 
 .edit-test-page {

@@ -55,14 +55,14 @@ export default {
     justify-content: space-evenly;
     align-items: center;
     padding: 10px 20px;
-    background-color: #2c3e50; /* gris foncé */
+    background-color: #2c3e50;
     color: white;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
     margin-bottom: 20px;
 }
 
 #header button, .button {
-    background-color: #0084ff; /* rouge */
+    background-color: #0084ff;
     color: white;
     border: none;
     padding: 8px 16px;
@@ -74,6 +74,6 @@ export default {
 }
 
 #header button:hover, .button:hover {
-    background-color: #0400ff; /* rouge plus foncé au survol */
+    background-color: #0400ff;
 }
 </style>

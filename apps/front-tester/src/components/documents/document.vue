@@ -140,7 +140,6 @@ export default {
     </div>
 </template>
 <style scoped>
-/* Container */
 #global {
     display: flex;
     flex-direction: column;
@@ -148,21 +147,18 @@ export default {
     font-family: Arial, sans-serif;
 }
 
-/* Header */
 h3 {
     margin: 0 0 10px 0;
     font-size: 1.5rem;
     color: #333;
 }
 
-/* Form styling */
 form {
     display: flex;
     flex-wrap: wrap;
     gap: 15px;
 }
 
-/* Individual card for each field */
 .card {
     display: flex;
     flex-direction: column;
@@ -170,7 +166,6 @@ form {
     min-width: 150px;
 }
 
-/* Label */
 .card p {
     margin: 0 0 5px 0;
     font-weight: bold;
@@ -178,7 +173,6 @@ form {
     color: #555;
 }
 
-/* Input field */
 .card input {
     padding: 8px 10px;
     font-size: 0.9rem;
@@ -190,11 +184,9 @@ form {
 
 .card input:focus {
     border-color: #0078d4;
-    /* nice blue */
     box-shadow: 0 0 3px rgba(0, 120, 212, 0.3);
 }
 
-/* PDF iframe */
 iframe {
     width: 100%;
     height: 500px;
@@ -202,7 +194,6 @@ iframe {
     border-radius: 5px;
 }
 
-/* Download button */
 button {
     margin-top: 10px;
     padding: 10px 20px;
@@ -219,7 +210,6 @@ button:hover {
     background-color: #005ea2;
 }
 
-/* Responsive for smaller screens */
 @media (max-width: 600px) {
     form {
         flex-direction: column;

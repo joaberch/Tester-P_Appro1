@@ -160,7 +160,6 @@ export default {
   background-color: #1e8449;
 }
 
-/* Responsive */
 @media (max-width: 480px) {
   .checkbox-group {
     flex-direction: column;

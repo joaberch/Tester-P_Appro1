@@ -201,7 +201,6 @@ export default {
     background-color: #2980b9;
 }
 
-/* Responsive for small screens */
 @media (max-width: 480px) {
     .answer-item {
         flex-direction: column;

@@ -163,7 +163,7 @@ export default {
     padding: 15px;
     border-radius: 5px;
     margin-bottom: 10px;
-    flex: 1 1 200px; /* Ajustable pour responsive */
+    flex: 1 1 200px;
     box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
 }
 </style>

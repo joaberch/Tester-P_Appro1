@@ -67,7 +67,7 @@ export default {
     margin-right: 25px;
 }
 .button {
-    background-color: #0084ff; /* rouge */
+    background-color: #0084ff;
     color: white;
     border: none;
     padding: 8px 16px;
@@ -79,7 +79,7 @@ export default {
 }
 
 .button:hover {
-    background-color: #0400ff; /* rouge plus foncé au survol */
+    background-color: #0400ff;
 }
 
 .back-btn {

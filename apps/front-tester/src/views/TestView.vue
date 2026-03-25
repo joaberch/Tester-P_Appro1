@@ -314,7 +314,6 @@ export default {
   gap: 6px;
 }
 
-/* columns */
 .unassigned,
 .assigned {
   display: flex;
@@ -330,7 +329,6 @@ export default {
   color: #374151;
 }
 
-/* modal layout */
 .assign-page {
   position: fixed;
   inset: 0;
@@ -359,7 +357,6 @@ export default {
   animation: popup 0.25s ease;
 }
 
-/* popup animation */
 @keyframes popup {
   from {
     transform: scale(.92);
@@ -371,7 +368,6 @@ export default {
   }
 }
 
-/* scrollbars */
 .students::-webkit-scrollbar {
   width: 6px;
 }
@@ -381,7 +377,6 @@ export default {
   border-radius: 4px;
 }
 
-/* main page */
 .test-page {
   min-height: 100vh;
   background: #f4f6fb;
@@ -389,7 +384,6 @@ export default {
   font-family: "Inter", Arial, sans-serif;
 }
 
-/* header */
 #header {
   display: flex;
   justify-content: space-between;
@@ -402,7 +396,6 @@ export default {
   gap: 10px;
 }
 
-/* buttons */
 button {
   padding: 10px 18px;
   background: linear-gradient(135deg,#6366f1,#4f46e5);
@@ -425,7 +418,6 @@ button:active {
   box-shadow: none;
 }
 
-/* edit button */
 #header .button {
   padding: 10px 16px;
   border-radius: 8px;
@@ -440,7 +432,6 @@ button:active {
   background: #ea580c;
 }
 
-/* description card */
 #description {
   background: white;
   padding: 30px;
@@ -448,7 +439,6 @@ button:active {
   box-shadow: 0 10px 30px rgba(0,0,0,0.08);
 }
 
-/* back button */
 .back-btn {
   padding: 8px 14px;
   border-radius: 8px;

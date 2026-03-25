@@ -133,9 +133,6 @@ export default {
     </div>
 </template>
 <style scoped>
-/* ==============================
-   Bouton Retour
-   ============================== */
 .back-btn {
     display: inline-block;
     padding: 8px 14px;
@@ -153,9 +150,6 @@ export default {
     background-color: #d1d5db;
 }
 
-/* ==============================
-   Container principal
-   ============================== */
 .module-container {
     max-width: 900px;
     margin: 40px auto;
@@ -168,9 +162,6 @@ export default {
     gap: 30px;
 }
 
-/* ==============================
-   Header
-   ============================== */
 .header {
     display: flex;
     align-items: center;
@@ -185,9 +176,6 @@ export default {
     color: #2c3e50;
 }
 
-/* ==============================
-   Formulaire module
-   ============================== */
 .edit-form {
     display: flex;
     flex-direction: column;
@@ -237,9 +225,6 @@ textarea {
     font-size: 14px;
 }
 
-/* ==============================
-   Actions du formulaire
-   ============================== */
 .form-actions {
     display: flex;
     justify-content: flex-end;
@@ -260,9 +245,6 @@ textarea {
     background-color: #2980b9;
 }
 
-/* ==============================
-   Liste des objectifs
-   ============================== */
 .objectives {
     display: flex;
     flex-direction: column;
@@ -272,12 +254,8 @@ textarea {
     margin-top: 20px;
 }
 
-/* ==============================
-   Bouton Créer un objectif
-   ============================== */
 button {
     background-color: #10b981;
-    /* vert */
     color: white;
     border: none;
     padding: 10px 18px;
@@ -292,9 +270,6 @@ button:hover {
     background-color: #059669;
 }
 
-/* ==============================
-   Objectif individuel (Objective.vue)
-   ============================== */
 .objective-card {
     background: #f9fafb;
     padding: 20px;
@@ -336,11 +311,9 @@ button:hover {
     min-height: 60px;
 }
 
-/* Bouton Supprimer objectif */
 .objective-card .delete {
     align-self: flex-start;
     background-color: #ef4444;
-    /* rouge */
     color: white;
     border: none;
     padding: 6px 12px;

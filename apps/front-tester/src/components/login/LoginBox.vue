@@ -144,7 +144,6 @@ h1 {
     font-size: 1em;
     border-radius: 8px;
     cursor: pointer;
-    /*transition: background 0.3s;*/
 }
 
 .btn:hover {

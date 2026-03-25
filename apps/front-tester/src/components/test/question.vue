@@ -113,7 +113,6 @@ export default {
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Carte question */
 .question {
   background: #ffffff;
   padding: 20px 25px;
@@ -130,7 +129,6 @@ export default {
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
 }
 
-/* Type spécifique */
 .question.checkbox {
   border-left-color: #3498db;
 }
@@ -143,7 +141,6 @@ export default {
   border-left-color: #e67e22;
 }
 
-/* Header question */
 .question-header {
   display: flex;
   justify-content: space-between;
@@ -163,7 +160,6 @@ export default {
   color: #7f8c8d;
 }
 
-/* Liste réponses */
 li {
   list-style: none;
   padding: 0;
@@ -182,16 +178,13 @@ ul:hover {
   background: #e0e6ed;
 }
 
-/* Radio et checkbox */
 input[type="radio"],
 input[type="checkbox"] {
   margin-right: 10px;
   accent-color: #3498db;
-  /* modern color for radio/checkbox */
   cursor: pointer;
 }
 
-/* Input text */
 input[type="text"] {
   width: 100%;
   padding: 10px 12px;
@@ -206,7 +199,6 @@ input[type="text"]:focus {
   box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
 }
 
-/* Bouton envoyer */
 button {
   margin-top: 30px;
   padding: 14px 28px;
@@ -224,7 +216,6 @@ button:hover {
   transform: translateY(-2px);
 }
 
-/* Responsive */
 @media (max-width: 600px) {
   .question-header {
     flex-direction: column;

@@ -174,7 +174,6 @@ export default {
     background-color: #dc2626;
 }
 
-/* Responsive small screens */
 @media (max-width: 480px) {
     .user, .user-card {
         padding: 15px;
