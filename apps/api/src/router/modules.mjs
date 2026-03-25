@@ -1,6 +1,6 @@
 import express from "express";
-import { auth } from "../auth/authMiddleware.mjs";
-import authorizeRoles from "../auth/roleMiddleware.mjs";
+import auth from "../middlewares/auth.mjs";
+import authorizeRoles from "../middlewares/role.mjs";
 import { archiveModule, createModule, editModule, getModule, getModules } from "../controllers/modules.mjs";
 
 const modulesRouter = express.Router();
