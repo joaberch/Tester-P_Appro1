@@ -35,7 +35,7 @@ export default {
         }
     },
     async mounted() {
-        if (this.$route.name != "login") {
+        if (this.$route.name != "login" && this.$route.name != undefined) {
             await this.getMe();
         }
     },
