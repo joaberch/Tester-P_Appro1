@@ -30,7 +30,7 @@ export async function getAssignedUsers(req, res) {
     res.status(200).json(users);
 }
 
-export async function getMe(req, res) {
+export async function getUser(req, res) {
     const user = await usersService.getMe(req.user.userId);
     res.status(200).json(user);
 }

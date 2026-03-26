@@ -7,7 +7,8 @@
   "type": "module",
   "main": "src/app.mjs",
   "scripts": {
-    "start": "nodemon --env-file .env src/app.mjs"
+    "start": "nodemon --env-file .env src/app.mjs",
+    "test": "echo \"No tests yet\""
   },
   "dependencies": {
     "bcrypt": "^6.0.0",

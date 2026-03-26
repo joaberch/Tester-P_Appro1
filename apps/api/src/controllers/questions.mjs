@@ -6,7 +6,7 @@ export async function getQuestionAnswers(req, res) {
 }
 
 export async function createQuestion(req, res) {
-    const question = await questionService.createQuestion();
+    const question = await questionService.createQuestion(req.body);
     res.status(201).json(question);
 }
 

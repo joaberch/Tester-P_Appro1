@@ -1,7 +1,7 @@
 import * as testsService from "../services/tests.mjs";
 
 export async function getTests(req, res) {
-    const userId = req.user.userId;
+    const userId = req.user.oid;
     const page = parseInt(req.query.page) || 1;
     const pageSize = parseInt(req.query.pageSize) || 20;
     const test = await testsService.getTests(userId, page, pageSize);
@@ -14,7 +14,7 @@ export async function getTest(req, res) {
 }
 
 export async function createTest(req, res) {
-    const { newTest, newCreatedBy } = await testsService.createTest(req.user.userId, req.body);
+    const { newTest, newCreatedBy } = await testsService.createTest(req.user.oid, req.body);
     res.status(201).json({ newTest, newCreatedBy });
 }
 

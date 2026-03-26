@@ -65,8 +65,8 @@ export async function getTest(id) { //TODO students only if assigned
     return test
 }
 
-export async function createTest(creatorId, body) {
-    if (!creatorId) {
+export async function createTest(oid, body) {
+    if (!oid) {
         const error = new Error(`Le créateur n'a pas pu être trouvé.`);
         error.status = 404;
         throw error;
@@ -85,9 +85,13 @@ export async function createTest(creatorId, body) {
     //Create test
     const newTest = await Test.create(payload);
 
+    const user = await User.findOne({
+        where: { azureOid: oid }
+    })
+
     //Create created_by
     const created_by = {
-        idUser: creatorId,
+        idUser: user.idUser,
         idTest: newTest.idTest,
     }
     const newCreatedBy = await CreatedBy.create(created_by);

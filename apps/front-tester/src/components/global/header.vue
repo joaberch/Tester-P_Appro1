@@ -7,6 +7,13 @@ export default {
             role: '',
         }
     },
+    watch: {
+        $route(to, from) {
+            if (to.name != 'login') {
+                this.getMe();
+            }
+        }
+    },
     methods: {
         async disconnect() {
             const APIDisconnectCall = `${import.meta.env.VITE_API_URL}/me/disconnect`;
@@ -42,10 +49,10 @@ export default {
 }
 </script>
 <template>
-    <div id="header" v-if="this.$route.name != 'login'">
-        <RouterLink class="button" v-if="this.role == 'teacher' || this.role == 'admin'" :to="{ name: 'create-test' }">Créer un test</RouterLink>
-        <RouterLink class="button" v-if="this.role == 'teacher' || this.role == 'admin'" :to="{ name: 'create-module'}">Créer un module</RouterLink>
-        <RouterLink class="button" v-if="this.role == 'admin'" :to="{ name: 'admin' }">Console admin</RouterLink>
+    <div id="header" v-if="$route.name != 'login'">
+        <RouterLink class="button" v-if="role == 'teacher' || role == 'admin'" :to="{ name: 'create-test' }">Créer un test</RouterLink>
+        <RouterLink class="button" v-if="role == 'teacher' || role == 'admin'" :to="{ name: 'create-module'}">Créer un module</RouterLink>
+        <RouterLink class="button" v-if="role == 'admin'" :to="{ name: 'admin' }">Console admin</RouterLink>
         <button @click="disconnect()">Se déconnecter</button>
     </div>
 </template>

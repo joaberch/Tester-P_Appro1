@@ -19,6 +19,7 @@ export default {
                 password: this.user.password,
                 role: this.user.role,
                 isDeleted: this.user.isDeleted,
+                azureOid: null, //temp value to prevent error - TODO 
             }
 
             if (!payload.firstname || !payload.name || !payload.login || !payload.password || !payload.role) {

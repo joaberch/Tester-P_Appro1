@@ -24,7 +24,7 @@ export async function checkToken(req, res) {
     if (token) {
         res.json({ token });
     } else {
-        res.status(401).json({ error: 'Token non trouvé' });
+        res.status(404).json({ error: 'Token non trouvé' });
     }
 }
 

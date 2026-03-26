@@ -37,6 +37,11 @@ const UserModel = (sequelize, DataTypes) => {
             type: DataTypes.BOOLEAN,
             allowNull: false,
             defaultValue: false,
+        },
+        azureOid: {
+            type: DataTypes.STRING,
+            allowNull: true,
+            unique: true
         }
     },
         {
