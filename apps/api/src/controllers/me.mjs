@@ -10,7 +10,6 @@ export async function getMe(req, res) {
 
     const user = await meService.getUser(azureOid);
     if (!user) {
-        console.log("user not found")
         res.status(404).json(`Utilisateur introuvable`)
     }
     res.status(200).json(user);

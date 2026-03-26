@@ -14,7 +14,7 @@ export async function getTest(req, res) {
 }
 
 export async function createTest(req, res) {
-    const { newTest, newCreatedBy } = await testsService.createTest(req.user.userId, req.body);
+    const { newTest, newCreatedBy } = await testsService.createTest(req.user.oid, req.body);
     res.status(201).json({ newTest, newCreatedBy });
 }
 
