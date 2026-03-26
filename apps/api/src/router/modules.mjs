@@ -1,23 +1,22 @@
 import express from "express";
-import { auth } from "../middlewares/auth.mjs";
-import authorizeRoles from "../middlewares/role.mjs";
+import auth from "../middlewares/auth.mjs";
 import { archiveModule, createModule, editModule, getModule, getModules } from "../controllers/modules.mjs";
 
 const modulesRouter = express.Router();
 
 //Get all modules
-modulesRouter.get("/", auth, authorizeRoles("admin", "teacher", "student"), getModules)
+modulesRouter.get("/", auth, getModules)
 
 //Get a specific module
-modulesRouter.get("/:id", auth, authorizeRoles("admin", "teacher", "student"), getModule);
+modulesRouter.get("/:id", auth, getModule);
 
 //Create a module
-modulesRouter.post("/", auth, authorizeRoles("admin", "teacher"), createModule);
+modulesRouter.post("/", auth, createModule);
 
 //Archive a module
-modulesRouter.put("/archive/:id", auth, authorizeRoles("admin", "teacher"), archiveModule);
+modulesRouter.put("/archive/:id", auth, archiveModule);
 
 //Edit a module
-modulesRouter.put("/:id", auth, authorizeRoles("admin", "teacher"), editModule);
+modulesRouter.put("/:id", auth, editModule);
 
 export { modulesRouter };

@@ -10,7 +10,7 @@ export async function storeToken(req, res) {
     res.cookie('token', token, {
         httpOnly: true,
         secure: false,
-        sameSite: 'None',
+        sameSite: 'Lax',
         maxAge: 3600000 //Durée de validité du cookie (en ms), 3600000 = 1h
     });
 

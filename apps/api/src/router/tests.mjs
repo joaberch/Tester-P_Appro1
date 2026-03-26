@@ -1,38 +1,37 @@
 import express from "express";
-import { auth } from "../middlewares/auth.mjs";
-import authorizeRoles from "../middlewares/role.mjs";
+import auth from "../middlewares/auth.mjs";
 import { archiveTest, assignTest, createTest, editTest, getAssignedTest, getTest, getTestAttachments, getTestQuestions, getTests, unassignTest } from "../controllers/tests.mjs";
 
 const testsRouter = express.Router();
 
 //Get all tests
-testsRouter.get("/", auth, authorizeRoles("admin", "teacher"), getTests);
+testsRouter.get("/", auth, getTests);
 
 //Create a test
-testsRouter.post("/", auth, authorizeRoles("admin", "teacher"), createTest);
+testsRouter.post("/", auth, createTest);
 
 //Archive a test
-testsRouter.put("/archive/:id", auth, authorizeRoles("admin", "teacher"), archiveTest);
+testsRouter.put("/archive/:id", auth, archiveTest);
 
 //Edit a test
-testsRouter.put("/:id", auth, authorizeRoles("admin", "teacher"), editTest);
+testsRouter.put("/:id", auth, editTest);
 
 //Assign a test
-testsRouter.post("/:testId/user/:userId", auth, authorizeRoles("admin", "teacher"), assignTest);
+testsRouter.post("/:testId/user/:userId", auth, assignTest);
 
 //De-Assign a test
-testsRouter.delete("/:testId/user/:userId", auth, authorizeRoles("admin", "teacher"), unassignTest);
+testsRouter.delete("/:testId/user/:userId", auth, unassignTest);
 
 //Get assigned test
-testsRouter.get("/assigned", auth, authorizeRoles("admin", "teacher", "student"), getAssignedTest)
+testsRouter.get("/assigned", auth, getAssignedTest)
 
 //Get a specific test
-testsRouter.get("/:id", auth, authorizeRoles("admin", "teacher", "student"), getTest);
+testsRouter.get("/:id", auth, getTest);
 
 //Get all questions of a test
-testsRouter.get("/:id/questions", auth, authorizeRoles("admin", "teacher", "student"), getTestQuestions)
+testsRouter.get("/:id/questions", auth, getTestQuestions)
 
 //Get attachments of test
-testsRouter.get("/:id/attachments", auth, authorizeRoles("admin", "teacher", "student"), getTestAttachments);
+testsRouter.get("/:id/attachments", auth, getTestAttachments);
 
 export { testsRouter };

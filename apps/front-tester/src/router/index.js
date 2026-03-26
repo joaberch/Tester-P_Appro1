@@ -77,7 +77,7 @@ const router = createRouter({
         },
         {
             path: "/auth-response",
-            redirect: "/login"
+            redirect: "/"
         }
     ],
 });

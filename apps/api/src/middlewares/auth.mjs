@@ -1,6 +1,5 @@
 import jwt from "jsonwebtoken";
 import jwksClient from "jwks-rsa";
-import { privateKey } from "../auth/private_key.mjs";
 
 const tenant_id = process.env.TENANT_ID
 const client_id = process.env.CLIENT_ID
@@ -30,11 +29,11 @@ function verifyToken(token) {
           return reject(err)
         }
         //Valider le aud(ience) et le iss(uer)
-        if (decoded.aud !== `api://${client_id}`) {
-          return reject(new Error("Invalid token"))
+        if (decoded.aud !== `${client_id}`) {
+          return reject(new Error("Invalid token1"))
         }
-        if (decoded.iss !== `https://sts.windows.net/${tenant_id}/`) {
-          return reject(new Error("Invalid token"))
+        if (decoded.iss !== `https://login.microsoftonline.com/${tenant_id}/v2.0`) {
+          return reject(new Error("Invalid token2"))
         }
         resolve(decoded)
       })
@@ -45,8 +44,6 @@ function verifyToken(token) {
 }
 
 const authenticate = async (req, res, next) => {
-  next()
-
   const token = req.cookies.token
   if (!token) {
     return res.status(401).send('Accès refusé: Pas de token fourni.')
@@ -62,20 +59,4 @@ const authenticate = async (req, res, next) => {
   }
 }
 
-const auth = (req, res, next) => {
-    const token = req.cookies.token;
-    if (!token) {
-        return res.status(401).json({ message: "Access denied" });
-    }
-
-    try {
-        const decodedToken = jwt.verify(token, privateKey);
-        req.user = decodedToken;
-        next();
-    } catch (error) {
-        return res.status(401).json({ message: "Access denied" });
-    }
-};
-
-export { auth };
 export default authenticate;

@@ -26,47 +26,13 @@ export default {
                 this.isLogin = false;
             }
         },
-        async login() {
-            try {
-                let username = document.getElementsByClassName('username')[0].value;
-                let password = document.getElementsByClassName('password')[0].value;
-
-                let APICall = `${import.meta.env.VITE_API_URL}/login`
-
-                const res = await axios.post(APICall, {
-                        login: username,
-                        password: password
-                    },
-                    { withCredentials: true }
-                );
-
-                localStorage.token = res.data.token;
-                this.$router.push('/');
-            } catch (error) {
-                console.error(error);
-                if (error.response || error.response.status == 404 || error.response.status == 401) {
-                    this.errorMessage = `Login ou mot de passe incorrect.`
-                }
-            }
-        },
-        async debug() {
-            try {
-                const APIDebugCall = `${import.meta.env.VITE_API_URL}/auth/check`
-
-                await axios.get(APIDebugCall, {
-                    withCredentials: true
-                })
-            } catch (error) {
-                console.error(error)
-            }
-        }
     },
     async mounted() {
         try {
             const res = await msalInstance.handleRedirectPromise();
             if (!res) return;
 
-            const token = res.accessToken;
+            const token = res.idToken;
             const APIStoreTokenCall = `${import.meta.env.VITE_API_URL}/auth/token`;
             await axios.post(APIStoreTokenCall, { token: token }, {
                 withCredentials: true,
@@ -80,25 +46,10 @@ export default {
 <template>
     <div class="global">
         <div class="wrapper">
-            <form @submit.prevent="login()">
+            <div>
                 <h1>Connexion</h1>
-                <div class="input-box">
-                    Login:
-                    <input type="text" placeholder="  px11xxx" class="username" required>
-                </div>
-
-                <div class="input-box">
-                    Mot de passe: <input :type="isPasswordDisplayed ? 'text' : 'password'"
-                        placeholder="  Mot de passe" class="password" required>
-                    <i :class="isPasswordDisplayed ? 'bx bx-show' : 'bx bxs-hide'"
-                        @mousedown="isPasswordDisplayed = !isPasswordDisplayed"
-                        @mouseup="isPasswordDisplayed = !isPasswordDisplayed"></i>
-                    <p class="error">{{ errorMessage }}</p>
-                </div>
-                <button type="submit" class="btn">Se connecter</button>
                 <button @click="azureLogin()" class="btn">Connexion Azure</button>
-                <button @click="debug()">Debug</button>
-            </form>
+            </div>
         </div>
     </div>
 </template>
