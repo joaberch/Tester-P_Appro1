@@ -1,6 +1,6 @@
 import express from "express";
 import auth from "../middlewares/auth.mjs";
-import { createUser, getAssignedUsers, getStudents, getUsers, updateUser, archiveUser, getMe } from "../controllers/users.mjs";
+import { createUser, getAssignedUsers, getStudents, getUsers, updateUser, archiveUser, getUser } from "../controllers/users.mjs";
 
 const usersRouter = express();
 
@@ -22,7 +22,7 @@ usersRouter.post("/", auth, createUser); //TODO - who can do in documentation
 //Get students assigned to a test
 usersRouter.get("/assignedTo/:id", auth, getAssignedUsers);
 
-//Get me
-usersRouter.get("/me", auth, getMe);
+//Get user
+usersRouter.get("/me", auth, getUser);
 
 export { usersRouter };
