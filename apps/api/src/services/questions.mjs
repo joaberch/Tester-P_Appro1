@@ -1,7 +1,7 @@
 import { Answer, Question } from "../db/sequelize.mjs";
 
 export async function getQuestionAnswers(id, role) {
-    const question = Question.findByPk(id);
+    const question = await Question.findByPk(id);
     if (!question) {
         const error = new Error(`La question est introuvable.`);
         error.status = 404;
@@ -41,7 +41,7 @@ export async function createQuestion(body) {
         idTest: body.idTest,
     };
 
-    const question = Question.create(payload);
+    const question = await Question.create(payload);
     return question;
 }
 
