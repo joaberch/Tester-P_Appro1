@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS t_users(
    role VARCHAR(50),
    isDeleted BOOLEAN,
    createdAt DATE,
-   azureOid VARCHAR(100) UNIQUE,
+   azureOid VARCHAR(100) UNIQUE NULL,
    PRIMARY KEY(idUser),
    UNIQUE(login)
 );
