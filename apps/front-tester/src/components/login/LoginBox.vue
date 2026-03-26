@@ -37,6 +37,7 @@ export default {
             await axios.post(APIStoreTokenCall, { token: token }, {
                 withCredentials: true,
             });
+            this.$router.push("/")
         } catch (error) {
             console.error(error);
         }
