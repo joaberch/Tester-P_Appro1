@@ -8,7 +8,7 @@
   "main": "src/app.mjs",
   "scripts": {
     "start": "nodemon --env-file .env src/app.mjs",
-    "test": "echo \"No tests yet\""
+    "test": "node --experimental-vm-modules node_modules/jest/bin/jest.js"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -16,6 +16,7 @@
     "cors": "^2.8.6",
     "express": "^5.2.1",
     "https": "^1.0.0",
+    "jest": "^30.3.0",
     "jsonwebtoken": "^9.0.3",
     "jwks-rsa": "^4.0.1",
     "mariadb": "^3.4.5",
