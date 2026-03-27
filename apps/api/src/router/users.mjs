@@ -1,6 +1,6 @@
 import express from "express";
 import auth from "../middlewares/auth.mjs";
-import { createUser, getAssignedUsers, getStudents, getUsers, updateUser, archiveUser, getUser } from "../controllers/users.mjs";
+import { createUser, getAssignedUsers, getStudents, getUsers, updateUser, archiveUser } from "../controllers/users.mjs";
 
 const usersRouter = express();
 
