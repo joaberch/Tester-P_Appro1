@@ -5,12 +5,12 @@ import { archiveAnswer, createAnswer, editAnswer } from "../controllers/answers.
 const answersRouter = express.Router();
 
 //Create an answer
-answersRouter.post("/", auth, createAnswer);
+answersRouter.post("/", auth, authorizeRoles("admin", "teacher"), createAnswer);
 
 //Archive an answer
-answersRouter.put("/archive/:id", auth, archiveAnswer);
+answersRouter.put("/archive/:id", auth, authorizeRoles("admin", "teacher"), archiveAnswer);
 
 //Edit an answer
-answersRouter.put("/:id", auth, editAnswer);
+answersRouter.put("/:id", auth, authorizeRoles("admin", "teacher"), editAnswer);
 
 export { answersRouter };

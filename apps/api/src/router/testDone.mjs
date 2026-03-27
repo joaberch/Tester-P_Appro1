@@ -5,6 +5,6 @@ import { createTestResult } from "../controllers/testDone.mjs";
 const testDoneRouter = express();
 
 //Create a test result
-testDoneRouter.post("/", auth, createTestResult);
+testDoneRouter.post("/", auth, authorizeRoles("admin", "teacher", "student"), createTestResult);
 
 export { testDoneRouter };

@@ -11,15 +11,15 @@ const attachmentsRouter = express.Router();
 attachmentsRouter.get("/:id", auth, getAttachment); //Check if used - TODO
 
 //Create an attachment
-attachmentsRouter.post("/", auth, upload.single("fileContent"), createAttachment);
+attachmentsRouter.post("/", auth, authorizeRoles("admin", "teacher"), upload.single("fileContent"), createAttachment);
 
 //Archive an attachment
-attachmentsRouter.put("/archive/:id", auth, archiveAttachment);
+attachmentsRouter.put("/archive/:id", auth, authorizeRoles("admin", "teacher"), archiveAttachment);
 
 //Delete an attachment
-attachmentsRouter.delete("/:id", auth, deleteAttachment);
+attachmentsRouter.delete("/:id", auth, authorizeRoles("admin", "teacher"), deleteAttachment);
 
 //Edit an attachment
-attachmentsRouter.put("/:id", auth, editAttachment);
+attachmentsRouter.put("/:id", auth, authorizeRoles("admin", "teacher"), editAttachment);
 
 export { attachmentsRouter };

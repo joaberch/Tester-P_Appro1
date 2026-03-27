@@ -5,18 +5,18 @@ import { archiveModule, createModule, editModule, getModule, getModules } from "
 const modulesRouter = express.Router();
 
 //Get all modules
-modulesRouter.get("/", auth, getModules)
+modulesRouter.get("/", auth, authorizeRoles("admin", "teacher", "student"), getModules)
 
 //Get a specific module
-modulesRouter.get("/:id", auth, getModule);
+modulesRouter.get("/:id", auth, authorizeRoles("admin", "teacher", "student"), getModule);
 
 //Create a module
-modulesRouter.post("/", auth, createModule);
+modulesRouter.post("/", auth, authorizeRoles("admin", "teacher"), createModule);
 
 //Archive a module
-modulesRouter.put("/archive/:id", auth, archiveModule);
+modulesRouter.put("/archive/:id", auth, authorizeRoles("admin", "teacher"), archiveModule);
 
 //Edit a module
-modulesRouter.put("/:id", auth, editModule);
+modulesRouter.put("/:id", auth, authorizeRoles("admin", "teacher"), editModule);
 
 export { modulesRouter };

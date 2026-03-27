@@ -4,6 +4,7 @@ import { getDocuments } from "../controllers/documents.mjs";
 
 const documentsRouter = express.Router();
 
-documentsRouter.get("/", auth, getDocuments)
+//Get all documents
+documentsRouter.get("/", auth, authorizeRoles("admin", "teacher", "student"), getDocuments)
 
 export { documentsRouter };

@@ -5,15 +5,15 @@ import { archiveObjective, createObjective, editObjective, getObjectivesOfModule
 const objectivesRouter = express();
 
 //Get all objectives of module
-objectivesRouter.get("/", auth, getObjectivesOfModule);
+objectivesRouter.get("/", auth, authorizeRoles("admin", "teacher", "student"), getObjectivesOfModule);
 
 //Create an objective
-objectivesRouter.post("/", auth, createObjective);
+objectivesRouter.post("/", auth, authorizeRoles("admin", "teacher"), createObjective);
 
 //Archive an objective
-objectivesRouter.put("/archive/:id", auth, archiveObjective);
+objectivesRouter.put("/archive/:id", auth, authorizeRoles("admin", "teacher"), archiveObjective);
 
 //Edit an objective
-objectivesRouter.put("/:id", auth, editObjective);
+objectivesRouter.put("/:id", auth, authorizeRoles("admin", "teacher"), editObjective);
 
 export { objectivesRouter };

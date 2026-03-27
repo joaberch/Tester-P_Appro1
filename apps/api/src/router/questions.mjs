@@ -5,15 +5,15 @@ import { archiveQuestion, getQuestionAnswers, createQuestion, editQuestion } fro
 const questionsRouter = express();
 
 //Get all answers of a question
-questionsRouter.get("/:id/answers", auth, getQuestionAnswers)
+questionsRouter.get("/:id/answers", auth, authorizeRoles("admin", "teacher", "student"), getQuestionAnswers)
 
 //Create a question
-questionsRouter.post("/", auth, createQuestion);
+questionsRouter.post("/", auth, authorizeRoles("admin", "teacher"), createQuestion);
 
 //Archive a question
-questionsRouter.put("/archive/:id", auth, archiveQuestion);
+questionsRouter.put("/archive/:id", auth, authorizeRoles("admin", "teacher"), archiveQuestion);
 
 //Edit a question
-questionsRouter.put("/:id", auth, editQuestion);
+questionsRouter.put("/:id", auth, authorizeRoles("admin", "teacher"), editQuestion);
 
 export { questionsRouter };
