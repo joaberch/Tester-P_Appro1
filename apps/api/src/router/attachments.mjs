@@ -1,6 +1,7 @@
 import express from "express";
 import auth from "../middlewares/auth.mjs";
-import { archiveAttachment, deleteAttachment, editAttachment, createAttachment, getAttachment } from "../controllers/attachments.mjs";
+import authorizeRoles from "../middlewares/role.mjs";
+import { archiveAttachment, deleteAttachment, editAttachment, createAttachment } from "../controllers/attachments.mjs";
 import multer from "multer";
 
 const upload = multer();

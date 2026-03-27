@@ -1,5 +1,6 @@
 import express from "express";
 import auth from "../middlewares/auth.mjs";
+import authorizeRoles from "../middlewares/role.mjs";
 import { archiveAnswer, createAnswer, editAnswer } from "../controllers/answers.mjs";
 
 const answersRouter = express.Router();

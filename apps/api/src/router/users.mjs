@@ -1,5 +1,6 @@
 import express from "express";
 import auth from "../middlewares/auth.mjs";
+import authorizeRoles from "../middlewares/role.mjs";
 import { createUser, getAssignedUsers, getStudents, getUsers, updateUser, archiveUser } from "../controllers/users.mjs";
 
 const usersRouter = express();

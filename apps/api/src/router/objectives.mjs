@@ -1,5 +1,6 @@
 import express from "express";
 import auth from "../middlewares/auth.mjs";
+import authorizeRoles from "../middlewares/role.mjs";
 import { archiveObjective, createObjective, editObjective, getObjectivesOfModule } from "../controllers/objectives.mjs";
 
 const objectivesRouter = express();
