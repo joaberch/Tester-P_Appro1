@@ -1,10 +1,5 @@
 import * as attachmentsService from "../services/attachments.mjs";
 
-export async function getAttachment(req, res) {
-    const attachment = await attachmentsService.getAttachment(req.params.id);
-    res.status(200).json(attachment);
-}
-
 export async function createAttachment(req, res) {
     const attachment = await attachmentsService.createAttachment(req.body, req.file?.buffer);
     res.status(201).json(attachment);

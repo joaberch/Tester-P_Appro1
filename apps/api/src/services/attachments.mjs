@@ -1,15 +1,5 @@
 import { Attachment } from "../db/sequelize.mjs";
 
-export async function getAttachment(id) {
-    const attachment = await Attachment.findByPk(id);
-    if (!attachment) {
-        const error = new Error(`Pièce jointe introuvable.`);
-        error.status = 404;
-        throw error;
-    }
-    return attachment;
-}
-
 export async function createAttachment(body, content) {
     const payload = {
         fileName: body.fileName,

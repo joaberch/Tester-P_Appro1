@@ -7,9 +7,6 @@ const upload = multer();
 
 const attachmentsRouter = express.Router();
 
-//Get a specific attachment
-attachmentsRouter.get("/:id", auth, getAttachment); //Check if used - TODO
-
 //Create an attachment
 attachmentsRouter.post("/", auth, authorizeRoles("admin", "teacher"), upload.single("fileContent"), createAttachment);
 
