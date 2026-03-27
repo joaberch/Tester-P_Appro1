@@ -22,7 +22,4 @@ usersRouter.post("/", auth, createUser); //TODO - who can do in documentation
 //Get students assigned to a test
 usersRouter.get("/assignedTo/:id", auth, getAssignedUsers);
 
-//Get user
-usersRouter.get("/me", auth, getUser);
-
 export { usersRouter };

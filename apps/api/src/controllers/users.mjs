@@ -29,8 +29,3 @@ export async function getAssignedUsers(req, res) {
     const users = await usersService.getAssignedUsers(req.params.id);
     res.status(200).json(users);
 }
-
-export async function getUser(req, res) {
-    const user = await usersService.getMe(req.user.userId);
-    res.status(200).json(user);
-}

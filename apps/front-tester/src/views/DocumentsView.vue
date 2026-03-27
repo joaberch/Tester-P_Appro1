@@ -42,7 +42,7 @@ export default {
         },
         async fetchMe() {
             try {
-                const APIGetMeCall = `${import.meta.env.VITE_API_URL}/users/me`;
+                const APIGetMeCall = `${import.meta.env.VITE_API_URL}/me`;
 
                 const me = await axios.get(APIGetMeCall, {
                     withCredentials: true,

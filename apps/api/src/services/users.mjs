@@ -95,10 +95,3 @@ export async function getAssignedUsers(id) {
     });
     return test;
 }
-
-export async function getUser(id) {
-    const user = await User.findByPk(id, {
-        attributes: { exclude: ['hashedPassword'] }
-    });
-    return user;
-}
