@@ -1,12 +1,26 @@
-import { Attachment } from "../db/sequelize.mjs";
+import { Attachment, Test } from "../db/sequelize.mjs";
 
 export async function createAttachment(body, content) {
+    if (!content && !body.fileContent) {
+        const error = new Error('Content is required');
+        error.status = 400;
+        throw error;
+    }
+
+    const test = await Test.findByPk(body.idTest);
+    if (!test) {
+        const error = new Error('Test not found');
+        error.status = 404;
+        throw error;
+    }
+    
     const payload = {
-        fileName: body.fileName,
-        fileContent: content,
+        fileName: body.fileName || 'document.pdf',
+        fileContent: content || body.fileContent,
         isDeleted: false,
         idTest: parseInt(body.idTest, 10),
     };
+    
     const attachment = await Attachment.create(payload);
     return attachment;
 }
