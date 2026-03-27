@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import msalInstance, { loginRequest } from "../config/authConfig";
+import axios from "axios";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -82,38 +83,34 @@ const router = createRouter({
     ],
 });
 
-/*router.beforeEach(async (to, from) => {
+router.beforeEach(async (to, from) => {
     if (to.name == 'login') {
         return true;
     }
 
     try {
-        const accounts = msalInstance.getAllAccounts();
-        if (!accounts.length) {
-            return { name: 'login' };
-        }
-    
-        const tokenResponse = await msalInstance.acquireTokenSilent({
-            ...loginRequest,
-            account: accounts[0]
-        })
-        const accessToken = tokenResponse.accessToken;
-
-        const APIGetMeCall = `${import.meta.env.VITE_API_URL}`;
-        const me = await axios.get(APIGetMeCall, {
-            headers: { Authorization: `Bearer ${accessToken}` }
+        const APICheckTokenCall = `${import.meta.env.VITE_API_URL}/auth/check`;
+        const check = await axios.get(APICheckTokenCall, {
+            withCredentials: true,
         });
 
-        if (!me.data) return { name: 'login' };
+        if (check.data.token == '') {
+            return { name: 'login' };
+        }
 
+        const APIGetMeCall = `${import.meta.env.VITE_API_URL}/me`;
+        const me = await axios.get(APIGetMeCall, {
+            withCredentials: true,
+        });
         if (to.meta.roles && !to.meta.roles.includes(me.data.role)) {
             return { name: 'home' };
         }
 
         return true;
     } catch(error) {
+        console.error(error)
         return { name: 'login' };
     }
-})*/
+})
 
 export default router;
