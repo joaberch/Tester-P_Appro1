@@ -12,15 +12,10 @@ export async function login(authorizationHeader, body) {
         }
         
         const user = await User.findOne({ where: { login: body.login } });
-        if (!user) {
-            const error = new Error(`L'utilisateur n'existe pas.`);
-            error.status = 404;
-            throw error;
-        }
-
-        let isValid = await bcrypt.compare(body.password + process.env.PEPPER, user.hashedPassword);
+        const passwordValid = await bcrypt.compare(body.password + process.env.PEPPER, user.hashedPassword);
+        const isValid = user && passwordValid;
         if (!isValid) {
-            const error = new Error(`Le mot de passe est incorrect.`);
+            const error = new Error(`Identifiants invalides.`);
             error.status = 401;
             throw error;
         }
