@@ -28,9 +28,6 @@ app.use(authenticate);
 import { meRouter } from "./router/me.mjs";
 app.use("/api/me", meRouter);
 
-import { loginRouter } from "./router/login.mjs";
-app.use("/api/login", loginRouter);
-
 import { testDoneRouter } from "./router/testDone.mjs";
 app.use("/api/testsDone", testDoneRouter);
 
