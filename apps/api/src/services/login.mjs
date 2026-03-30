@@ -11,10 +11,11 @@ export async function login(authorizationHeader, body) {
             throw error;
         }
         
+        const dummyHash = "$2a$12$BAFWG0WxIHi6/WUm0Zt2IOMEKw.OM8iEbuooF3AgsgVEQOu2Qq0kq";
         const user = await User.findOne({ where: { login: body.login } });
-        const passwordValid = await bcrypt.compare(body.password + process.env.PEPPER, user.hashedPassword);
+        const passwordValid = await bcrypt.compare(body.password + process.env.PEPPER, user.hashedPassword || dummyHash);
         const isValid = user && passwordValid;
-        if (!isValid) {
+        if (!user || !isValid) {
             const error = new Error(`Identifiants invalides.`);
             error.status = 401;
             throw error;
