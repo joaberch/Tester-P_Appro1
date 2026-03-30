@@ -35,6 +35,9 @@ export async function login(authorizationHeader, body) {
 
         return token
     } catch (err) {
+        if (err.status) {
+            throw err;
+        }
         const error = new Error(`L'utilisateur n'a pas pu être connecté. ${err}`);
         error.status = 500;
         error.data = err.message;
