@@ -5,6 +5,7 @@ export async function storeToken(req, res) {
     if (!token) {
         return res.status(400).json({ error: 'Token manquant' });
     }
+    console.log("token:", token)
 
     //Stocker le token dans un cookie
     res.cookie('token', token, {

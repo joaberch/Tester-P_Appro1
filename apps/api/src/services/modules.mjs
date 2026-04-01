@@ -27,7 +27,7 @@ export async function createModule(body) {
         isDeleted: false,
     }
 
-    const module = Module.create(payload);
+    const module = await Module.create(payload);
     return module;
 }
 
@@ -52,10 +52,18 @@ export async function editModule(id, body) {
         throw error;
     }
 
+    if ((body.name != undefined && typeof body.name != "string") ||
+    (body.description != undefined && typeof body.description != "string") ||
+    (body.isDeleted != undefined && typeof body.isDeleted != "boolean")) {
+        const error = new Error(`Invalid type for module fields.`);
+        error.status = 400;
+        throw error;
+    }
+
     const payload = {
-        name: body.name,
-        description: body.description,
-        isDeleted: body.isDeleted,
+        name: body.name ?? module.name,
+        description: body.description ?? module.description,
+        isDeleted: body.isDeleted ?? module.isDeleted,
     };
     const updatedModule = await module.update(payload);
     return updatedModule;

@@ -5,6 +5,12 @@ export async function getUser(oid) {
         where: { azureOid: oid }
     })
 
+    if (!user) {
+        const error = new Error(`Utilisateur introuvable`);
+        error.status = 404;
+        throw error;
+    }
+
     return {
         id: user.idUser,
         login: user.login,
