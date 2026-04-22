@@ -2,7 +2,7 @@ import { Test, User } from "../db/sequelize.mjs";
 import bcrypt from "bcrypt";
 
 export async function getStudents() {
-    const users = User.findAll({
+    const users = await User.findAll({
         where: {
             role: "student",
             isDeleted: false,
