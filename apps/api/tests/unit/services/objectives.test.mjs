@@ -187,7 +187,7 @@ describe('Objectives Service', () => {
         });
         it('should throw 404 if objective not found', async () => {
             Objective.findByPk.mockResolvedValue(null);
-            expect(editObjective(1)).rejects.toMatchObject({
+            expect(editObjective(1, {})).rejects.toMatchObject({
                 status: 404,
                 message: "L'objectif est introuvable."
             });
