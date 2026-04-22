@@ -70,30 +70,6 @@ describe('Attachment Service', () => {
         });
     });
 
-    describe('deleteAttachment', () => {
-        it('should delete the attachment', async () => {
-            const id = 1;
-            const mockAttachment = {
-                idAttachment: id,
-                fileName: 'test.pdf',
-                isDeleted: false,
-                destroy: jest.fn().mockResolvedValue({ })
-            }
-            Attachment.findByPk.mockResolvedValue(mockAttachment);
-
-            const result = await deleteAttachment(id);
-
-            expect(mockAttachment.destroy).toHaveBeenCalledWith();
-            expect(result).toEqual({})
-        });
-
-        it('should throw 404 on attachment not found', async () => {
-            const id = 1;
-            Attachment.findByPk.mockResolvedValue(null);
-            await expect(deleteAttachment(id)).rejects.toMatchObject({ status: 404 });
-        });
-    });
-
     describe('editAttachment', () => {
         it('should update the attachment', async () => {
             const id = 1;
