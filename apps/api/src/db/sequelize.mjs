@@ -18,8 +18,15 @@ const USERNAME = process.env.DB_USER;
 const PASSWORD = process.env.DB_PASSWORD;
 const HOST = process.env.DB_HOST;
 const PORT = process.env.DB_PORT;
+const isTest = process.env.NODE_ENV === "test";
 
-const sequelize = new Sequelize(
+const sequelize = isTest ?
+new Sequelize({
+    dialect: "sqlite",
+    storage: ":memory:",
+    logging: false
+}) :
+new Sequelize(
     DB_NAME,
     USERNAME,
     PASSWORD,

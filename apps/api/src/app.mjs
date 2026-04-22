@@ -15,10 +15,12 @@ app.use(cookieParser())
 const port = 3001;
 
 import { sequelize } from "./db/sequelize.mjs";
-sequelize
-    .authenticate()
-    .then((_) => console.log("La connexion à la base de données a bien été créé."))
-    .catch((error) => console.error(`Impossible de se connecter à la base de données :\n- ${error}`));
+if (process.env.NODE_ENV !== "test") {
+    sequelize
+        .authenticate()
+        .then((_) => console.log("La connexion à la base de données a bien été créé."))
+        .catch((error) => console.error(`Impossible de se connecter à la base de données :\n- ${error}`));
+}
 
 import authRouter from "./router/auth.mjs";
 app.use("/api/auth", authRouter);
@@ -62,6 +64,10 @@ app.use(({ res }) => {
     res.status(404).json(message);
 });
 
-app.listen(port, () => {
-    console.log(`Tester app listening on port ${port}`);
-})
+if (process.env.NODE_ENV !== "test") {
+    app.listen(port, () => {
+        console.log(`Tester app listening on port ${port}`);
+    })
+}
+
+export default app;

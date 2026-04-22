@@ -1,7 +1,9 @@
 import { ValidationError } from "sequelize";
 
 export function errorHandler(err, req, res, next) {
-    console.error(err); //dev log
+    if (process.env.NODE_ENV !== "test") {
+        console.error(err); //dev log
+    }
 
     const safeError = {
         name: err.name,
